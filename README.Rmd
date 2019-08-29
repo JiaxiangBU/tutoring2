@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 # tutoring2
 
 <!-- badges: start -->
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JiaxiangBU/tutoring/master)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master)
 <!-- badges: end -->
 
 ```{r include=FALSE}
