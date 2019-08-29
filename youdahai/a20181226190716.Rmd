@@ -1,0 +1,8 @@
+现在针对每个地区只能生成第一页的数据，估计cookie里面还有一个参数需要修改
+
+pagesize 是在response里面看吗？我看一般都是在Headers里面的，但是我们现在看的页面没有
+
+```{r}
+knitr::include_graphics('pagesize.png')
+```
+

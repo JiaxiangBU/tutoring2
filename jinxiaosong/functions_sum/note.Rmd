@@ -1,0 +1,167 @@
+---
+title: "Function Review"
+author: "Jiaxiang"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(data.table)
+```
+
+合并函数到一个文档方便查看。
+
+```{r eval=F}
+list.files('180901_靳晓松_函数',full.names = T) %>% 
+    as_tibble() %>% 
+    mutate(fun = map(value,read_file)) %>% 
+    unnest() %>% 
+    .$fun %>% 
+    paste0(.,paste0(rep('\n',3),collapse = '')) %>% 
+    str_flatten() %>% 
+    write_file('function_sum.txt')
+```
+
+导入测试数据。
+
+```{r}
+test_data <- fread('180901_靳晓松_测试数据.csv')
+```
+
+# `freq_sort`
+
+```{r}
+freq_nosort <- function(data, var, fill = "#1f77b4", title='变量频数查询') {
+  data %>%
+  dplyr::count(eval(parse(text = var))) %>%
+  ggplot(aes(x = `eval(parse(text = var))`, y = n)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title)
+  # eval(parse(text = mytheme_b))
+}
+```
+
+```{r}
+data <- test_data
+var <- 'bad_good'
+fill <- "#1f77b4"
+title <- '变量频数查询'
+data %>%
+  dplyr::count(eval(parse(text = var))) %>%
+  ggplot(aes(x = `eval(parse(text = var))`, y = n)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title)
+  # eval(parse(text = mytheme_b))
+```
+
+1. 每个bar给数据值非常好，但是我建议给有效数字，或者用`,`分开，见修改后函数。
+1. 建议`title`和`theme`给`default`值，不然影响函数调用。比如，每个人都必须要输入`title`和`theme`才能调用函数，否则报错，但是这是个trivial的问题。
+<!-- 1. `eval(parse(text = var))`可以重置，这样假设重复代码。 -->
+1. `x`和`y`可以不需要删除，建议给default值方便用户设计个性化。
+1. 其他大部分函数可以按照这个来修改。
+
+```{r}
+data <- test_data
+var <- 'bad_good'
+fill <- "#1f77b4"
+title <- '变量频数查询'
+data %>%
+  dplyr::count(eval(parse(text = var))) %>%
+  ggplot(aes(x = `eval(parse(text = var))`, y = n)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title)
+  # eval(parse(text = mytheme_b))
+```
+
+```{r}
+freq_nosort <- function(data, var, fill = "#1f77b4", title='变量频数查询', theme = 'theme_bw()', x = var, y = '频数') {
+library(tidyverse)  
+library(formattable)
+data %>%
+    count(eval(parse(text = var))) %>%
+    ggplot(aes(x = `eval(parse(text = var))`, y = n)) +
+    geom_bar(stat = "identity", fill = fill) +
+    geom_text(aes(label = accounting(n,digits = 0)), vjust = -0.5, size = 3, family = "MYH") +
+    labs(x = x, y = y, title = title) +
+    eval(parse(text = theme))
+}
+```
+
+```{r}
+freq_nosort(test_data,'bad_good')
+```
+
+
+# `xvar_pass_cumsum_line`
+
+```{r}
+xvar_pass_cumsum_line <- function(data, xvar, yvar, fill = "#1f77b4", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         badcumsum  = cumsum(bad),
+         goodcumsum = cumsum(good),
+         percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar))`, y = percumsum, color = "red")) +
+  geom_line(group = 1, size = 1) +
+  geom_point(shape = 19, size = 2) +
+  geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.5, size = 3, family = "MYH", color = "black") +
+  scale_color_manual(values = fill) +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
+}
+```
+
+```{r}
+data <- test_data
+var <- 'bad_good'
+fill <- "#1f77b4"
+data %>% 
+    count(type1,bad_good) %>% 
+    spread(bad_good,n) %>% 
+    mutate(
+        bad = ifelse(bad %in% NA, 0, bad)
+        ,badcumsum  = cumsum(bad)
+        ,goodcumsum = cumsum(good)
+        ,percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+  ggplot(aes(x = type1, y = percumsum, color = "red")) +
+  geom_line(group = 1, size = 1) +
+  geom_point(shape = 19, size = 2) +
+  geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.5, size = 3, family = "MYH", color = "black") +
+  scale_color_manual(values = fill)
+```
+
+这种滚动逾期率的思路我可以借鉴下，这个函数看起来没什么问题。
+但是可以简化很多，代码如下。
+
+1. `cumsum`没有`na.rm`参数，因此需要对`good`和`bad`都执行替换，这里最简单的方式是加一条代码`mutate_if(is.double,~ifelse(is.na(.),0,.)) %>% `
+1. `is.character`替换成`as.factor`
+
+```{r}
+data <- test_data
+var <- 'bad_good'
+fill <- "#1f77b4"
+data %>% 
+    mutate_if(is.character,as.factor) %>% 
+    mutate_if(is.double,~ifelse(is.na(.),0,.)) %>% 
+    count(type1,bad_good) %>% 
+    spread(bad_good,n) %>% 
+    mutate(
+        badcumsum  = cumsum(bad)
+        ,goodcumsum = cumsum(good)
+        ,percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+    ggplot(aes(x = type1, y = percumsum)) +
+    geom_line(group = 1, size = 1) +
+    geom_point(shape = 19, size = 2) +
+    geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.5, size = 3, family = "MYH", color = "black") +
+    scale_color_manual(values = fill)
+```
+

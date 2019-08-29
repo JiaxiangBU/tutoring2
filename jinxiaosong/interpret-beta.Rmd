@@ -1,0 +1,17 @@
+
+$$y = \text{boxcox}(z)$$
+$$z = \beta_0+ \beta_1 x + \mu $$
+
+训练后得到
+
+$$\hat z = \hat \beta_0 + \hat \beta_1 x$$
+
+这个方程对每对 $\hat z, x$ 都成立，且$\hat \beta_1$是一个常数。所以可以说
+
+$x$增加1单位，$z$增加 $\hat \beta_1$个单位，在其他变量不变的情况下。
+
+但是 $\text{boxcox}$是非线性的
+
+$$\hat y = \text{boxcox}^{-1}(z) = \text{boxcox}^{-1}(\hat \beta_0 + \hat \beta_1 x)$$
+
+$\text{boxcox}^{-1}$是非线性的，因此不能说 $x$ 增加1单位，y 可以恒定的增加 $\text{boxcox}^{-1}(\hat \beta_0 + \hat \beta_1 \cdot 1)$

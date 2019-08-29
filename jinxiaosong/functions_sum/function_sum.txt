@@ -1,0 +1,304 @@
+freq_nosort <- function(data, var, fill = "#1f77b4", title) {
+  data %>%
+  dplyr::count(eval(parse(text = var))) %>%
+  ggplot(aes(x = `eval(parse(text = var))`, y = n)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b))
+}
+
+
+freq_sort <- function(data, var, fill = "#1f77b4", title) {
+  data %>%
+  dplyr::count(eval(parse(text = var))) %>%
+  ggplot(aes(x = reorder(`eval(parse(text = var))`, n), y = n)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b))
+}
+
+
+freq_xvars_face <- function(data, xvar1, xvar2, xvar3, colcode, title) {
+  data %>% 
+    count(eval(parse(text = xvar1)),
+          eval(parse(text = xvar2)),
+          eval(parse(text = xvar3))) %>%
+    ggplot(aes(x = `eval(parse(text = xvar1))`, y = n, 
+               fill = `eval(parse(text = xvar2))`)) +
+    geom_bar(stat = 'identity', position = 'dodge') +
+    facet_grid(. ~ `eval(parse(text = xvar3))`) +
+    geom_text(aes(label = n), vjust = -0.5, size = 3, 
+              family = "MYH", position = position_dodge(0.9)) +
+    scale_fill_manual(values = colcode) +
+    labs(x = '', y = '', title = title) +
+    eval(parse(text = mytheme_b)) +
+    theme(legend.position = 'none')
+}
+
+
+freq_xvars_nosort <- function(data, xvar1, xvar2, colcode, title) {
+  data %>%
+    count(eval(parse(text = xvar1)), eval(parse(text = xvar2))) %>%
+    ggplot(aes(x = `eval(parse(text = xvar1))`, y = n,
+               fill = `eval(parse(text = xvar2))`)) +
+    geom_bar(stat = 'identity', position = 'dodge') +
+    geom_text(aes(label = n), position = position_dodge(0.9),
+              vjust = -0.5, size = 3, family = 'MYH') +
+    labs(x = '', y = '', title = title) +
+    scale_fill_manual(values = colcode) +
+    eval(parse(text = mytheme_b))
+}
+
+
+ks_fun <- function(data, xvar, xvar_cut_new, yvar) {
+  data %>% 
+    filter(!eval(parse(text = xvar)) %in% NA) %>%
+    count(eval(parse(text = xvar_cut_new)), eval(parse(text = yvar))) %>%
+    spread(`eval(parse(text = yvar))`, n) %>%
+    mutate(bad = ifelse(bad %in% NA, 0, bad),
+	   bad_sum = sum(bad),
+           good_sum = sum(good),
+           bad_cumsum = cumsum(bad), 
+           good_cumsum = cumsum(good),
+           bad_cumper = round(bad_cumsum / bad_sum, 4),
+           good_cumper = round(good_cumsum / good_sum, 4),
+           ks = paste0((good_cumper - bad_cumper) * 100, '%'))
+}
+
+
+mydetach <- function() {
+  packs <- c('stats', 'graphics', 'grDevices', 'utils', 'datasets', 'methods', 'base')
+  packs_now <- (.packages())
+  packs_setdiff <- setdiff(packs_now, packs)
+  packs_rm <- paste0('package:', packs_setdiff)
+  for (i in packs_rm) {
+    detach(i, character.only = T)
+  }
+}
+
+
+over_per <- function(data) {
+  require(VIM)
+  require(dplyr)
+  data %>%
+    aggr(plot = F) %>%
+    .$missings %>%
+    as.data.frame() %>%
+    rename(MissCount = Count) %>%
+    mutate(MissPerent = MissCount / nrow(data),
+           OverPerent = paste0(round(1 - MissPerent, 3) * 100, '%'))
+}
+
+
+ScoreCut <- function(x, g = 10) {
+  require(Hmisc)
+  cuts <- cut2(x, g = g, onlycuts = T)
+  res <- data.frame(x = x,
+                    cut = cut2(x, cuts = cuts),
+                    score = as.numeric(cut2(x, cuts = cuts)))
+  return(res[, 'score'])
+}
+
+
+xvar_pass_cumsum_line <- function(data, xvar, yvar, fill = "#1f77b4", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         badcumsum  = cumsum(bad),
+         goodcumsum = cumsum(good),
+         percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar))`, y = percumsum, color = "red")) +
+  geom_line(group = 1, size = 1) +
+  geom_point(shape = 19, size = 2) +
+  geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.5, size = 3, family = "MYH", color = "black") +
+  scale_color_manual(values = fill) +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
+}
+
+
+xvar_pass_line <- function(data, xvar, yvar, fill = "#1f77b4", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         percent = round(bad / (bad + good) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar))`, y = percent, color = "red")) +
+  geom_line(group = 1, size = 1) +
+  geom_point(shape = 19, size = 2) +
+  geom_text(aes(label = paste0(percent, "%")), 
+            vjust = -0.5, size = 3, family = "MYH", color = "black") +
+  scale_color_manual(values = fill) +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
+}
+
+
+xvar_pass_nosort <- function(data, xvar, yvar, fill = "#ff7f0e", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(percent = bad / (bad + good) * 100) %>%
+  ggplot(aes(x = `eval(parse(text = xvar))`, y = percent)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = paste0(round(percent, 1), "%")), 
+            vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b))
+}
+
+
+xvar_pass_nosort_kable <- function(data, xvar, yvar) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+          bad_good = bad + good,
+          percent = round(bad / (bad + good) * 100, 1),
+          percent = paste0(percent, "%")) %>%
+  kable(align = "l")
+}
+
+
+xvar_pass_sort <- function(data, xvar, yvar, fill = "#ff7f0e", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(percent = bad / (bad + good) * 100) %>%
+  ggplot(aes(x = reorder(`eval(parse(text = xvar))`, percent), y = percent)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = paste0(round(percent, 1), "%")), 
+            vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b))
+}
+
+
+xvars_hist <- function(data, xvar1, xvar2, title) {
+  data %>%
+  select(xvar1, xvar2) %>%
+  gather(vars, value) %>%
+  ggplot(aes(x = value, fill = vars)) +
+  geom_histogram(position = "identity", alpha = 0.6) +
+  scale_fill_manual(values = c("#1f77b4", "#ff7f0e")) +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  guides(fill = guide_legend(title = NULL))
+}
+
+
+xvars_pass_cumsum_line_face <- function(data, xvar1, xvar2, yvar, title) {
+  data %>%
+  dplyr::count(eval(parse(text = xvar1)), 
+               eval(parse(text = xvar2)), 
+               eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  group_by(`eval(parse(text = xvar2))`) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         badcumsum  = cumsum(bad),
+         goodcumsum = cumsum(good),
+         percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar1))`, y = percumsum)) +
+  geom_line(aes(group = `eval(parse(text = xvar2))`, 
+                color = `eval(parse(text = xvar2))`), size = 1) +
+  geom_point(shape = 19, size = 2) +
+  facet_grid(. ~ `eval(parse(text = xvar2))`) + 
+  geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.8, size = 3, family = "MYH") +
+  labs(x = "", y = "", fill = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), 
+        strip.background = element_rect(fill = "lightblue", color = "black"),
+        legend.position = "none")
+}
+
+
+xvars_pass_face <- function(data, xvar1, xvar2, xvar3, yvar, colcode, title) {
+  data %>% 
+    count(eval(parse(text = xvar1)),
+          eval(parse(text = xvar2)),
+          eval(parse(text = xvar3)),
+          eval(parse(text = yvar))) %>%
+    spread(`eval(parse(text = yvar))`, n) %>%
+    mutate(bad = ifelse(bad %in% NA, 0, bad),
+           percent  = round(bad / (bad + good) * 100, 1)) %>%
+    ggplot(aes(x = `eval(parse(text = xvar1))`, y = percent, 
+               fill = `eval(parse(text = xvar2))`)) +
+    geom_bar(stat = 'identity', position = 'dodge') +
+    facet_grid(. ~ `eval(parse(text = xvar3))`) +
+    geom_text(aes(label = paste0(percent, "%")), vjust = -0.5, size = 3, 
+              family = "MYH", position = position_dodge(0.9)) +
+    scale_fill_manual(values = colcode) +
+    labs(x = '', y = '', title = title) +
+    eval(parse(text = mytheme_b)) +
+    theme(legend.position = 'none')
+}
+
+
+xvars_pass_line_face <- function(data, xvar1, xvar2, yvar, title) {
+  data %>%
+  dplyr::count(eval(parse(text = xvar1)), 
+               eval(parse(text = xvar2)), 
+               eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  group_by(`eval(parse(text = xvar2))`) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         percent  = round(bad / (bad + good) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar1))`, y = percent)) +
+  geom_line(aes(group = `eval(parse(text = xvar2))`, 
+                color = `eval(parse(text = xvar2))`), size = 1) +
+  geom_point(shape = 19, size = 2) +
+  facet_grid(. ~ `eval(parse(text = xvar2))`) + 
+  geom_text(aes(label = paste0(percent, "%")), 
+            vjust = -0.8, size = 3, family = "MYH") +
+  labs(x = "", y = "", fill = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), 
+        strip.background = element_rect(fill = "lightblue", color = "black"),
+        legend.position = "none")
+}
+
+
+xvars_pass_nosort <- 
+function(data, xvar1, xvar2, yvar, colcode, title) {
+  data %>% 
+  dplyr::group_by(eval(parse(text = xvar1)), eval(parse(text = xvar2))) %>%
+  dplyr::count(`eval(parse(text = xvar2))`, eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(percent = round(bad / (bad + good) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar1))`, y = percent, 
+         fill = `eval(parse(text = xvar2))`)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = paste0(percent, "%")), position = position_dodge(0.9), 
+            vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  scale_fill_manual(values = colcode) +
+  eval(parse(text = mytheme_b)) +
+  guides(fill = guide_legend(title = NULL))
+}
+
+
+xvars_pass_sort <- function(data, xvar1, xvar2, yvar, colcode, title) {
+  data %>% 
+  dplyr::group_by(eval(parse(text = xvar1)), eval(parse(text = xvar2))) %>%
+  dplyr::count(`eval(parse(text = xvar2))`, eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(percent = round(bad / (bad + good) * 100, 1)) %>%
+  ggplot(aes(x = reorder(`eval(parse(text = xvar1))`, percent), 
+             y = percent, fill = `eval(parse(text = xvar2))`)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = paste0(percent, "%")), position = position_dodge(0.9), 
+            vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  scale_fill_manual(values = colcode) +
+  eval(parse(text = mytheme_b)) +
+  guides(fill = guide_legend(title = NULL))
+}
+
+

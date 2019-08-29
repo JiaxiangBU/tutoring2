@@ -1,0 +1,72 @@
+---
+title: "JX_YWH"
+author: "wanhai you"
+date: "2018年12月26日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# revised by wanhai
+# 增加循环
+# 当前存在的问题还是只能对每个地区的第一页数据抓取
+```{r cookie}
+rm(list=ls())
+web="http://www.pizzahut.com.cn/StoreList"
+result = readLines(web,encoding="UTF-8")
+cities_list = grep('<a href="javascript:addCookie',result,value=T)
+cities_real = gsub('(.*)(\\(.*\\))(.*)',"\\2",cities_list)
+regex_cities = noquote(gsub('(\\()(.*)(\\))',"\\2",cities_real))
+regex_cities=gsub("('|')","",regex_cities)
+urlcities = paste(noquote(regex_cities),"|0|0",sep="")
+library(curl)
+allcookies = curl_escape(urlcities)
+nlen = length(allcookies)
+namelist =list()
+
+library(httr)
+library(rvest)
+library(dplyr)
+library(stringr)
+cookie1 <- ' _u_=1; gr_user_id=40f8d796-9967-4f05-b8e9-5ad94b4fdbce; Hm_lvt_7226f1398a8a1aae74384b0f7635de6f=1545374993; AlteonP=A8KeEQnySd7Wkp8OMNsQTw$$; __RequestVerificationToken=HWDlXbsh0czOhNPjLp5-CBYhP4HOM_IJwBL0FJmEScxG60_bsLhoA8EQ6pQrxO-U_ql7ohw9Ti_LUQtHmYVm-Uh8rAmHo4BVjyOTKmgybXMjHXhkwfh8RxCE2TbaXC-LWzeLDUx2G6vFuk-iLDxElw2; gr_session_id_a58d28f5fdbbcb8b=566fb47d-7fac-46a0-b63c-899eb81d0acd; gr_session_id_a58d28f5fdbbcb8b_566fb47d-7fac-46a0-b63c-899eb81d0acd=true'
+#varying_cookie <- '%E4%B8%8A%E6%B5%B7%E5%B8%82%7C0%7C0'
+
+payload<-list(
+  pageIndex=1,
+  pageSize=50, 
+  relativeOffset=0,
+  frontCategoryId=-1
+)
+
+url <- "http://www.pizzahut.com.cn/StoreList"
+
+for (i in 1:5) {
+varying_cookie <- allcookies[i]
+cookie2 <- paste(";iplocation=",varying_cookie,sep="")
+cookie <- paste(cookie1,cookie2,sep="")
+
+headers <- c('Accept'='text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+             'Content-Type'='text/html; charset=utf-8',          
+             'Referer'='http://www.pizzahut.com.cn/StoreList', 
+             'Host'= 'www.pizzahut.com.cn',
+             'User-Agent'='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106    
+             Safari/537.36','Connection'='keep-alive',
+             'cookie'=cookie)
+
+louwill <- GET(url,add_headers(.headers =headers),body = payload)  ##GET还是POST
+xml <- read_html(louwill$content) %>% html_nodes('.re_RNew')
+postdata <- xml %>% html_text()   
+pdata <- gsub('\r\n'," ",postdata)
+pdata=str_trim(pdata)
+fdata = strsplit(pdata,split="             ")
+bsk_name <- unlist(lapply(fdata,function(x) x[1]))
+bsk_address <- unlist(lapply(fdata,function(x) x[2]))
+bsk_telephone <- unlist(lapply(fdata,function(x) x[3]))
+bsk_region <- rep(regex_cities[i],times=length(bsk_name))
+namelist[[i]] = cbind(bsk_region,bsk_name,bsk_address,bsk_telephone)
+}
+
+noquote(do.call(rbind,namelist))
+```

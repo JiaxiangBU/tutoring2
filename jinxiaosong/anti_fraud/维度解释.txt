@@ -1,0 +1,13 @@
+﻿user_id：申请人唯一编码
+name：申请人姓名
+phone_no：手机号
+id_no：身份证号
+passdue_day：是否逾期（均逾期）
+registered_from：注册渠道
+registered_at：注册时间
+applied_at：申请时间
+province：省份证（省）
+phone_province：手机（省）
+city：省份证（市）
+phone_city：手机（市）
+district：省份证（区/县）

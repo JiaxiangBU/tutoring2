@@ -1,0 +1,65 @@
+> 1test数据是每5分钟测试一个点，2test是每15分钟测试一个点，现在需要将1test数据处理成和2test时间格式一样，再对比两组数据，挑选出2test数据和处理后的1test数据时间不对应的（即缺测或者重复测试）。
+
+```{r setup, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(tidyverse)
+library(lubridate)
+test_1 <- read_csv("./data/1test20180602.csv",col_names = FALSE, skip = 1)
+test_2 <- read_csv("./data/2test20180602.csv",col_names = FALSE, skip = 1)
+```
+
+    Error in make.names(col.names, unique = TRUE) : 
+      invalid multibyte string at '<c4><ea>'
+
++ `skip = 1`说明: 表格变量名中，奇异字符，因此删除重命名，否则无法读取文件。
+
+```{r}
+test_1 %>% 
+    transmute(datetime = make_datetime(X1,X2,X3,X4,X5)) %>% 
+    arrange(datetime) %>% 
+    mutate(duration = interval(datetime,lag(datetime)) %>% as.duration(),
+           duration_int = as.integer(duration)) %>% 
+    filter(!duration_int %in% c(-300))
+test_2 %>% 
+    transmute(datetime = make_datetime(X1,X2,X3,X4,X5)) %>% 
+    arrange(datetime) %>% 
+    mutate(duration = interval(datetime,lag(datetime)) %>% as.duration(),
+           duration_int = as.integer(duration)) %>% 
+    filter(!duration_int %in% c(-60*15))
+```
+
+这两条数据间隔不满足要求。
+
+对`test_2`进行合并。
+
+> 我想把一小时内的数据点由12个降到4个，把三组合并为一组取平均值。
+
+![](http://p24kaozv6.bkt.clouddn.com/xiaoxiao_demand.png)
+
+但是这里并未说明要取什么的平均？
+这个只有你可以尝试`group_by`和`summarise`函数完成，这里就不具体展开了。
+具体可以参考，[Baert dplyr tutorial](https://jiaxiangli.netlify.com/2018/02/dplyr/)
+
+要求很显然，分成，
+
++ 0 5 10
++ 15 20 25
++ 30 35 40 
++ 45 50 55
+
+```{r}
+test_1 %>% 
+    select(X1:X5) %>% 
+    mutate(datetime = make_datetime(X1,X2,X3,X4,X5)) %>% 
+    mutate(
+        X5 = 
+            case_when(
+                X5 %in% c(0,5,10) ~ 0,
+                X5 %in% c(15,20,25) ~ 15,
+                X5 %in% c(30,35,40 ) ~ 30,
+                X5 %in% c(45,50,55) ~ 45
+            )
+    )
+```
+
+

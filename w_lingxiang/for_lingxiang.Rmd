@@ -1,0 +1,73 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Tree
+
+```{r}
+library(rpart)
+mod_tree <- rpart(form, data = train %>% select(-starts_with("cmstr")))
+library(partykit)
+p2 <- plot(as.party(mod_tree));p2
+```
+
+#KS
+
+# 数据表建立函数
+
+```{r}
+try_func <- function(mod_forest,data6){
+  try_1 <- data_frame(
+    y = data6$good,
+    y_hat = predict(mod_forest, newdata = data6),
+    weekid = data6$weekid
+    ) %>%
+    mutate(grade = cut_number(y_hat, n = 4))
+  return(try_1)
+}
+```
+
+# KS数据表建立函数
+
+```{r}
+get_roc1 <- function(x, y) {
+pred <- ROCR::prediction(x, y)
+perf <- ROCR::performance(pred, 'tpr', 'fpr') 
+perf_df <- data.frame(perf@x.values, perf@y.values) 
+names(perf_df) <- c("fpr", "tpr")
+return(perf_df)
+}
+```
+
+```{r, message=FALSE, warning=FALSE}
+ks_data1 <- try_mod1 %>%
+  group_by(weekid) %>%
+  # sample_n(10000) %>%
+  dplyr::do(mutate(., idx2 = 1:nrow(.))) %>%
+  filter(idx2 > 0, idx2 < 10000) %>%
+  do(get_roc1(x = .$y_hat, y = .$y)) %>%
+  do(mutate(.,idx = 1:nrow(.)/nrow(.))) %>%
+  mutate(tpr = tpr^3, fpr = fpr) %>%
+  mutate(ks = tpr - fpr);head(ks_data1)
+ks_data1 %>%  
+  summarise(max(ks))
+label_name <- c(
+                    `41` = "训练组",
+                    `42` = "测试组1",
+                    `43` = "测试组2",
+                    `44` = "训练组",
+                    `45` = "测试组1",
+                    `46` = "测试组2"
+                    )
+p10 <- ks_data1 %>%
+  filter(weekid %in% c(44,45,46)) %>%
+  gather(`fpr/tpr/ks`, value, fpr:tpr, ks) %>%
+  ggplot(aes(x = idx, y = value, col = `fpr/tpr/ks`)) +
+    geom_smooth(se = F, method = 'loess', size = 0.5) +
+    xlab("概率分界值") + ylab("") +
+    ggtitle("模型稳定性和分类性检验") +
+    theme(text = element_text(family = 'STKaiti', size=10)) +
+    geom_hline(yintercept = 0.25, alpha = 0.25) +
+    facet_wrap(~ weekid, scales="free", labeller = as_labeller(label_name));p10
+```

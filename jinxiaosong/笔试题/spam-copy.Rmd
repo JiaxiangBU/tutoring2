@@ -1,0 +1,230 @@
+---
+title: "垃圾邮件分析决策"
+author: "靳晓松"
+date: "2018年7月6日"
+output: 
+  html_document:
+    number_sections: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: show
+    fig_width: 8
+    fig_height: 5
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+```
+
+<font size=4 face="微软雅黑">
+
+# 项目简介
+***
+&emsp;emsp;本项目的目的是通过对4601封电子邮件及其对应的标签进行预处理，并训练出一个可以有效地区分一封新邮件是否为垃圾邮件的模型。
+
+
+# 加载所需的程序包
+***
+
+```{r}
+library(tidyverse)
+library(DT)
+library(plotly)
+library(psych)
+library(caret)
+library(DMwR)
+```
+
+
+# 获取数据
+***
+&emsp;&emsp;获取数据时使用的是`choose.files()`函数，目的就是避免因为不同用户存放数据文件的位置不同导致文件找不到的情况发生。
+
+```{r}
+# spam <- read_csv("E:/ApplySquare/spam.csv")
+spam <- read_csv("spam.csv")
+```
+
+
+# 探索性数据分析
+***
+&emsp;&emsp;在探索性数据分析部分，主要包括探索数据集基本结构、缺失值、数据平衡性等内容。
+
+## 探索数据结构
+```{r}
+spam %>% glimpse() # 查看数据集的简单结构
+```
+上面的数据集结构简单探索主要返回了三部分信息：
+
+* **Observations: **返回数据集有4601行，即有4601条电子邮件
+* **Variables：**返回数据集有58列，即有58个变量
+* 最后一部分返回了各个变量的数据类型及部分特征值的展示，得知有三个整型(int)的变量、一个字符型(chr)变量，其他均是双精度型(dbl)变量。
+
+需要注意的是数据集中的因变量type是字符型，需要将其转换为因子型，方便后续的探索和训练模型。
+
+## 探索缺失值
+```{r}
+spam %>% is.na() %>% sum() # 查看数据中是否存在缺失值
+
+## 探索各变量存在缺失值的情况
+spam %>%
+  lapply(function(x) {sum(is.na(x))}) %>%
+  data.frame() %>% 
+  t() %>%
+  data.frame() %>%
+  rename(NaCount = ".") %>%
+  mutate(ColName = colnames(spam),
+         NaPercent = NaCount / nrow(spam),
+         NaPercent = round(NaPercent, 4) * 100) %>%
+  select(ColName, everything()) %>%
+  arrange(desc(NaCount)) %>%
+  datatable()
+```
+
+通过上面对数据集缺失值的探索，发现只有`cs`变量存在缺失值，缺失值为145个，占此列的3.15%。下面对缺失值进行填补：
+```{r}
+spam$cs %>% factor() %>% table() # 查看数据集中cs变量的不同特征值个数
+spam$cs[is.na(spam$cs)] <- 0 # 将缺失值用0填补
+```
+
+经过对原始数据中cs变量中特征值的观察，发现有4453个是0，2个是2，5个是1，所以用众数填补缺失值。
+
+## 探索因变量
+```{r}
+spam$type <- factor(spam$type) # 将type变量转换为因子型
+spam$type %>% table() # 查看数据集中不同种类邮件的个数
+spam$type %>% table() %>% prop.table() # 查看数据集中不同种类邮件的比例
+
+## 绘制因变量种类条形图
+spam %>% 
+  count(type) %>%
+  mutate(type_chn = c("非垃圾邮件", "垃圾邮件")) %>%
+  plot_ly(x = ~type_chn, y = ~n, color = ~type_chn) %>%
+  layout(xaxis = list(title = "邮件种类"),
+         yaxis = list(title = "邮件个数"))
+
+```
+
+将type转换为因子型之后，通过对因变量的探索，发现数据集存在不平衡的现象(垃圾邮件占总邮件的39.4%)，可能需要平衡数据。
+
+# 自变量&因变量
+```{r}
+# 重塑一列，将type列用0(nonspam)和1(spam)代替
+spam$type_num <- ifelse(spam$type == "nonspam", 0, 1)
+```
+这里我感觉需要添加一些自变量与因变量的图，但是不知道画什么图
+
+# 主成分分析
+***
+
+```{r}
+spam %>% 
+  select(-type) %>% 
+  prcomp(center = T, scale. = T) %>%
+  predict() %>% 
+  as_tibble() %>% 
+  select(1:2) %>% 
+  bind_cols(spam %>% select(type)) %>% 
+  mutate(type = as.factor(type)) %>% 
+  plot_ly(x = ~PC1, y = ~PC2, color = ~type)
+```
+
+<!-- # 特征选择 -->
+<!-- *** -->
+<!-- balabala -->
+
+<!-- ```{r} -->
+<!-- rfeControls_rf <- rfeControl(             # 设置rfe函数的控制参数 -->
+<!--   functions = rfFuncs,                    # 使用朴素贝叶斯算法 -->
+<!--   method = 'cv',                          # 使用交叉验证的抽样方法 -->
+<!--   number = 3)                             # 设定随机种子 -->
+
+<!-- fs_rf <- rfe(x = spam_train[, -58],       # 指定输入变量 -->
+<!--              y = spam_train[, 58],        # 指定输出变量 -->
+<!--              sizes = seq(4, 50, 3),       # 指定保留特征的数量 -->
+<!--              rfeControl = rfeControls_rf) # 指定控制参数 -->
+<!-- ``` -->
+
+
+# PCA降维
+```{r}
+spam %>%
+  select(-type) %>%
+  cor() %>%
+  fa.parallel(fa = "pc", n.iter = 100)
+```
+
+```{r}
+spam_pc <- principal(spam[-58], nfactors = 4, rotate = "varimax")
+spam_scores <- as.data.frame(spam_pc$scores)
+spam_scores$type <- spam$type
+```
+
+# 分层抽样
+```{r}
+set.seed(45)                                                   # 设置随机种子
+idx_pc <- createDataPartition(spam$type, p = 0.7, list = F)    # 构建训练集索引
+spam_pc_train <- spam_scores[idx_pc, ]                         # 构建训练集
+spam_pc_test  <- spam_scores[-idx_pc, ]                        # 构建测试集
+```
+
+# 建模
+## rpart
+```{r}
+set.seed(45)
+model_rp <- train(type ~., data = spam_pc_train, method = "rpart")
+
+pred_rp <- predict(model_rp, spam_pc_test[-5])
+confusionMatrix(pred_rp, spam_pc_test$type)
+
+```
+
+## rf
+```{r}
+set.seed(45)
+ctrl <- trainControl(method = "cv", number = 5, selectionFunction = "oneSE")
+
+set.seed(45)
+model_rf <- train(type ~., data = spam_pc_train, method = "rf", trControl = ctrl)
+
+pred_rf <- predict(model_rf, spam_pc_test[-5])
+confusionMatrix(pred_rf, spam_pc_test$type)
+```
+
+# nb
+```{r}
+set.seed(45)
+ctrl <- trainControl(method = "cv", number = 5, selectionFunction = "oneSE")
+
+set.seed(45)
+model_nb <- train(type ~., data = spam_pc_train, method = "nb", trControl = ctrl)
+
+pred_nb <- predict(model_nb, spam_pc_test[-5])
+confusionMatrix(pred_nb, spam_pc_test$type)
+```
+
+## svm
+```{r}
+set.seed(45)
+ctrl <- trainControl(method = "cv", number = 5, selectionFunction = "oneSE")
+
+set.seed(45)
+model_svm <- train(type ~., data = spam_pc_train, method = "svmRadial", trControl = ctrl)
+
+pred_svm <- predict(model_svm, spam_pc_test[-5])
+confusionMatrix(pred_svm, spam_pc_test$type)
+```
+
+# 数据平衡
+```{r}
+set.seed(45)
+# spam_balance <- SMOTE(type ~ ., data = spam, perc.over = 100, perc.under = 200)
+```
+这里报错了，但是不知道为啥。
+
+后续的思路就是平衡之后在建模评估一下，与平衡前做对比
+
+
+</font>

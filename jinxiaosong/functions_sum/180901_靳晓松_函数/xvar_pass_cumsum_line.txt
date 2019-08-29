@@ -1,0 +1,18 @@
+xvar_pass_cumsum_line <- function(data, xvar, yvar, fill = "#1f77b4", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         badcumsum  = cumsum(bad),
+         goodcumsum = cumsum(good),
+         percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar))`, y = percumsum, color = "red")) +
+  geom_line(group = 1, size = 1) +
+  geom_point(shape = 19, size = 2) +
+  geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.5, size = 3, family = "MYH", color = "black") +
+  scale_color_manual(values = fill) +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
+}

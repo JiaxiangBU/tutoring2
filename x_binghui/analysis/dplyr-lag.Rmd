@@ -1,0 +1,19 @@
+```{r message=FALSE, warning=FALSE}
+source(here::here("R/load.R"))
+```
+
+```{r}
+df <- read_excel("../refs/数据处理.xlsx")
+```
+
+```{r}
+df %>% 
+    mutate(
+        `节点` = fct_relevel(`节点`, `时间`)
+    ) %>% 
+    group_by(user_id, `链路`, `节点`) %>% 
+    mutate(route = as.integer(`节点`))
+```
+
+主要是需要产生 路径是需要产生 1,2,2,2,2 ... 这样的。
+暂时没有想到好的方式。

@@ -1,0 +1,9 @@
+---
+output: github_document
+---
+
+```{r}
+# install.packages("dataMaid")
+library(dataMaid)
+makeDataReport(trees, output="html")
+```

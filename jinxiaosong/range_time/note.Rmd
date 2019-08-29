@@ -1,0 +1,57 @@
+---
+output: github_document
+---
+
+>
+怎么留下第一次打卡时间和最后一次打卡时间呢
+>
+如果只有一个打卡时间 就留下它本身就行
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(xfun)
+# read_utf8('range_time.csv')
+library(data.table)
+data <- fread('range_time.csv')
+```
+
+```{r eval=F}
+library(tidyverse)
+data %>% 
+    select(V1) %>% 
+    mutate(V1_e = str_extract_all(V1,'[0-9]{2}:[0-9]{2}:[0-9]{2}')) %>% 
+    mutate(V1_max = map_chr(V1_e,max,na.rm=T)) %>% 
+    mutate(V1_min = map_chr(V1_e,min,na.rm=T))
+```
+
+```{r}
+library(tidyverse)
+data %>% 
+    mutate_all(~str_extract_all(.,'[0-9]{2}:[0-9]{2}:[0-9]{2}')) %>% 
+    mutate_all(
+        function(x){
+            # x_max = map_chr(x,max,na.rm=T)
+            # x_min = map_chr(x,min,na.rm=T)
+            # text = paste0(x_max,x_min,collapse = ',')
+            # return(text)
+            
+            map_chr(x
+                    # ,length
+                    ,~case_when(
+                        length(.) == 0 ~ '-'
+                        ,length(.) == 1 ~ max(.)
+                        ,length(.) >= 2 ~ paste(max(.,na.rm = T)
+                                                ,min(.,na.rm = T)
+                                                ,sep = ',')
+                        )
+                    )
+        }
+    ) %>% 
+    head
+```
+
+1. 处理一下唯一值的情况
+1. 处理一下`NA`和`character(0)`的情况

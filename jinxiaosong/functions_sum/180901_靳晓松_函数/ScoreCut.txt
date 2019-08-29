@@ -1,0 +1,8 @@
+ScoreCut <- function(x, g = 10) {
+  require(Hmisc)
+  cuts <- cut2(x, g = g, onlycuts = T)
+  res <- data.frame(x = x,
+                    cut = cut2(x, cuts = cuts),
+                    score = as.numeric(cut2(x, cuts = cuts)))
+  return(res[, 'score'])
+}

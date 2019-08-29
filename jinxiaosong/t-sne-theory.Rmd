@@ -1,0 +1,66 @@
+---
+title: t-SNE理论部分补充
+author: 李家翔
+date: '2018-01-22'
+slug: t-sne-append
+categories:
+  - statistics
+tags:
+  - machineLearning
+---
+
+[t-SNE处理高维数据可视化](https://jiaxiangli.netlify.com/2017/12/21/t-sne/)
+这里提供了Python代码和例子，
+这里主要解释理论，
+或许给出R的代码和Python再次整理好的代码。
+
+更新记录用于博客。
+
+***
+
+
+### 比PCA好的地方
+
+降维是为了用数据的pattern，从高维转为成低维。
+通常有用信息signal和无用信息noise并存，我们降维的工作就是要
+更多踢掉noise。
+
+PCA是1933年的方法，t-SNE是2008年的方法，因此这里t-SNE感觉会好。
+因为PCA是处理线性关系的降维，数据只在scaling和adding两个基础上进行作业。
+但是数据的非线性关系，比如多项式关系，PCA不能够很好的处理。
+
+t-SNE全名是stochastic-neighbor-embeding by t-distribution，这里限定了
+neighbor和
+t-distribution，
+下面马上解释。
+
+先谈SNE。
+
+假设数据有任意两个点$x_i$和$x_j$，他们包含了数据的n维信息，比如我们有是三个特征向量，
+年龄、工作、学校，那么$x_i$很可能是$[25, 工薪族, xx学校]$。
+我们假设$x_i$满足一个正态分布，$\mathcal N \sim (x_i,\sigma_i)$。
+那么conditional on$x_i$，$x_j$的发生概率为$P(x_j;x_i,\sigma_i) = \frac{1}{\sqrt{2\pi\sigma_i}}\exp(-\frac{(x_j-x_i)^2}{2\sigma_i})$。
+这个公式发生了$(x_j-x_i)^2$也可以间接表达了两点在空间的举例。
+我们知道当$x_j$和$x_i$离得越近时，$x_j$处于分布的中间，表示发生概率很高。
+我们构建一个概率函数，$p_{j|i} = \frac{\exp(-\frac{(x_i-x_j)^2}{2\sigma_i})}{\sum_{k \neq i}\exp(-\frac{(x_i-x_k)^2}{2\sigma_i}}$
+概率用$p_{j|i}$表示。
+
+假设我们将数据降维，原来的那两点，现在用$y_i$和$y_j$表示。
+我们假设$y_i$满足一个正态分布，$\mathcal N \sim (y_i,\sigma_i)$。
+那么conditional on$y_i$，$y_j$的发生概率为$P(y_j;y_i,\sigma_i) = \frac{1}{\sqrt{2\pi\sigma_i}}\exp(-\frac{(y_j-y_i)^2}{2\sigma_i})$。
+这个公式发生了$(y_j-y_i)^2$也可以间接表达了两点在空间的举例。
+我们知道当$y_j$和$y_i$离得越近时，$y_j$处于分布的中间，表示发生概率很高。
+我们构建一个概率函数，$q_{j|i} = \frac{\exp(-\frac{(y_i-y_j)^2}{2\sigma_i})}{\sum_{k \neq i}\exp(-\frac{(y_i-y_k)^2}{2\sigma_i}}$
+概率用$q_{j|i}$表示。
+
+如果$p_{j|i}$和$q_{j|i}$越类似说明拟合效果越好。
+我们可以用$p_{j|i}-q_{j|i}$表示，
+同时加入两点的对称性，进行整体优化，
+$(p_{j|i}-q_{j|i})+(p_{i|j}-q_{i|j})$。
+
+这就是SNE的理论基础。
+
+同时这里用到的正态分布，换成t分布，就是SNE的2.0版本，t-SNE了。
+解释逻辑的
+[英文版本，比较清楚](https://www.analyticsvidhya.com/blog/2017/01/t-sne-implementation-r-python/)，
+[这里有中文版本，但是比较乱，专业名词不是很看得懂，但是在英文里面就是很简单的词汇。](https://mp.weixin.qq.com/s/_DXMlNZHVKm2jMnLGQFM_Q)

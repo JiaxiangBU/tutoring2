@@ -1,0 +1,84 @@
+---
+title: 计算 lasso 的 p 值
+bibliography: [../../imp_rmd/add_bc.bib, ../refs/add.bib]
+output: bookdown::html_document2
+---
+```{r}
+library(glmnet)
+x1 <- c(1, 2, 3, 4, 5, 6)
+x2 <- c(3, 4, 5, 6, 7, 8)
+y <- c(1, 0, 0, 1, 0, 1)
+x <- cbind(x1, x2)
+fit <- glmnet(x, y, alpha = 1)
+
+```
+
+> if alpha = 1, fit a lasso model
+[@James2013An, pp.256]
+
+```{r}
+str(fit)
+```
+
+这里没有提供 p 值的对象。
+
+参考 @410196 的做法是
+
+1. 保留 x 变量，重新进行 `lm`，这个自己可以尝试下
+1. 采用 bootstrap 的方式，@410196 的代码写的过于复杂，下面是一个精简版本。
+
+我们知道 OLS 回归中，$\hat beta$ 是估计的均值，se 是 $\hat beta$ 的标准差，比值是 t 值，对应地，计算出 p 值，因此我们只要模拟出 $\hat beta$ 的分布即可。
+
+```{r message=FALSE, warning=FALSE}
+library(boot)
+library(glmnet)
+library(tidyverse)
+
+x1 <- rnorm(100)
+x2 <- rnorm(100)
+y <- runif(100)
+x <- cbind(x1, x2)
+get_beta <- function() {
+    train_index <- sample(1:length(y), 80 , replace = FALSE)
+    x_train <- x[train_index,]
+    x_test <- x[-train_index,]
+    y_train <- y[train_index]
+    lasso_mod <-
+        glmnet(x_train, y_train, alpha = 1, lambda = 0) # Fit lasso model on training data
+    beta_result <-
+        coef(lasso_mod) %>% t() %>% as.matrix() %>% as.data.frame()
+    return(beta_result)
+}
+beta_list <- list()
+for (i in 1:30) {
+    # beta_matrix <- append(beta_list,possibly(get_beta, NA)())
+    beta_list[[i]] <- get_beta()
+}
+```
+
+```{r}
+beta_df <-
+    beta_list %>%
+    bind_rows()
+```
+
+```{r}
+beta_df %>% head
+```
+
+
+```{r}
+beta_df %>% 
+    gather() %>% 
+    group_by(key) %>% 
+    summarise(
+        beta = mean(value),
+        sd = sd(value)
+    ) %>% 
+    mutate(
+        t = beta/(sd/sqrt(100)),
+        pvalue = 2*pt(-abs(t),df=100-1)
+        # https://www.cyclismo.org/tutorial/R/pValues.html
+    )
+```
+

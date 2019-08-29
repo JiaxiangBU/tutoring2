@@ -1,0 +1,11 @@
+xvars_hist <- function(data, xvar1, xvar2, title) {
+  data %>%
+  select(xvar1, xvar2) %>%
+  gather(vars, value) %>%
+  ggplot(aes(x = value, fill = vars)) +
+  geom_histogram(position = "identity", alpha = 0.6) +
+  scale_fill_manual(values = c("#1f77b4", "#ff7f0e")) +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  guides(fill = guide_legend(title = NULL))
+}

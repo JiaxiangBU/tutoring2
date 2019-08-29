@@ -1,0 +1,61 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r setup}
+#classification for credit data
+### Install required packages.
+library(e1071)
+library(ROCR)
+library(SDMTools)
+library(rpart)
+library(randomForest)
+library(readr)
+library(tidyverse)
+library(broom)
+library(RODBC)
+library(forcats)
+impala <- odbcConnect("Impala")
+library(doParallel)
+registerDoParallel(cores = 4)
+```
+
+```{r}
+data1<-sqlQuery(odbcConnect("impala")," 
+               select * from  opd.mkt_dx90_modelvariable_xunihua
+                
+                "
+                )
+```
+
+```{r}
+mod_forest <- randomForest(is_apply ~., data = data1, ntree = 201, mtry = 3)
+mod_forest
+```
+
+```{r}
+sum(diag(mod_forest$confusion)) / nrow(data1)
+```
+
+```{r}
+(p3 <- varImpPlot(mod_forest))
+```
+
+```{r}
+(top10 <- 
+importance(mod_forest) %>%
+  as.data.frame() %>%
+  rownames_to_column() %>%
+  arrange(desc(IncNodePurity)) %>%
+  mutate(IncNodePurity = formatC(IncNodePurity, format = "f", digit = 3)) %>%
+  mutate(IncNodePurity = as.numeric(IncNodePurity)) %>%
+  head(n = 10)
+)
+```
+
+```{r}
+model1 <- glm(formula = is_apply ~., family = binomial(link='logit'),data=data1)
+```
+

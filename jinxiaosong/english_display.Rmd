@@ -1,0 +1,58 @@
+---
+title: "《Advanced R》Note"
+author: "靳晓松"
+date: "2018年4月29日"
+output: 
+  html_document:
+    fig_height: 4.5
+    highlight: tango
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 加载程序包
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+
+```
+
+# lapply返回数据框
+<font size=2 face="微软雅黑">
+
+使用lapply函数去替代某些重复性操作的时候，难免会返回列表数据。一般而言，还得需要使用dataframe函数去转换为数据框，略显繁琐。下面我们“df[]”去解决这个问题：
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+df <- data.frame(a = 1:3, b = 2:4)
+
+df[] <- lapply(df, function(x) { x + 1 })
+df
+
+```
+
+# 多个函数应用于同一个数据
+<font size=2 face="微软雅黑">
+
+通常都是使用lapply对数据的每一列执行同一个函数命令，下面使用lapply去实现多个函数作用于同一个数据：
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+my_summary <- function(x) {
+  funs <- c(mean, median, sd, mad, IQR)
+  lapply(funs, function(f) f(x, na.rm = TRUE)) %>% unlist()
+}
+
+my_summary(df$a)
+```
+
+# 

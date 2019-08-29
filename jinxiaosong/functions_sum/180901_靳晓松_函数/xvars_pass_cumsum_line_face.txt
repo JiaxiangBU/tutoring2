@@ -1,0 +1,24 @@
+xvars_pass_cumsum_line_face <- function(data, xvar1, xvar2, yvar, title) {
+  data %>%
+  dplyr::count(eval(parse(text = xvar1)), 
+               eval(parse(text = xvar2)), 
+               eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  group_by(`eval(parse(text = xvar2))`) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+         badcumsum  = cumsum(bad),
+         goodcumsum = cumsum(good),
+         percumsum  = round(badcumsum / (badcumsum + goodcumsum) * 100, 1)) %>%
+  ggplot(aes(x = `eval(parse(text = xvar1))`, y = percumsum)) +
+  geom_line(aes(group = `eval(parse(text = xvar2))`, 
+                color = `eval(parse(text = xvar2))`), size = 1) +
+  geom_point(shape = 19, size = 2) +
+  facet_grid(. ~ `eval(parse(text = xvar2))`) + 
+  geom_text(aes(label = paste0(percumsum, "%")), 
+            vjust = -0.8, size = 3, family = "MYH") +
+  labs(x = "", y = "", fill = "", title = title) +
+  eval(parse(text = mytheme_b)) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1), 
+        strip.background = element_rect(fill = "lightblue", color = "black"),
+        legend.position = "none")
+}

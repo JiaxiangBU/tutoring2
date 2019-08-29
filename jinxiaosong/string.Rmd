@@ -1,0 +1,21 @@
+---
+output: github_document
+---
+
+```{r}
+# library(tidyverse) 
+# str_extract('"a_1_2>2000"', '>\\d+')
+```
+
+```{r}
+text <- '"a_1_2>2000"'
+```
+
+```{r}
+library(rebus)
+library(magrittr)
+library(stringr)
+text %>% 
+    str_match(">(\\d{4})") %>% .[1,2]
+```
+

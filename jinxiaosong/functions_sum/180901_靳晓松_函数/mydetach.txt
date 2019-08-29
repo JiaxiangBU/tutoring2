@@ -1,0 +1,9 @@
+mydetach <- function() {
+  packs <- c('stats', 'graphics', 'grDevices', 'utils', 'datasets', 'methods', 'base')
+  packs_now <- (.packages())
+  packs_setdiff <- setdiff(packs_now, packs)
+  packs_rm <- paste0('package:', packs_setdiff)
+  for (i in packs_rm) {
+    detach(i, character.only = T)
+  }
+}

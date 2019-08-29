@@ -1,0 +1,16 @@
+xvars_pass_sort <- function(data, xvar1, xvar2, yvar, colcode, title) {
+  data %>% 
+  dplyr::group_by(eval(parse(text = xvar1)), eval(parse(text = xvar2))) %>%
+  dplyr::count(`eval(parse(text = xvar2))`, eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(percent = round(bad / (bad + good) * 100, 1)) %>%
+  ggplot(aes(x = reorder(`eval(parse(text = xvar1))`, percent), 
+             y = percent, fill = `eval(parse(text = xvar2))`)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = paste0(percent, "%")), position = position_dodge(0.9), 
+            vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  scale_fill_manual(values = colcode) +
+  eval(parse(text = mytheme_b)) +
+  guides(fill = guide_legend(title = NULL))
+}

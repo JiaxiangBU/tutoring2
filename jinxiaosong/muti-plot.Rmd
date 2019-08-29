@@ -1,0 +1,25 @@
+```{r}
+library(Rmisc)
+library(tidyverse)
+
+a <- ggplot(iris, aes(x = Species, y = Sepal.Length)) + geom_boxplot() + theme_bw() + xlab("")
+b <- ggplot(iris, aes(x = Species, y = Sepal.Width)) + geom_boxplot() + theme_bw() + xlab("")
+
+d <- list(a, b)
+multiplot(plotlist = d, cols = 2)
+```
+
+```{r}
+gg_lists <- list()
+# names(iris)[1:2]
+for (col in names(iris)[1:2]) {
+  
+  gg_list <- ggplot(iris, aes_string(x = "Species", y = col)) +
+    geom_boxplot() + theme_bw() + labs(x = "", y = col)
+  
+  gg_lists <- append(gg_lists, list(gg_list))
+}
+
+multiplot(plotlist = gg_lists, cols = 2)
+```
+

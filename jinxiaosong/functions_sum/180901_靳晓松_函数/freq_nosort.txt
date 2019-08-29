@@ -1,0 +1,9 @@
+freq_nosort <- function(data, var, fill = "#1f77b4", title) {
+  data %>%
+  dplyr::count(eval(parse(text = var))) %>%
+  ggplot(aes(x = `eval(parse(text = var))`, y = n)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = n), vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b))
+}

@@ -1,0 +1,58 @@
+---
+output: github_document
+---
+
+1. id：客户
+1. name：客户联系人姓名
+1. phone：客户联系人手机号
+
+```{r}
+library(plyr)
+library(tidyverse)
+```
+
+
+# 创建数据
+***
+
+```{r}
+df <- data.frame(id = sort(c(rep(letters[1:3], each = 2), 'a', 'a', 'b', 'd')),
+                 name = LETTERS[1:10],
+                 phone = 0:9); df
+```
+
+
+# 方法一
+***
+
+```{r}
+df <- df %>% group_by(id) %>% mutate(number = 1:length(id)); df
+
+df_1 <- df %>% filter(number == 1) %>% select(-number)
+df_2 <- df %>% filter(number == 2) %>% select(-number)
+df_3 <- df %>% filter(number == 3) %>% select(-number)
+df_4 <- df %>% filter(number == 4) %>% select(-number)
+
+df_1 %>%
+  left_join(df_2, by = 'id') %>%
+  left_join(df_3, by = 'id') %>%
+  left_join(df_4, by = 'id')
+```
+
+
+# 方法二
+***
+
+【别运行】我记得你当时用过这个批量join，我这样写就崩了！！！
+
+```{r}
+# dfs <- list(
+#   df_1 <- df %>% filter(number == 1) %>% select(-number),
+#   df_2 <- df %>% filter(number == 2) %>% select(-number),
+#   df_3 <- df %>% filter(number == 3) %>% select(-number),
+#   df_4 <- df %>% filter(number == 4) %>% select(-number)
+# )
+# 
+# join_all(dfs, 'id')
+```
+

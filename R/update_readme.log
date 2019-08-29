@@ -1,0 +1,274 @@
+[32m✔[39m Setting active project to [34m'/Users/vija/Downloads/work/tutoring'[39m
+─ [1mAttaching packages[22m ───────────────────────── tidyverse 1.2.1 ─
+[32m✔[39m [34mggplot2[39m 3.1.0       [32m✔[39m [34mpurrr  [39m 0.2.5  
+[32m✔[39m [34mtibble [39m 2.1.1       [32m✔[39m [34mdplyr  [39m 0.8.0.[31m1[39m
+[32m✔[39m [34mtidyr  [39m 0.8.2       [32m✔[39m [34mstringr[39m 1.4.0  
+[32m✔[39m [34mreadr  [39m 1.1.1       [32m✔[39m [34mforcats[39m 0.3.0  
+─ [1mConflicts[22m ────────────────────────── tidyverse_conflicts() ─
+[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+
+载入程辑包：‘glue’
+
+The following object is masked from ‘package:dplyr’:
+
+    collapse
+
+here() starts at /Users/vija/Downloads/work/tutoring
+
+载入程辑包：‘kableExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    group_rows
+
+
+Job Start: 2019-07-19 21:29:19
+On branch master
+Your branch is ahead of 'origin/master' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	R/update_readme.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Already up to date.
+
+
+processing file: README.Rmd
+  |                                                                         |                                                                 |   0%  |                                                                         |.........                                                        |  14%
+  ordinary text without R code
+
+  |                                                                         |...................                                              |  29%
+label: unnamed-chunk-1 (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                         |............................                                     |  43%
+  ordinary text without R code
+
+  |                                                                         |.....................................                            |  57%
+label: unnamed-chunk-2 (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                         |..............................................                   |  71%
+   inline R code fragments
+
+  |                                                                         |........................................................         |  86%
+label: unnamed-chunk-3 (with options) 
+List of 4
+ $ echo   : logi FALSE
+ $ message: logi FALSE
+ $ warning: logi FALSE
+ $ results: chr "asis"
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: README.knit.md
+
+/Applications/RStudio.app/Contents/MacOS/pandoc/pandoc +RTS -K512m -RTS README.utf8.md --to gfm-ascii_identifiers --from markdown+autolink_bare_uris+tex_math_single_backslash --output README.md --standalone --template /Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/default.md 
+/Applications/RStudio.app/Contents/MacOS/pandoc/pandoc +RTS -K512m -RTS README.md --to html4 --from gfm-ascii_identifiers --output README.html --standalone --self-contained --highlight-style pygments --template /Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/preview.html --variable 'github-markdown-css:/Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/github.css' --email-obfuscation none --metadata pagetitle=PREVIEW 
+
+Preview created: README.html
+
+Output created: README.md
+错误: [ENOTDIR] Failed to search directory 'README.html': not a directory
+停止执行
+[32m✔[39m Setting active project to [34m'/Users/vija/Downloads/work/tutoring'[39m
+─ [1mAttaching packages[22m ───────────────────────── tidyverse 1.2.1 ─
+[32m✔[39m [34mggplot2[39m 3.1.0       [32m✔[39m [34mpurrr  [39m 0.2.5  
+[32m✔[39m [34mtibble [39m 2.1.1       [32m✔[39m [34mdplyr  [39m 0.8.0.[31m1[39m
+[32m✔[39m [34mtidyr  [39m 0.8.2       [32m✔[39m [34mstringr[39m 1.4.0  
+[32m✔[39m [34mreadr  [39m 1.1.1       [32m✔[39m [34mforcats[39m 0.3.0  
+─ [1mConflicts[22m ────────────────────────── tidyverse_conflicts() ─
+[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+
+载入程辑包：‘glue’
+
+The following object is masked from ‘package:dplyr’:
+
+    collapse
+
+here() starts at /Users/vija/Downloads/work/tutoring
+
+载入程辑包：‘kableExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    group_rows
+
+
+Job Start: 2019-07-19 21:30:08
+On branch master
+Your branch is ahead of 'origin/master' by 2 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   R/update_readme.R
+	modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	R/update_readme.log
+	README.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Already up to date.
+
+
+processing file: README.Rmd
+  |                                                                         |                                                                 |   0%  |                                                                         |.........                                                        |  14%
+  ordinary text without R code
+
+  |                                                                         |...................                                              |  29%
+label: unnamed-chunk-1 (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                         |............................                                     |  43%
+  ordinary text without R code
+
+  |                                                                         |.....................................                            |  57%
+label: unnamed-chunk-2 (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                         |..............................................                   |  71%
+   inline R code fragments
+
+  |                                                                         |........................................................         |  86%
+label: unnamed-chunk-3 (with options) 
+List of 4
+ $ echo   : logi FALSE
+ $ message: logi FALSE
+ $ warning: logi FALSE
+ $ results: chr "asis"
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: README.knit.md
+
+/Applications/RStudio.app/Contents/MacOS/pandoc/pandoc +RTS -K512m -RTS README.utf8.md --to gfm-ascii_identifiers --from markdown+autolink_bare_uris+tex_math_single_backslash --output README.md --standalone --template /Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/default.md 
+/Applications/RStudio.app/Contents/MacOS/pandoc/pandoc +RTS -K512m -RTS README.md --to html4 --from gfm-ascii_identifiers --output README.html --standalone --self-contained --highlight-style pygments --template /Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/preview.html --variable 'github-markdown-css:/Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/github.css' --email-obfuscation none --metadata pagetitle=PREVIEW 
+
+Preview created: README.html
+
+Output created: README.md
+[1] TRUE
+README.Rmd and README.md should be both staged
+use 'git commit --no-verify' to override this check
+To https://github.com/JiaxiangBU/tutoring.git
+   336d698..b6a0d8c  master -> master
+
+Job End: 2019-07-19 21:30:33
+[32m✔[39m Setting active project to [34m'/Users/vija/Downloads/work/tutoring'[39m
+─ [1mAttaching packages[22m ───────────────────────── tidyverse 1.2.1 ─
+[32m✔[39m [34mggplot2[39m 3.1.0       [32m✔[39m [34mpurrr  [39m 0.2.5  
+[32m✔[39m [34mtibble [39m 2.1.1       [32m✔[39m [34mdplyr  [39m 0.8.0.[31m1[39m
+[32m✔[39m [34mtidyr  [39m 0.8.2       [32m✔[39m [34mstringr[39m 1.4.0  
+[32m✔[39m [34mreadr  [39m 1.1.1       [32m✔[39m [34mforcats[39m 0.3.0  
+─ [1mConflicts[22m ────────────────────────── tidyverse_conflicts() ─
+[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
+
+载入程辑包：‘glue’
+
+The following object is masked from ‘package:dplyr’:
+
+    collapse
+
+here() starts at /Users/vija/Downloads/work/tutoring
+
+载入程辑包：‘kableExtra’
+
+The following object is masked from ‘package:dplyr’:
+
+    group_rows
+
+
+Job Start: 2019-07-19 21:31:41
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	R/update_readme.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Already up to date.
+
+
+processing file: README.Rmd
+  |                                                                         |                                                                 |   0%  |                                                                         |.........                                                        |  14%
+  ordinary text without R code
+
+  |                                                                         |...................                                              |  29%
+label: unnamed-chunk-1 (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                         |............................                                     |  43%
+  ordinary text without R code
+
+  |                                                                         |.....................................                            |  57%
+label: unnamed-chunk-2 (with options) 
+List of 1
+ $ include: logi FALSE
+
+  |                                                                         |..............................................                   |  71%
+   inline R code fragments
+
+  |                                                                         |........................................................         |  86%
+label: unnamed-chunk-3 (with options) 
+List of 4
+ $ echo   : logi FALSE
+ $ message: logi FALSE
+ $ warning: logi FALSE
+ $ results: chr "asis"
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: README.knit.md
+
+/Applications/RStudio.app/Contents/MacOS/pandoc/pandoc +RTS -K512m -RTS README.utf8.md --to gfm-ascii_identifiers --from markdown+autolink_bare_uris+tex_math_single_backslash --output README.md --standalone --template /Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/default.md 
+/Applications/RStudio.app/Contents/MacOS/pandoc/pandoc +RTS -K512m -RTS README.md --to html4 --from gfm-ascii_identifiers --output README.html --standalone --self-contained --highlight-style pygments --template /Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/preview.html --variable 'github-markdown-css:/Library/Frameworks/R.framework/Versions/3.5/Resources/library/rmarkdown/rmarkdown/templates/github_document/resources/github.css' --email-obfuscation none --metadata pagetitle=PREVIEW 
+
+Preview created: README.html
+
+Output created: README.md
+[1] TRUE
+[master c2347f6] automatically update
+ 2 files changed, 446 insertions(+), 164 deletions(-)
+ create mode 100644 R/update_readme.log
+To https://github.com/JiaxiangBU/tutoring.git
+   b6a0d8c..c2347f6  master -> master
+
+Job End: 2019-07-19 21:32:00

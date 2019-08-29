@@ -1,0 +1,91 @@
+---
+title: "R Notebook"
+output: github_document
+---
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(readxl)
+library(tidyverse)
+library(lubridate)
+library(glue)
+```
+
+
+
+```{r}
+data <-
+    read_excel('data.xlsx') %>% 
+    rename_all(str_to_lower) %>% 
+    # 变量名称用小写
+    mutate_at(vars(starttime,endtime),dmy_hms)
+    # 时间格式有问题，需要修改
+```
+
+>
+表格中每一个ID表示每一个病人，
+num表示用某种药物的次数（第1次，第2次。。。），
+starttime和endtime分别是这种药物使用的起止时间。随后一列是时间差。
+我现在想要刷选出针对每一个病人，
+>
+1. 如果只用过一次药，那么就筛选出第一次。
+1. 如果用过不止一次，那么筛选出每一次用药的开始时间与上一次用药的结束时间的差值小于一天的所有行。
+    1. 并且第一次用药记录保留
+
+那么这个是两个需求。
+
+# 需求一
+
+```{r}
+data_1 <- 
+data %>% 
+    group_by(id) %>% 
+    filter(n() == 1)
+    # 只有一次用药的人
+data_1
+```
+
+# 需求二
+
+```{r}
+data_2 <- 
+    data %>% 
+    group_by(id) %>% 
+    filter(n() > 1) %>%
+    arrange(starttime) %>% 
+    # 需要查看本次和上次的关系，因此排序
+    # mutate(is_ok = (starttime - lag(endtime)) < ddays(1))
+    filter(
+        (
+            (starttime - lag(endtime)) < ddays(1) | num == 1
+        )
+    )
+data_2
+```
+
+
+>
+data_2里病人的第一次用药都没有了，都是从第二次开始的？
+
+是的
+这是按照需求一和需求二分开的。
+
+>    
+但是第二次还是需要与第一次比较的。？
+
+进行什么样的比较？
+“如果只用过一次药”和“如果用过不止一次”两个条件是互斥不重叠。
+
+>
+我将“filter(n() > 1) %>% ”这句删除，结果好像还是一样
+
+是指`data_2`的结果一样还是，合并后的结果一样？
+
+# 合并
+
+```{r}
+bind_rows(data_1,data_2) %>% 
+    distinct() %>% 
+    write_excel_csv('output.csv')
+```
+

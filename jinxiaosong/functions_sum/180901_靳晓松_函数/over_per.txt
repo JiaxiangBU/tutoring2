@@ -1,0 +1,11 @@
+over_per <- function(data) {
+  require(VIM)
+  require(dplyr)
+  data %>%
+    aggr(plot = F) %>%
+    .$missings %>%
+    as.data.frame() %>%
+    rename(MissCount = Count) %>%
+    mutate(MissPerent = MissCount / nrow(data),
+           OverPerent = paste0(round(1 - MissPerent, 3) * 100, '%'))
+}

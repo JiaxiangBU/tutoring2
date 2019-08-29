@@ -1,0 +1,29 @@
+﻿song_help：需要构建决策树的数据
+x1:x5：    自变量
+y：        因变量
+
+目的：构建一颗好的决策树（尽量通多更多的人且逾期率在3%以下）
+注：x2中的“0”是缺失值，x5中的“9”是特殊的一个值（即命中x5==“9”的这几个样本没有调用x5变量，并不是缺失，而是没调用x5这个特征）
+
+代码如下：
+
+library(C50)
+library(caret)
+library(tidyverse)
+
+set.seed(45L)
+error_cost <- matrix(c(0, 4, 1, 0), nrow = 2)
+model_c50_1 <- C5.0(df[-6], df$bad_good, trials = 5, costs = error_cost)
+summary(model_c50_1)
+
+
+#######====================== 以下代码会报错 =======================#########
+set.seed(45L)
+ctrl <- trainControl(method = 'boot632', number = 25, selectionFunction = 'oneSE')
+model_c50_3 <- train(bad_good ~., 
+                     data = ah_model, 
+                     method = 'C5.0', 
+                     trControl = ctrl,
+                     metric = 'Kappa')
+
+model_c50_3

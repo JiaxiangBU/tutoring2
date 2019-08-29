@@ -1,0 +1,39 @@
+---
+title: "一周债转人数金额统计"
+output: 
+  html_document:
+    self_contained: no
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r eval=FALSE, include=FALSE}
+library(DBI)
+library(RMySQL)
+con <- dbConnect(MySQL(),host="127.0.0.1",port=3001,dbname="ods",user="u_qnn_kaifa",password="Kaifa_qnN")
+sql=paste("select date(ptransaction_finish_at) '日期',
+    round(sum(ptransaction_amount)/1000000,2) '债转金额（万元）',
+    count(distinct ptransaction_user_id) '债转人数'
+from  osor_prod_ptran
+where ptransaction_type=2 and ptransaction_status=5 and ptransaction_hide_type=0
+and ptransaction_finish_at>='2018-08-30'
+group by date(ptransaction_finish_at)
+order by date(ptransaction_finish_at) desc",sep="")
+daily=dbGetQuery(con,sql)
+
+
+knitr::kable(daily,align = c('l','c','c'))
+```
+
+```{r eval=FALSE, include=FALSE}
+dbDisconnect(con)
+```
+
+```{r}
+mtcars
+```
+

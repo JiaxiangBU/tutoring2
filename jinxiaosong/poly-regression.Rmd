@@ -1,0 +1,43 @@
+---
+output: github_document
+bibliography: ../../imp_rmd/add_bc.bib
+---
+
+```{r include=FALSE}
+source(here::here("R/load.R"))
+```
+
+
+```{r}
+mtcars %>% head
+```
+
+```{r}
+y <- mtcars$mpg
+x <- mtcars$disp
+```
+
+```{r}
+plot(y,x)
+```
+
+```{r}
+lm(y ~ x) %>% summary()
+```
+
+```{r}
+lm(y ~ poly(x,10)) %>% summary()
+lm(y ~ poly(x,19)) %>% summary()
+```
+
+这里可以看到把 x 的 1到10次方都加入后，R^2 会越来越高。
+如果 x 放到无穷，那么 R^2 = 100%，相当于影响关系和噪音都抓取了。
+
+但是这其实使用的是泰勒公式展开，有兴趣你可以去查下。
+
+另外，这种处理方法，很容易让这个 x 的组合变量是**过拟合**。
+
+所以一般来说，大家考虑使用 交叉项，也就是 x1 和 x2 等的乘数，而不是这种暴力的提高x的次方。
+
+更多地，你可以参考 @James2013An[pp.115]
+

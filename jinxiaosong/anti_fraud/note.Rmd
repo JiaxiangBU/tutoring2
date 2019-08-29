@@ -1,0 +1,95 @@
+---
+title: "anti fraud"
+output: github_document
+---
+
+```{r setup,message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+
+```{r}
+list.files()
+```
+
+```{r}
+library(xfun)
+read_utf8('维度解释.txt')
+```
+
+```{r}
+library(data.table)
+data <- fread('ah_data_base.csv',encoding = 'UTF-8')
+data <- fread('ah_data_base.csv',encoding = 'UTF-8')
+data02 <- fread('ah_data_base02.csv',encoding = 'UTF-8')
+data03 <- fread('ah_data_base03.csv',encoding = 'UTF-8')
+data04 <- fread('ah_data_base04.csv',encoding = 'UTF-8')
+```
+
+```{r}
+library(tidyverse)
+data %>% 
+    group_by(province) %>% 
+    count()
+```
+
+1. <input type="checkbox" id="checkbox1" class="styled">`passdue_day`这个可以看到逾期天数和第几次逾期吗？
+1. 第二个优先级滞后，我看到这里只有地理信息比较有用，整理省份的接壤数据，参考这个
+[GitHub文档](https://github.com/JiaxiangBU/tutoring/blob/master/zhangxinyue/border.md)
+
+这里的接壤和的逻辑
+
+1. 接壤 是为1 否为0
+1. 隔海 如果两省份相隔1个海，那么也算接壤，即接壤=1，但是因为是一种特殊情况，所以需要把“隔海”这一项标记为1
+
+最红我需要这样一个矩阵
+
+```{r}
+library(tidyverse)
+mtr_1 <- 
+matrix(
+    c(rep(1,9))
+    ,nrow = 3
+)
+diag(mtr_1) <- 0
+mtr_1[2,3] <- 0
+mtr_1[3,2] <- 0
+mtr_1 %>% 
+    `colnames<-`(str_c('省份',letters[1:3])) %>% 
+    `rownames<-`(str_c('省份',letters[1:3]))
+```
+
+这里表示每个省份的接壤情况，
+
+1. 假设这个矩阵为A
+1. 我的一个特征变量是B
+
+我会构造这样一个变量
+$AB$
+
+
+
+```{r}
+data;data02
+setequal(data %>% select(-passdue_day),data02 %>% select(-passdue_day))
+```
+
+```{r}
+data03 %>% 
+    ggplot(aes(x = passdue_day)) +
+    geom_freqpoly() +
+    theme_bw() +
+    labs(
+        title = '定下首逾40天作为欺诈的目标'
+        ,caption = 'Made by Jiaxiang Li'
+    )
+```
+
+```{r}
+data03 %>% 
+    group_by(phone_no) %>% 
+    count()
+# 均匀分布 电话号码没什么用
+```
+
+

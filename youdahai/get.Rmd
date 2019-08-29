@@ -1,0 +1,6 @@
+1. [必胜客 页面切换城市后不改变](http://www.pizzahut.com.cn/StoreList#)
+1. [R 增加 Headers 信息](http://www.sohu.com/a/256181769_455817)
+1. [R的GET和POST请求介绍](http://www.seo96.com/xgkj/1736.html)
+1. [可以通过cookies来定位城市，从而构造不同的网址](https://mp.weixin.qq.com/s/ArZ2G5e0bzehHTZQqNIasg)
+
+实际上没有解决实际问题，因此笔记丢失也没啥。

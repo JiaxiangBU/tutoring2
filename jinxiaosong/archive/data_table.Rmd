@@ -1,0 +1,582 @@
+---
+title: "data.table"
+author: "Xiaosong Jin"
+date: "2018-05-01"
+output: 
+  html_document:
+    number_sections: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: show
+    fig_width: 7
+    fig_height: 4.5
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# data.table
+<font size=3 face="微软雅黑">
+
+data.table包提供了一个data.frame的高级版本，是一个超高性能处理包，其在处理上代码简介，功能强大，并且效率极高，强烈建议大家使用此包。官方链接：<https://github.com/Rdatatable/data.table/wiki><br>
+data.table的语法主要是基于`[]`，其一般格式是：<span style="background-color:#FFA07A">DT[i, j, by]</span>。<br>
+解释："Take <mark>DT</mark>, subset rows using <mark>i</mark>, then calculate <mark>j</mark> grouped by <mark>by</mark>."<br>
+<span style="color:red">注：以下称data.table为数据表。</span>
+
+</font>
+
+
+# Download And Library
+<font size=3 face="微软雅黑">
+
+此包被收录在CRAN里面，所以下载它特别方便，只需要使用`install.packages()`即可。
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+# install.packages("data.table")
+library(data.table)
+
+```
+
+
+# Creating A data.table
+<font size=3 face="微软雅黑">
+
+构建一个数据表可以用`data.table()`直接构建，也可以将数据框使用`data.table()`去转换为数据表：
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+set.seed(45L)
+DT <- data.table(V1 = c(1L, 2L), 
+                 V2 = LETTERS[1:3],
+                 V3 = round(rnorm(4), 4),
+                 V4 = 1:12)
+DT
+
+set.seed(45L)
+DF <- data.frame(V1 = c(1L, 2L), 
+                 V2 = LETTERS[1:3],
+                 V3 = round(rnorm(4), 4),
+                 V4 = 1:12)
+
+DF_T <- data.table(DF); DF_T
+
+```
+
+
+# Subsetting Rows Using i
+<font size=3 face="微软雅黑">
+
+使用<span style="background-color:#FFA07A">DT[i, j, by]</span>中的<mark>i</mark>进行子集的选取。<br>
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+# DT[3:5]
+DT[3:5, ]
+
+# DT[V2 == "A"]
+DT[V2 == "A", ]
+
+# DT[V2 %in% c("A", "C")]
+DT[V2 %in% c("A", "C"), ]
+
+```
+
+
+# Manipulating on Columns in j {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+对列进行操作的时候，需要注意返回的类型（向量还是数据表）。<br>
+如果想返回向量，可以使用`DT[, j]`、`DT[[idx]]`或`DT[["j"]]`。<br>
+如果想返回数据表，可以使用`DT[, "j"]`、`DT[, .(j)]`或`DT[, idx]`。<br>
+<span style="color:red">注：上述针对的是某一列，并且均推荐使用第一种操作方式。</span><br>
+对多列进行操作时，必不可少的就是`.()`符号，其相当于`list()`
+
+</font>
+
+## **vector**
+```{r message=FALSE, warning=FALSE}
+
+DT[, V2]
+DT[[2]]
+DT[["V2"]]
+DT[, !c("V1", "V3", "V4")]
+DT[, names(DT) %like% "2", with = F]
+
+DT[, sum(V1)]
+
+```
+
+## **data.table_col**
+```{r}
+
+DT[, "V2"]
+DT[, 2]
+
+```
+
+## **data.table_cols**
+```{r message=FALSE, warning=FALSE}
+
+DT[, .(V2, V3)]
+DT[, list(V2, V3)]
+
+DT[, .(sum(V1), sd(V3))]
+DT[, .(Aggregate = sum(V1), Sd.V3 = sd(V3))]
+DT[, .(V1, Sd.V3 = sd(V3))]
+
+DT[, .(print(V2), plot(V3))]
+
+```
+
+# Doing j by Group
+<font size=3 face="微软雅黑">
+
+使用<span style="background-color:#FFA07A">DT[i, j, by]</span>中的<mark>by</mark>对<mark>j</mark>进行操作。<br>
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+DT[, .(V4.Sum = sum(V4)), by = V1]
+DT[, .(V4.Sum = sum(V4)), by = .(V1, V2)]
+
+DT[, .(V4.Sum = sum(V4)), by = sign(V1-1)]  #列名会被sign填补
+DT[, .(V4.Sum = sum(V4)), by = .(V1.01 = sign(V1-1))]  #自定义列名
+
+DT[, .N, by = V1]  #统计V1列特征值的个数
+
+```
+
+
+# setorder
+<font size=3 face="微软雅黑">
+
+`setorder()`可以按照一个变量或者多个变量排序，默认的排列方式是升序，如果想要降序，只需要在变量名前面加一个`-`即可。
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+setorder(DT, V3)
+setorder(DT, V3, -V4)
+
+```
+
+
+# Add/Updat/Del Columns in j {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+使用`:=`可以对数据的列进行重塑：Updat、Add、Delete。<br>
+<span style="color:red">注：额外的指定<mark>DT <- DT[...]</mark>是多余的，以下操作会直接在DT上进行修改。并且后面使用`[]`会代替`DT`使修改后的数据直接返回。</span>
+
+</font>
+
+## **Updat**
+```{r message=FALSE, warning=FALSE}
+
+DT[, V1 := round(exp(V1), 2)] []
+DT[, c("V1", "V2") := .(round(exp(V1), 2), LETTERS[4:6])] []
+
+```
+
+## **Add**
+```{r message=FALSE, warning=FALSE}
+
+DT[, V5 := letters[4:6]] []
+DT[, c("V6", "V7") := .(sum(V1), mean(V4))] []
+
+```
+
+## **Delete**
+```{r message=FALSE, warning=FALSE}
+
+DT[, V7:= NULL] []
+DT[, c("V3", "V4") := NULL] []
+
+Col.Chosen = c("V5", "V6")
+DT[, Col.Chosen := NULL] []  #“Col.Chosen”在这里是一个变量名称，而不是“V5”&“V6”
+DT[, (Col.Chosen) := NULL] [] #“Col.Chosen”在这里代表“V5”&“V6”
+
+```
+
+
+# Indexing And Keys {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+数据表和数据框不同，其没有行索引，所以有时候得使用`setkey`设置一下行索引，并且可以是单索引和多索引。<br>
+<span stylt="color:red">注：使用索引进行操作效率比较高。</span>
+
+</font>
+
+## **key_one**
+```{r message=FALSE, warning=FALSE}
+
+set.seed(45L)
+DT <- data.table(V1 = c(1L, 2L), 
+                 V2 = LETTERS[1:3],
+                 V3 = round(rnorm(4), 4),
+                 V4 = 1:12)
+DT
+
+setkey(DT, V2)
+
+DT["A"]
+DT[c("A", "C")]
+
+DT["A", mult = "first"]  #挑选出索引是“A”的第一条观测
+DT["A", mult = "last"]   #挑选出索引是“A”的最后一条观测
+
+DT[c("A", "G")]  #不存在的索引将会用NA填补
+DT[c("A", "G"), nomatch = 0]  #不存在的索引不返回
+
+DT[c("A", "C"), sum(V1)]  #对索引是“D”或“F”的V1求和
+DT[c("A", "C"), sum(V1), by = .EACHI]  #分别对索引是“D”或“F”的V1求和
+
+```
+
+## **key_two**
+```{r message=FALSE, warning=FALSE}
+
+setkey(DT, V1, V2)
+
+DT[.(2, "C")]
+DT[.(2, c("A", "C"))]
+
+```
+
+
+# Special symbols {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+**·**`.N`：代表行的数量，用by参数分组时则是每一组的行数量<br>
+**·**`.SD`：代表整个数据表，用by参数分组时则是每一组的数据表<br>
+**·**`.SDcols`：指定`.SD`代表的数据表包括哪些列<br>
+**·**`I`：
+
+</font>
+
+## **.N**
+```{r}
+
+DT[.N]    #返回数据表的最后一行
+DT[.N-1]  #返回数据表的倒数第二行
+DT[, .N]  #返回数据表的行数
+
+```
+
+## **.SD**
+```{r}
+
+# 按照“V2”进行拆分整个数据表，依次返回每个数据表
+DT[, print(.SD), by = V2]
+
+# 按照“V2”进行拆分整个数据表，依次返回每个数据表的第一个和最后一个观测
+DT[, .SD[c(1, .N)], by = V2]
+
+# 按照“V2”进行拆分整个数据表，依次对每个数据表进行列求和
+DT[, lapply(.SD, sum), by = V2]
+
+```
+
+## **.SDcols**
+```{r message=FALSE, warning=FALSE}
+
+# 按照“V2”进行拆分整个数据表，依次对每个数据表的“V3”和“V4”列进行列求和
+DT[, lapply(.SD, sum), by = V2, .SDcols = c("V3", "V4")]
+DT[, lapply(.SD, sum), by = V2, .SDcols = paste0("V", 3:4)]
+
+```
+
+
+# %between%
+```{r message=FALSE, warning=FALSE}
+
+DT[between(V4, 6, 10)]
+
+```
+
+
+# Chaining
+<font size=3 face="微软雅黑">
+
+data.table还可以进行串联操作，与dplyr中的`%>%`有点相似。主要目的就是把多个表达式串联起来，从而避免多于的中间变量。
+
+</font>
+
+```{r}
+
+DT[, .(V4.Sum = sum(V4)), by = V1] [V4.Sum > 40]
+
+DT[, .(V4.Sum = sum(V4)), by = V1] [order(-V1)]
+
+```
+
+
+# set()-Family
+<font size=3 face="微软雅黑">
+
+Syntax: for (i in from:to) set(DT, row, column, new value)
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+rows <- list(3:4, 5:6)
+cols <- 1:2
+
+for (i in seq_along(rows)) {
+  set(DT,
+      i = rows[[i]],
+      j = cols[i],
+      value = NA)
+}
+
+```
+
+
+# setnames()/setcolorder() {.tabset .tabset-fade .tabset-pills}
+## **setnames()**
+```{r message=FALSE, warning=FALSE}
+
+setnames(DT, "V2", "Rating")
+setnames(DT, c("V3", "V4"), c("V3.DC", "V4.DC")); DT
+
+```
+
+## **setcolorder()**
+```{r message=FALSE, warning=FALSE}
+
+setcolorder(DT, c("V3.DC", "V1", "Rating", "V4.DC")); DT
+
+```
+
+
+# melt()/dcast() {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+data.table包改写了reshape2中的数据融合重铸的功能，使其更加方便和强大。
+
+</font>
+
+## **data_melt**
+```{r message=FALSE, warning=FALSE}
+
+set.seed(45L)
+
+DT <- data.table(
+  i_1 = c(1:5, NA), 
+  i_2 = c(NA,6,7,8,9,10), 
+  f_1 = factor(sample(c(letters[1:3], NA), 6, TRUE)), 
+  f_2 = factor(c("z", "a", "x", "c", "x", "x"), ordered=TRUE), 
+  c_1 = sample(c(letters[1:3], NA), 6, TRUE), 
+  d_1 = as.Date(c(1:3,NA,4:5), origin="2013-09-01"), 
+  d_2 = as.Date(6:1, origin="2012-01-01"))
+DT[, l_1 := DT[, list(c=list(rep(i_1, sample(5,1)))), by = i_1]$c]
+DT[, l_2 := DT[, list(c=list(rep(c_1, sample(5,1)))), by = i_1]$c]
+
+DT
+
+```
+
+## **melt()**
+```{r message=FALSE, warning=FALSE}
+
+## 如果对不同类型的数据整合在同一列，则会出现警告（会强制转换数据类型）
+# melt(DT, id.vars = c("i_1", "i_2"))  #同下
+melt(DT, id.vars = 1:2)
+
+## 对某一列的数值进行整合
+# melt(DT, id.vars = 1:2, measure.vars = "f_1")  #同下
+melt(DT, id.vars = 1:2, measure.vars = 3)
+
+## 对相同数据类型的多列进行整合到一列
+# melt(DT, id.vars = 1:2, measure.vars = c("d_1", "d_2"))  # 同下
+melt(DT, id.vars = 1:2, measure.vars = 6:7)
+
+## 对不同类型的多列进行整合的时候，使用measure.vars参数时，默认把相同类型的数值整合到一列，即几种数据类型的数据则被整合为几列
+melt(DT, id.vars = 1:2, measure.vars = list(3:4, c("d_1", "d_2")))
+
+## 模糊匹配整合
+melt(DT, id.vars = 1:2, measure.vars = patterns("^f_", "^d_"), value.factor = T)
+melt(DT, id.vars = 1:2, measure.vars = patterns("l_", "c_"), na.rm = T)
+
+## 整合之后的新列会生成默认的列名，我们也可以自定义列名
+melt(DT, id = 3:4, measure = c("d_1", "d_2"), variable.name = "newvar", value.name = "newval")
+
+## 不同类型的数据整合之后也可以自定义列名
+melt(DT, id.vars = 1:2, measure.vars = patterns("l_", "c_"), variable.name = "newvar", value.name = "newval")
+
+melt(DT, id.vars = 1:2, measure.vars = patterns("l_", "c_"), variable.name = "newvar", value.name = c("nv1", "nv2"))
+
+```
+
+## **data_dcast**
+```{r message=FALSE, warning=FALSE}
+
+set.seed(45L)
+DT <- data.table(V1 = rep(1:2, each = 4),
+                 V2 = 1:4,
+                 V3 = letters[1:2],
+                 V4 = rnorm(8))
+DT
+
+```
+
+## **dcast()** { .tabset }
+
+### **value.var**
+```{r message=FALSE, warning=FALSE}
+
+## 指定行列索引和填充值
+dcast(DT, V1~V2, value.var = "V3")
+
+## 指定行列索引，不指定填充值的时候，会自动选择数值型数据作为填充值
+# dcast(DT, V1~V2)  #同下
+dcast(DT, V1~V2, value.var = "V4")
+
+```
+
+### **margins**
+```{r message=FALSE, warning=FALSE}
+
+## 指定行列索引和填充值
+# dcast(DT, V1~V3, mean, value.var = "V4")  #同下
+dcast(DT, V1~V3, mean)
+
+## 对多列进行求平均
+dcast(DT, V1~V3, mean, value.var = c("V2", "V4"))
+
+## 对多列进行求平均、求和
+dcast(DT, V1~V3, list(mean, sum), value.var = c("V2", "V4"))
+
+```
+
+### **drop**
+```{r message=FALSE, warning=FALSE}
+
+set.seed(45L)
+DT <- data.table(V1 = rep(1:2, each = 6),
+                 V2 = rep(rep(1:3, 2), each = 2),
+                 V3 = factor(rep(c(1,3),6),levels=1:3),
+                 V4 = rnorm(6))
+DT
+
+# V3因子型，因子水平2没有出现过，在融合时还会与其他列进行匹配，就会出现一行全是NA的情况
+dcast(DT, V1+V3~V2, drop = F) 
+dcast(DT, V1+V3~V2, drop = T) 
+
+```
+
+### **fill**
+```{r message=FALSE, warning=FALSE}
+
+dcast(DT, V1+V3~V2, drop = F, fill = 0)  #是NA的地方填充0
+
+```
+
+### **subset** 
+```{r message=FALSE, warning=FALSE}
+
+dcast(DT, V1~V2, mean)
+
+# 挑选V3是1的出来计算
+dcast(DT, V1~V2, mean, subset = .(V3 == 1))
+
+# 计算完挑选V1是1的出来
+dcast(DT, V1~V2, mean, subset = .(V1 == 1))
+
+# 计算完挑选V2是1的出来
+dcast(DT, V1~V2, mean, subset = .(V2 == 1))
+
+# 挑选V3是1的出来计算，之后挑选V1是1的来展示
+dcast(DT, V1~V2, mean, subset = .(V1 == 1 & V3 == 1)) 
+
+```
+
+
+# Set Function {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+上面涉及到的几乎都是常用的语法和函数，下面就介绍几个改进了的函数：<br>
+
+%chin%替代了%in%<br>
+fsort替代了sort<br>
+chmatch替代了match，两个参数返回和前者等长的向量，是前者每一个元素在后者中的索引<br>
+chorder或者chgroup代替order，返回一个向量，排列顺序为：最小值在向量中的索引，第二小的...<br>
+duplicated替代duplicated<br>
+unique替代unique,另有uniqueN直接计算去重之后的个数<br>
+还有就是常用的集合函数：增加了all参数，控制重复值。基础函数只能返回去重之后的结果。<br>
+函数变化：union intersect setdiff setequal 前面都加了一个f<br>
+<span style="color:red">注：以上几个集合函数作用于数据表，并且要求列名相同。</span>
+
+</font>
+
+## **fintersect()**
+```{r message=FALSE, warning=FALSE}
+
+x <- data.table(a = c(1, 2, 2, 2, 3, 4, 4))
+y <- data.table(a = c(2, 3, 4, 4, 4, 5))
+
+fintersect(x, y)              #返回相交部分并去重
+fintersect(x, y, all = TRUE)  #相交，保留重复值
+
+```
+
+## **fintersect**
+```{r message=FALSE, warning=FALSE}
+
+x <- data.table(a = c(1, 2, 2, 2, 3, 4, 4))
+y <- data.table(a = c(2, 3, 4, 4, 4, 5))
+
+fintersect(x, y)              #交集，去重
+fintersect(x, y, all = TRUE)  #交集，保留重复值
+
+```
+
+## **setdiff**
+```{r message=FALSE, warning=FALSE}
+
+fsetdiff(x, y)                #差集，去重
+fsetdiff(x, y, all = TRUE)    #差集，保留重复值
+
+```
+
+## **funion**
+```{r message=FALSE, warning=FALSE}
+
+funion(x, y)                  #并集，去重
+funion(x, y, all = TRUE)      #并集，保留重复值
+
+```
+
+## **fsetqual()**
+```{r message=FALSE, warning=FALSE}
+
+fsetequal(x, y)  #返回一个F，二者不完全相等
+
+```
+
+# shift
+```{r message=FALSE, warning=FALSE}
+
+y <- x <- 1:5
+xy <- data.table(x, y)
+
+shift(x, n = 1, fill = NA, type = "lag")
+shift(x, n = 1:2, fill = 0, type = "lag")
+xy[, (c("a"," b")) := shift(.SD, 1, 0, "lead")] []
+xy[, shift(.SD, 1, 0, "lead", give.names = T)] []  #自动生成名字
+
+```
+

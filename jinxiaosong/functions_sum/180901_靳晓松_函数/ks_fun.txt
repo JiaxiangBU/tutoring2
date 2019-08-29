@@ -1,0 +1,14 @@
+ks_fun <- function(data, xvar, xvar_cut_new, yvar) {
+  data %>% 
+    filter(!eval(parse(text = xvar)) %in% NA) %>%
+    count(eval(parse(text = xvar_cut_new)), eval(parse(text = yvar))) %>%
+    spread(`eval(parse(text = yvar))`, n) %>%
+    mutate(bad = ifelse(bad %in% NA, 0, bad),
+	   bad_sum = sum(bad),
+           good_sum = sum(good),
+           bad_cumsum = cumsum(bad), 
+           good_cumsum = cumsum(good),
+           bad_cumper = round(bad_cumsum / bad_sum, 4),
+           good_cumper = round(good_cumsum / good_sum, 4),
+           ks = paste0((good_cumper - bad_cumper) * 100, '%'))
+}

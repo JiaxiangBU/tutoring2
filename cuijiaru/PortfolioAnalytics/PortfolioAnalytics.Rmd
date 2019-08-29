@@ -1,0 +1,77 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+
+数据是直接在R里抓的现成数据，没用我自己的股票数据，我想的是先按照R官网的数据和代码跑通，弄懂每一步都是什么意思，再用自己的数据。
+
+结果用人家的都没跑出来
+
+参考的这篇文档
+
+代码R语言官网有，在这里
+
+http://127.0.0.1:18297/library/PortfolioAnalytics/doc/custom_moments_objectives.R
+
+`http://127.0.0.1:18297`这个网址应该打不开。
+
+```{r}
+library(PortfolioAnalytics)
+library(DEoptim)
+library(PerformanceAnalytics)
+```
+ 
+```{r}
+data(edhec)
+head(edhec)
+R <- edhec[, 1:4]
+colnames(R) <- c("CA", "CTAG", "DS", "EM")
+head(R, 5)
+funds <- colnames(R)
+funds
+```
+ 
+```{r}
+init.portf <- portfolio.spec(assets=funds)
+init.portf <- add.constraint(portfolio=init.portf, type="full_investment")
+init.portf <- add.constraint(portfolio=init.portf, type="long_only")
+SD.portf <- add.objective(portfolio=init.portf, type="risk", name="StdDev")
+ES.portf <- add.objective(portfolio=init.portf, type="risk", name="ES")
+sd.moments <- set.portfolio.moments(R, SD.portf)
+names(sd.moments)
+es.moments <- set.portfolio.moments(R, ES.portf)
+names(es.moments)
+```
+ 
+```{r}
+sigma.robust <- function(R){
+  require(MASS)
+  out <- list()
+  set.seed(1234)
+  out$sigma <- cov.rob(R, method="mcd")$cov
+  return(out)
+}
+```
+ 
+```
+library(ROI)
+opt.sd <- optimize.portfolio(R, SD.portf, 
+                             optimize_method="ROI", 
+                             momentFUN="sigma.robust")
+opt.sd
+```
+
+
+`search()`的意思是反馈这个`.Rproj`中`load`哪些packages。
+我更新后，还是出现了bug，但是这次提示我是包没安装，但是没告诉我哪个包，真是好水的包。
+
+`Error: paste0("package:", plugin) %in% search() || requireNamespace(plugin, .... is not TRUE`
+
+```{r}
+sessionInfo()
+```
+
+* [The first example of the vignette doesn't work reproducibly. · Issue #10 · braverock/PortfolioAnalytics](https://github.com/braverock/PortfolioAnalytics/issues/10)
+我去github上给这个包作者报错了，等他回复吧，但是这个包不是很热门，基本上issue上作者和协同作者都没有debug。
+这个主要是解决什么问题？

@@ -1,0 +1,45 @@
+---
+output: github_document
+---
+
+```{r message=FALSE, warning=FALSE}
+source(here::here("R/load.R"))
+```
+
+```{r}
+df <- read_excel("refs/Omega2.xlsx")
+```
+
+```{r}
+df %>% 
+    column_to_rownames("...1") %>% 
+    as.matrix() -> mtr
+mtr[upper.tri(mtr, diag = TRUE)] <- NA
+df <- 
+    mtr %>% 
+    as.data.frame() %>% 
+    rownames_to_column("lhs") %>% 
+    gather(rhs, value, -lhs) %>% 
+    na.omit()
+```
+
+```{r}
+df %>% head
+```
+
+```{r}
+get_n_unique <- function(cutoff = 0.01, df){
+    df %>% 
+    filter(value > cutoff) %>% 
+    summarise(
+        n_distinct(lhs)
+    ) %>% 
+    pull
+}
+```
+
+```{r}
+map_int(list(0.01, 0.05, 0.09), get_n_unique, df = df)
+```
+
+选出阈值最多那一个 cutoff 即可。

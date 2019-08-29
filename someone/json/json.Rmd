@@ -1,0 +1,75 @@
+---
+title: "json"
+author: "Jiaxiang Li"
+date: "`r Sys.Date()`"
+output: 
+    github_document:
+        df_print: tibble
+---
+
+```{r}
+library(data.table)
+library(tidyverse)
+data <- fread('test.csv')
+```
+
+```{r}
+# profvis::profvis(
+#     for (i in 1:100) {
+        data %>% 
+            # two cols
+            # json data is not std, clean it.
+            mutate(var = str_replace_all(var,'""','\"')) %>% 
+            mutate(var = map(.x = var,.f = jsonlite::fromJSON)) %>% 
+            unnest()
+            # unnest, spread
+            # as_tibble() %>% 
+            # print %>% 
+            # write_excel_csv('tmp.csv')
+            # output
+#     }
+# )
+```
+
+1. json code 可以参考
+[7.30 json格式文件清理成dataframe](https://jiaxiangli.netlify.com/2018/02/dplyr/)
+
+```{r}
+# profvis::profvis(
+#     for (i in 1:100){
+        data[, var := str_replace_all(var, '""', '\"')
+        ][, {
+            I <- list()
+            for (i in 1:.N) {
+                I[[i]] <- c(jsonlite::fromJSON(var[i]), cusnum = cusnum[i])
+            }
+            rbindlist(I, fill = T)        
+        }]
+#     }
+# )
+```
+
+# dplyr and data.table
+
+
+```{r}
+library(packagefinder)
+library(dlstats)
+library(cranly)
+library(tidyverse)
+library(lubridate)
+cran_stats(c('dplyr','data.table','tidyverse')) %>% 
+    filter(year(end) >= 2017) %>% 
+    ggplot(aes(x=end,y=downloads,col=package)) + 
+    geom_line()
+```
+
+# list
+
+```{r}
+data %>% 
+    mutate(var = str_replace_all(var,'""','\"')) %>% 
+    mutate(var = map(.x = var,.f = jsonlite::fromJSON)) %>% 
+    unnest()
+```
+

@@ -1,0 +1,19 @@
+---
+output: github_document
+---
+
+### 2018-12-19 01:15:27
+
+1. 手臂围度 左25cm 右25cm
+1. 肩膀训练，前和两侧若干，大约1-2组
+
+### 2018-12-18 21:02:07
+
+1. <input type="checkbox" id="checkbox1" class="styled">[练背](tiktok/练背.mp4)
+
+1. <input type="checkbox" id="checkbox1" class="styled">如何测量肩围、三角肌
+1. <input type="checkbox" id="checkbox1" class="styled">review 硬派健身
+1. <input type="checkbox" id="checkbox1" class="styled">加入新的视频
+
+
+多行插入checkbox

@@ -1,0 +1,56 @@
+---
+title: 找最近的点
+author: Jiaxiang Li
+date: "`r Sys.Date()`"
+output: github_document
+---
+
+```{r}
+suppressMessages(library(tidyverse))
+```
+
+```{r}
+read_lines("L04808.inf", n_max = 6)
+read_lines("L04808.vtx", n_max = 6)
+```
+
+```{r}
+vtx <- read_delim("L04808.vtx",delim = '\t',col_names = c('x1','y1','z1'))
+inf <- read_delim("L04808.inf",delim = '\t',col_names = c('l','x2','y2','z2'))
+```
+
+```{r}
+vtx %>% dim
+inf %>% dim
+```
+`vtx`是一个立体的脸。
+
+```{r}
+inf %>% mutate(by = 1) %>% 
+    full_join(vtx %>% mutate(by = 1) %>% 
+                  mutate(vtx_index = row_number())
+                  , by = 'by') %>% 
+    group_by(l) %>% 
+    mutate(
+        dist = (x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2
+    ) %>% 
+    filter(
+        dist == min(dist)
+    )
+```
+
+如果运算量大，运算速度慢，可以采用下面的方法。
+round 图片加速运算。
+
+```{r}
+library(magrittr)
+library(wrapr)
+# vtx
+vtx %>% round(-1) %>% distinct() -> vtx_n1;dim(vtx_n1)
+vtx %>% round( 0) %>% distinct() -> vtx_00;dim(vtx_00)
+vtx %>% round( 1) %>% distinct() -> vtx_01;dim(vtx_01)
+vtx %>% round( 2) %>% distinct() -> vtx_02;dim(vtx_02)
+vtx %>% round( 3) %>% distinct() -> vtx_03;dim(vtx_03)
+```
+
+然后按照round后的图片，先找 local 最优，再调试。

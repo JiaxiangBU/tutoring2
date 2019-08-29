@@ -1,0 +1,92 @@
+---
+title: '决策树'
+author: '李家翔'
+date: '`r Sys.Date()`'
+output: github_document
+---
+
+```{r message=FALSE, warning=FALSE}
+library(xfun)
+library(tidyverse)
+read_utf8('说明.txt') %>% 
+    head
+```
+
+我参考我之前做决策树的
+[笔记](https://jiaxiangli.netlify.com/2018/01/machine-learning-with-tree-based-models-in-r/)
+
+```{r}
+library(data.table)
+data <- 
+    fread('song_help.csv',stringsAsFactors = T) %>% 
+    mutate(y = y == 'bad')
+```
+
+```{r}
+library(psych)
+describe(data) %>% 
+    as_tibble()
+```
+
+
+```{r}
+# Create the model
+library(rpart)
+mod <- rpart(formula = y ~ . 
+             ,data = data
+             ,method = "class"
+             )
+```
+ 
+```{r}
+# Display the results
+library(rpart.plot)
+rpart.plot(x = mod, yesno = 2, type = 5, extra = 1,digits = 10)
+```
+
+`digits`参考加上，否则图示会做近似处理，参考
+[Stack Overflow](https://stackoverflow.com/questions/31571248/rpart-rounding-values?answertab=active)
+
+```{r}
+data %>% 
+    summarise(
+        node_1 = sum(x5 < 0.06535)
+    )
+```
+
+
+ 
+```{r}
+data_addpred <- 
+    data %>% 
+    bind_cols(
+        predict(mod,newdata = data) %>% 
+        as_tibble() %>% 
+        transmute(yhat = `TRUE`)
+    ) %>% 
+    mutate(yhat_bin = yhat < 0.03) %>% 
+    select(y,yhat,yhat_bin)
+```
+
+```{r}
+data_addpred %>% 
+    as_tibble()
+```
+
+```{r}
+data_addpred %>% 
+    mutate(yhat_bin2 = cut_width(yhat,0.03)) %>% 
+    group_by(yhat_bin2) %>% 
+    summarise(
+        y = mean(y)
+        ,yhat = mean(yhat)
+    ) %>% 
+    as_tibble() %>% 
+    print %>% 
+    gather(key,value,y:yhat) %>% 
+    mutate(key = as.factor(key)) %>% 
+    ggplot(aes(x=yhat_bin2,y=value,col=key)) +
+        geom_point()
+```
+
+晓松，这个数据看来不支持0.03这么低的bin，你看最低都是0.045。

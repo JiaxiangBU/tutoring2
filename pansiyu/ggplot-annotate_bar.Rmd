@@ -1,0 +1,17 @@
+---
+output: github_document
+---
+
+```{r}
+# R语言
+library(tidyverse)
+# 下面是年龄的那一列，家祥哥可以直接复制然后读图
+age_hist <- read.table("refs/age.csv", header = T)
+age <- age_hist %>%
+    mutate(bin = cut_number(age, 5)) %>%
+    group_by(bin) %>%
+    summarise(n = n())
+p <- ggplot(data = age, aes(x = bin, y = n))
+p + theme_minimal() + geom_col() + geom_text(aes(label = n), vjust = "outward", hjust = "outward")
+```
+

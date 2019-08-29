@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+我看了下你的代码，我先讲一下观点，再在你的代码基础上修改。
+
+1. 根据你的例子，有一个提升的技巧，input 尽量考虑，matrix 和 vector，而非 data.frame，具体参考 [DataCamp](https://jiaxiangbu.github.io/r_code/datacamp/ch2)
+1. 尽量函数化编程，提高可读性和维护性
+
+参考你的样式
+
+```{r}
+(s = c('123AA21234','123AA11234','123AA29999','123AA2//34','123ADDAA21234','123DAA21234'))
+pattern <- 'AA2'
+start <- 1
+end <- 3
+```
+
+```
+#### 按照要求提取长字符串中的部分字符串，要求如下：
+## 3、若标识符后面需要提取的字符串为m-n个9，则返回-9999
+## 1、若存在标识符，则按照要求返回标识符后的第n到m位字符
+## 2、若不存在，则返回-9999
+## 4、若标识符后面需要提取的字符中存在任何一个非数值，则返回-9999
+## 5、若标识符前面是任何字母（除“ADD”），那么视为该字符串不存在该标识符
+```
+
+这里的判断条件并非先后顺序，这会影响 case when 的判断，这里进行调整。
+
+```{r}
+suppressMessages(library(tidyverse))
+library(glue)
+false_value <- '-9999'
+regexp_2 <- glue('<<pattern>>(\\w{<<start>>,<<end>>})',.open = '<<',.close = '>>')
+regexp_3 <- rep('9',end-start+1) %>% str_flatten('')
+regexp_4 <- glue('[A-z]+\\d?<<pattern>>',.open = '<<',.close = '>>')
+regexp_5 <- glue('ADD\\w?<<pattern>>',.open = '<<',.close = '>>')
+value_func <- function(is_match, output){
+    if (output == regexp_3) {
+        false_value
+    } else if (is_match) {
+        str_match(s,regexp_2)[,2]
+    } else if (!is_match) {
+        false_value
+    } else if (output %>% str_detect('\\d') ) {
+        false_value
+    } else if (output %>% str_detect(regexp_4) & output %>% str_detect(regexp_5)) {
+        output
+    } else if (output %>% str_detect(regexp_4)) {
+        NA_character_
+    } else {
+        output
+    }
+}
+data.frame(s = s) %>% 
+    mutate(is_match = str_detect(s,pattern),
+           output   = str_match(s,regexp_2)[,2]
+           ) %>% 
+    mutate(
+        # output2 = map2(is_match, output, value_func)
+        output2 = value_func(is_match, output)
+    )
+```
+

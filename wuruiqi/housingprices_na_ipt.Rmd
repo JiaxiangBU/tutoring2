@@ -1,0 +1,59 @@
+```{r}
+train <- fread('D:/数据竞赛/kaggle-houseprice/train.csv',stringsAsFactors = TRUE)
+test <- fread('D:/数据竞赛/kaggle-houseprice/test.csv',stringsAsFactors = TRUE)
+temp <- rbindlist(l = list(train,test),use.names = TRUE,fill = TRUE,idcol = 'ID')
+names(temp) <- make.names(names(temp))
+```
+
+```{r}
+# 将因子水平转换为数值标签，NA值未处理,将因子型变量转换为数值型
+for (i in 1:length(temp)){
+  if (is.factor(temp[[i]])){
+    levels(temp[[i]]) <- seq(length(levels(temp[[i]])))
+    temp[[i]] <- as.numeric(temp[[i]])
+  }
+}
+```
+
+```{r}
+train1 = temp[ID==1,-c('ID','id')]
+test1 = temp[ID==2,-c('ID','id','SalePrice')]
+```
+
+这是我直接把因子型变量转换为数值型变量
+
+
+```{r}
+train <- fread('D:/数据竞赛/kaggle-houseprice/train.csv',stringsAsFactors = TRUE)
+test <- fread('D:/数据竞赛/kaggle-houseprice/test.csv',stringsAsFactors = TRUE)
+temp2 <- rbindlist(l = list(train,test),use.names = TRUE,fill = TRUE,idcol = 'ID')
+names(temp2) <- make.names(names(temp2))
+```
+对于NA值有确切含义的变量(Alley,MiscFeature,Fence,FireplaceQu,GarageType,GarageFinish,GarageQual,GarageCond,BsmtExposure,BsmtFinType1,BsmtFinType2,PoolQC),单独增加一个水平NA，并最终数值化该变量
+
+```{r}
+namelist <- c('Alley','MiscFeature','Fence','FireplaceQu','GarageType','GarageFinish','GarageQual','GarageCond','BsmtExposure','BsmtFinType1','BsmtFinType2','PoolQC')
+
+for (i in namelist){
+  levels(temp2[[i]]) <- c(levels(temp2[[i]]),'NONE')
+  temp2[is.na(get(i)), c(i)] <- 'NONE'
+}
+
+for (i in 1:length(temp2)){
+  if (is.factor(temp2[[i]])){
+    levels(temp2[[i]]) <- seq(length(levels(temp2[[i]])))
+    temp2[[i]] <- as.numeric(temp2[[i]])
+  }
+}
+```
+
+```{r}
+train2 = temp2[ID==1,-c('ID','id')]
+test2 = temp[ID==2,-c('ID','id','SalePrice')]
+```
+
+这是我把有确切含义的na值赋值的数据
+
+用同样参数的模型，第一种的效果要比第二种好，我想不明白。
+
+如果是第一种的na的话，模型会按照信息增益认为它是某一个已知的水平。但是这就和实际不符了啊。但是第一种的效果却比第二种要好

@@ -1,0 +1,148 @@
+---
+output: github_document
+---
+
+爬取全部城市，
+但测试两个测试的循环，否则被封。
+
+
+```js
+function GetStoreList(pageSize, pageIndex) {
+    var keyword = $("#keyword").val();
+    var action = "Index";
+    if (keyword != "" && keyword != null && keyword != "输入餐厅地址或餐厅名称") {
+        action = "GetStoreByName";
+    }
+    $.ajax({
+        type: 'POST',
+        url: '/StoreList/' + action,
+        data: { pageIndex: pageIndex, pageSize: pageSizeConfig, keyword: keyword },
+        dataType: 'text',
+        success: function (data) {
+            $(".our_store").html(data);
+            storePage(pageCount, pageIndex, pageSize);
+            var a = $(".our_store").find("input").first().val();
+            ClickStore(a, "");
+        }
+    });
+}
+```
+
+>
+从代码中，我们可以了解到页面使用 Ajax 方式来获取数据。页面以 POST 方式请求地址<http://www.pizzahut.com.cn/StoreList/Index>。同时，请求还携带参数 pageIndex 和 pageSize。
+
+`$.ajax`和`(pageSize, pageIndex)`
+并且告诉了我们爬虫的方式
+```js
+$.ajax({
+    type: 'POST',
+    url: '/StoreList/' + action,
+    data: { pageIndex: pageIndex, pageSize: pageSizeConfig, keyword: keyword },
+    dataType: 'text',
+    success: function (data) {
+        $(".our_store").html(data);
+        storePage(pageCount, pageIndex, pageSize);
+        var a = $(".our_store").find("input").first().val();
+        ClickStore(a, "");
+    }
+```
+
+先提取城市信息
+
+```{r}
+library(rvest)
+library(httr)
+city_xml <- GET("http://www.pizzahut.com.cn/StoreList/Index")
+```
+
+```{r}
+city_text <- content(city_xml, as = "text")
+```
+
+
+```{r}
+library(tidyverse)
+library(xfun)
+city_list <- 
+    city_text %>% 
+    read_lines() %>% 
+    str_subset('<a href="javascript:addCookie') %>% 
+    str_extract(">\\p{Han}{2,}<") %>% 
+    str_extract("\\p{Han}{2,}") %>% 
+    unique()
+```
+
+```{r}
+city_list_test <- city_list[1:2]
+```
+
+```{r}
+headers <- headers()
+```
+
+
+点击一个城市餐厅的翻页列表，产生一个 POST请求
+
+```{r}
+knitr::include_graphics("youdahai/post_request.png")
+```
+
+```{r}
+add_headers(Accept = "text/plain, */*; q=0.01"
+    ,Accept-Encoding = "gzip, deflate")
+```
+
+
+```{r}
+headers <- add_headers(
+    Accept = "text/plain, */*; q=0.01"
+    ,`Accept-Encoding` = "gzip, deflate"
+    ,`Accept-Language` = "zh-CN,zh;q=0.9,en;q=0.8"
+    ,Connection = "keep-alive"
+    ,`Content-Length` = "131"
+    ,`Content-Type` = "application/x-www-form-urlencoded; charset=UTF-8"
+    ,Cookie = "AlteonP=BPpUcQnySd7PI78njrrmBA$$; _u_=1; gr_user_id=d35614ef-bd43-4f49-b718-5e6c482adf54; gr_session_id_a58d28f5fdbbcb8b=52f66757-3cc2-4853-a63b-d87ad8318c21; gr_session_id_a58d28f5fdbbcb8b_52f66757-3cc2-4853-a63b-d87ad8318c21=true; Hm_lvt_7226f1398a8a1aae74384b0f7635de6f=1546066229; AlteonP=BJW6XwnySd4TvX8oax2GPw$$; __RequestVerificationToken=jClTwOC2xXhEZ27k0tX1WyOKEvZr-Kwvg_XbIHw2sxzH10oQIfOOD0E-o6H_9ANW0A_cMsc6eYerGRQlw3TRdMm_84DBRAG6PfoAm8CcQPfe1wHVChCpZHRyJOEgL0KDRbdstdOpIcqmNjV287kquA2; iplocation=%E5%8C%97%E4%BA%AC%E5%B8%82%7C0%7C0; Hm_lpvt_7226f1398a8a1aae74384b0f7635de6f=1546067615"
+    ,Host = "www.pizzahut.com.cn"
+    ,Origin = "http://www.pizzahut.com.cn"
+    ,Referer = "http://www.pizzahut.com.cn/StoreList/Index"
+    ,`User-Agent` = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"
+    ,`X-Requested-With` = "XMLHttpRequest"
+)
+```
+
+```{r}
+data = c(pageIndex = 2,pageSize = 50)
+```
+
+只爬第一页
+
+```{r}
+store_xml <- POST("http://www.pizzahut.com.cn/StoreList/Index"
+                  ,headers = headers
+                  ,data = data)
+```
+
+参考
+[rcookies.md ](简单爬虫)
+
+```{r}
+library(rvest)
+xml <- 
+    store_xml %>% 
+    content(as = "parse") %>% 
+    html_nodes('.re_RNew')
+get_text <- 
+    function(text){
+        xml %>% 
+        html_nodes(text) %>% 
+        html_text()    
+    }
+cbind(
+    get_text('.re_NameNew')
+    ,get_text('.re_addr') %>% matrix(ncol = 2,byrow = T)
+) %>% 
+    as.data.frame() %>% 
+    set_names('name','address','tel')
+```
+
+<input type="checkbox" id="checkbox1" class="styled">翻页失败。

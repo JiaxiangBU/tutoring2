@@ -1,0 +1,772 @@
+---
+title: "短期光伏功率预测"
+author: "靳晓松"
+date: "2018年10月27日"
+output: 
+  html_document:
+    number_sections: TRUE
+    paged: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F)
+```
+
+
+<font size=4 face="微软雅黑">
+
+
+```{r}
+# setwd("E:/sprixin/jxs")
+
+library(Rmisc)
+library(timetk)
+library(tidyverse)
+library(data.table)
+library(xgboost)
+library(lubridate)
+library(forecast)
+```
+
+
+# 导入数据
+***
+
+## 导入train数据
+```{r}
+train_data_0 <- 
+    data.table(
+        short_name = 
+            file.path('data') %>% 
+            list.files(full.names = F) %>% 
+            str_subset('train_[:digit:].csv'),
+        full_name = 
+            file.path('data') %>% 
+            list.files(full.names = T) %>% 
+            str_subset('train_[:digit:].csv')
+    ) %>% 
+    mutate(data = map(full_name, fread, encoding='UTF-8')) %>% 
+    select(short_name, data) %>% 
+    unnest()
+```
+
+## 处理train数据
+```{r}
+train_data_1 <- 
+    train_data_0 %>% 
+    mutate(short_name = str_extract_all(short_name, '[:digit:]+') %>% as.integer) %>% 
+    set_names('short_name',
+              't','tsi','windspeed','winddirection',
+              'temperature','pressure','humidity','tsi_real','p') %>% 
+    mutate(
+      t = round_date(ymd_hms(t), unit = 'minute')
+      ) %>%
+  unique()
+
+train_data_2 <- 
+    train_data_1 %>% 
+    group_by(short_name) %>% 
+    arrange(t) %>% 
+    tk_augment_timeseries_signature() %>% 
+        mutate_if(is.ordered, as.integer)
+
+train_data_3 <- 
+    train_data_2 %>% 
+    mutate(tsi_2 = tsi^2,
+           windspeed_2 = windspeed^2,
+           winddirection_2 = winddirection^2,
+           temperature_2 = temperature^2,
+           pressure_2 = pressure^2,
+           humidity_2 = humidity^2,
+           
+           tsi_3 = tsi^3,
+           windspeed_3 = windspeed^3,
+           winddirection_3 = winddirection^3,
+           temperature_3 = temperature^3,
+           pressure_3 = pressure^3,
+           humidity_3 = humidity^3)
+```
+
+## 划分训练集和验证集
+```{r}
+set.seed(123)
+
+split <- sample(nrow(train_data_3), nrow(train_data_3)*0.8, replace = F)
+train_data_3 <- train_data_3[split, ]
+valid_data_3 <- train_data_3[-split, ]
+
+dtrain_3 <- xgb.DMatrix(data = as.matrix(train_data_3 %>% select(-t,-tsi_real,-p)),
+                        label = train_data_3$p+100)
+dvalid_3 <- xgb.DMatrix(data = as.matrix(valid_data_3 %>% select(-t,-tsi_real,-p)),
+                        label = valid_data_3$p+100)
+
+watchlist_3 <- list(train = dtrain_3, valid = dvalid_3)
+```
+
+```{r}
+set.seed(123)
+
+xgb_base_3 <- xgb.train(
+    data = dtrain_3,
+    ## 1
+    eta = 0.3,
+    nround = 200,
+    ## 2
+    max_depth = 11,
+    min_child_weight = 42,  
+    gamma = 2.5,
+    ## 3
+    subsample = 0.8 ,
+    colsample_bytree = 0.6,
+    ## 评价标准
+    ## eval.metric = "error",
+    eval.metric = "rmse",
+    ## eval.metric = ks_value,
+    ## eval.metric = "auc",
+    ## eval.metric = "logloss",
+    ## objective
+    objective = "reg:tweedie", ## 这是一个回归问题
+    ## 其他
+    seed = 123,
+    watchlist = watchlist_3,
+    nfold = 30,
+    early_stopping_rounds = 50,
+    nthread = 8
+    )
+
+# xgb.save(xgb_base_3, 
+#          file.path('E:', 
+#                    paste(today() %>% str_remove_all('-') %>% str_sub(3,-1), 
+#                          'xgb_base_3.model', sep = '_')
+#     )
+# )
+
+```
+
+
+## 下面报错了
+
+```{r}
+library(data.table)
+library(xgboost)
+library(tidyverse)
+path <- "D:/weDo/tutoring/xiaosong/phv"
+train_data_3 <- 
+  fread(file.path(path,'train_data_3.csv'))
+valid_data_3 <- 
+  fread(file.path(path,'valid_data_3.csv'))
+xgb_base_3 <- 
+  xgb.load(file.path(path,'181104_xgb_base_3.model'))
+
+# test pred
+
+train_data_3 %>%
+  select(-t, -p, tsi_real) %>%
+  as.matrix %>%
+  predict(xgb_base_3, .) %>%
+  `-`(100) %>% 
+  head
+# test mutate
+
+train_data_3 %>%
+    mutate(
+        prediction =
+            train_data_3 %>%
+            select(-t, -p, tsi_real) %>%
+            as.matrix %>%
+            predict(xgb_base_3, .) %>%
+            `-`(100)
+    ) %>% 
+  head
+```
+
+1. 晓松，等下文件用邮件传我？因为我手机连不上公司网络，只能手机下数据了。
+1. 我跑下来没有问题，因此你跑一下上面的代码，用`reprex`反馈我下你的session info，我需要匹配下，可能哪个包的版本出了问题。
+  1. `reprex`参考 
+  * [Tidyverse使用技巧](https://jiaxiangli.netlify.com/2018/02/dplyr/#reprex-)
+  **7.57 reprex 使用技巧**
+
+
+```{r}
+setdiff(
+  train_data_3 %>% names
+  ,valid_data_3 %>% names
+)
+```
+
+
+
+```{r}
+train_data_3 %>%
+    mutate(
+        prediction =
+            train_data_3 %>%
+            select(-t, -p, tsi_real) %>%
+            as.matrix %>%
+            predict(xgb_base_3, .) %>%
+            `-`(100)
+    ) %>%
+    write_excel_csv(
+        file.path('data',
+                  paste(today() %>% str_remove_all('-') %>% str_sub(3, -1),
+                        'jxs_prediction_xgboostbaseline_tweedie.csv', sep='_')
+        )
+    )
+
+
+valid_data_3 %>%
+    mutate(
+        prediction =
+            valid_data_3 %>%
+            select(-t, tsi_real, -p) %>%
+            as.matrix %>%
+            predict(xgb_base_3, .) %>%
+            `-`(100)
+            # round(.,1)
+    ) %>%
+    write_excel_csv(
+        file.path('data',
+                  paste(today() %>% str_remove_all('-') %>% str_sub(3, -1),
+                        'jxs_prediction_xgboostbaseline_tweedie.csv', sep='_')
+        )
+    )
+```
+
+## 逐行运行到这里即可
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 导入test数据
+```{r}
+test_data_0 <- 
+    data.table(
+        short_name = 
+            file.path('data') %>% 
+            list.files(full.names = F) %>% 
+            str_subset('test_[:digit:].csv'),
+        full_name = 
+            file.path('data') %>% 
+            list.files(full.names = T) %>% 
+            str_subset('test_[:digit:].csv')
+    ) %>% 
+    mutate(data = map(full_name, fread, encoding='UTF-8')) %>% 
+    select(short_name, data) %>% 
+    unnest()
+```
+
+```{r}
+test_data_1 <- 
+    test_data_0 %>% 
+    mutate(short_name = str_extract_all(short_name, '[:digit:]+') %>% as.integer) %>% 
+    set_names('short_name','id',
+              't','tsi','windspeed','winddirection',
+              'temperature','pressure','humidity') %>% 
+    mutate(
+      t = round_date(ymd_hms(t), unit = 'minute')
+           # ,sp_year = year(t),
+           # sp_quarter = quarter(t),
+           # sp_month = month(t),
+           # sp_day = day(t)
+      ) %>%
+  unique()
+# %>% 
+#     write_excel_csv(
+#         file.path(
+#             'data'
+#             ,paste(today() %>% str_remove_all('-') %>% str_sub(3,-1),'jiaxiang_testdata.csv',sep='_')
+#         )
+#     )
+```
+
+
+## 合并数据
+```{r}
+bind_data <- bind_rows(train_data_1 %>% mutate(is_train = TRUE),
+                       test_data_1 %>% mutate(is_train = FALSE))
+
+## 查看设备记录的时间间隔
+bind_data %>% 
+    group_by(is_train, short_name) %>% 
+    nest() %>% 
+    mutate(text = map(data, 
+                      ~distinct(., minute(t)) %>% str_flatten(collapse = ','))) %>% 
+    select(-data) %>% 
+    unnest()
+
+## 查看训练集和测试机的起始时间和样本数
+bind_data %>% 
+    group_by(short_name, is_train) %>% 
+    summarise(min(t), max(t), n())
+```
+
+
+# EDA 
+***
+
+## eda_1
+```{r}
+short_name_all <-
+  train_data_1 %>%
+  select(short_name, sp_year, sp_quarter) %>%
+  group_by(short_name) %>%
+  unique() %>%
+  ungroup()
+
+setwd("E:/sprixin/jxs/short_name_all")
+
+for (b in unique(short_name_all$short_name)) {
+  for (i in short_name_all %>% filter(short_name == b) %>% .$sp_year %>% unique()) {
+    for (j in short_name_all %>% filter(short_name == b & sp_year == i) %>% .$sp_quarter %>% unique()) {
+      
+      pdf(file = paste0(b, '_', i, '_', j, '_atsi', '.pdf'), width = 25, height = 6)
+      
+      print(
+        train_data_1 %>%
+          filter(short_name == b & sp_year == i & sp_quarter == j) %>%
+          ggplot(aes(x = t, y = tsi_real)) +
+          geom_line(color = '#ff7f0e') +
+          labs(x = '', y = '', title = eval(parse(text = 'paste0("tsi_", b, "_", i, "_", j)'))) +
+          theme_bw() +
+          theme(plot.title = element_text(colour = '#ff7f0e'))
+      )
+      
+      dev.off()
+      
+    }
+  }
+}
+
+
+for (b in unique(short_name_all$short_name)) {
+  for (i in short_name_all %>% filter(short_name == b) %>% .$sp_year %>% unique()) {
+    for (j in short_name_all %>% filter(short_name == b & sp_year == i) %>% .$sp_quarter %>% unique()) {
+      
+      pdf(file = paste0(b, '_', i, '_', j, '_p', '.pdf'), width = 25, height = 6)
+      
+      print(
+        train_data_1 %>%
+          filter(short_name == b & sp_year == i & sp_quarter == j) %>%
+          ggplot(aes(x = t, y = p)) +
+          geom_line(color = '#1f77b4') +
+          labs(x = '', y = '', title = eval(parse(text = 'paste0("p_", b, "_", i, "_", j)'))) +
+          theme_bw() +
+          theme(plot.title = element_text(colour = '#1f77b4'))
+      )
+      
+      dev.off()
+      
+    }
+  }
+}
+```
+
+
+## filter
+```{r}
+train_data_2 <- 
+  train_data_1 %>%
+  filter(p > 0) %>%
+  group_by(short_name, sp_ymd) %>%
+  mutate(p_max = max(p)) %>%
+  ungroup() %>%
+  group_by(short_name) %>%
+  mutate(p_median = median(p_max)) %>%
+  ungroup() %>%
+  group_by(short_name, sp_ymd) %>%
+  filter(p_max > p_median * 0.8) %>%
+  bind_rows(train_data_1 %>% filter(p <= 0)) %>%
+  ungroup() %>%
+  group_by(short_name) %>%
+  arrange(short_name, t) %>%
+  ungroup()
+
+# train_data_1 <- train_data_1 %>% mutate(short_name_t = paste(short_name, t, sep = '_'))
+# train_data_2 <- train_data_2 %>% mutate(short_name_t = paste(short_name, t, sep = '_'))
+
+# setdiff(train_data_1$short_name_t, train_data_2$short_name_t) %>%
+#   data.frame() %>%
+#   rename(shortname_t = '.') %>%
+#   write_excel_csv(file.path('E:/sprixin/jxs/data', 'rm_idx.csv'))
+```
+
+## eda_2
+
+```{r}
+short_name_all_2 <-
+  train_data_2 %>%
+  select(short_name, sp_year, sp_quarter) %>%
+  group_by(short_name) %>%
+  unique() %>%
+  ungroup()
+
+setwd("E:/sprixin/jxs/short_name_all2")
+
+for (b in unique(short_name_all_2$short_name)) {
+  for (i in short_name_all_2 %>% filter(short_name == b) %>% .$sp_year %>% unique()) {
+    for (j in short_name_all_2 %>% filter(short_name == b & sp_year == i) %>% .$sp_quarter %>% unique()) {
+      
+      pdf(file = paste0(b, '_', i, '_', j, '_atsi', '.pdf'), width = 25, height = 6)
+      
+      print(
+        train_data_2 %>%
+          filter(short_name == b & sp_year == i & sp_quarter == j) %>%
+          ggplot(aes(x = t, y = tsi_real)) +
+          geom_line(color = '#ff7f0e') +
+          labs(x = '', y = '', title = eval(parse(text = 'paste0("tsi_", b, "_", i, "_", j)'))) +
+          theme_bw() +
+          theme(plot.title = element_text(colour = '#ff7f0e'))
+      )
+      
+      dev.off()
+      
+    }
+  }
+}
+
+for (b in unique(short_name_all_2$short_name)) {
+  for (i in short_name_all_2 %>% filter(short_name == b) %>% .$sp_year %>% unique()) {
+    for (j in short_name_all_2 %>% filter(short_name == b & sp_year == i) %>% .$sp_quarter %>% unique()) {
+      
+      pdf(file = paste0(b, '_', i, '_', j, '_p', '.pdf'), width = 25, height = 6)
+      
+      print(
+        train_data_2 %>%
+          filter(short_name == b & sp_year == i & sp_quarter == j) %>%
+          ggplot(aes(x = t, y = p)) +
+          geom_line(color = '#1f77b4') +
+          labs(x = '', y = '', title = eval(parse(text = 'paste0("p_", b, "_", i, "_", j)'))) +
+          theme_bw() +
+          theme(plot.title = element_text(colour = '#1f77b4'))
+      )
+      
+      dev.off()
+      
+    }
+  }
+}
+```
+
+
+# 模型
+***
+
+## arima
+```{r}
+bind_data_edittime <-   
+    bind_data %>% 
+    group_by(short_name, t, is_train) %>% 
+    summarise_all(mean)
+
+arima_mod <- 
+    bind_data_edittime %>% 
+    ungroup %>% 
+    # 删除时间太近的重复值
+    group_by(short_name, is_train) %>% 
+    # count
+    arrange(t) %>% 
+    select(t, p) %>% 
+    # filter(is_train==TRUE) %>% 
+    nest() %>% 
+    spread(is_train, data) %>% 
+    mutate(arima_mod = map(`TRUE`, ~(auto.arima(.$p)))) %>% 
+    mutate(range = map(`FALSE`, count))
+
+p_pred_train <- 
+    arima_mod %>% 
+    unnest(range) %>% 
+    mutate(train = map(arima_mod, ~fitted(object = .) %>% as.data.frame)) %>%
+    mutate(t_train = map(`TRUE`, 
+                         ~select(. ,t) %>% mutate(t = round_date(t, unit = 'minute')) %>%
+                         distinct(t))) %>%
+    select(short_name, t_train, train) %>% 
+    unnest()
+    # anyNA
+
+p_pred_test <- 
+    arima_mod %>% 
+    unnest(range) %>% 
+    mutate(pred = map2(.x = arima_mod, .y = n, 
+                       .f = ~forecast(object = .x, h =.y) %>% as.data.frame)) %>% 
+    mutate(t_test = map(`FALSE`, ~select(., t) %>% 
+                       mutate(t = round_date(t, unit = 'minute')) %>% 
+                       distinct(t))) %>% 
+    select(short_name, t_test, pred) %>% 
+    unnest()
+    # anyNA
+
+arima_yhat_data <- 
+    bind_rows(
+        p_pred_train %>% 
+            select(1:3) %>% 
+            set_names(c('short_name','t','arima_yhat')) %>% 
+            mutate(is_train = TRUE),
+        p_pred_test %>% 
+            select(1:3) %>% 
+            set_names(c('short_name','t','arima_yhat')) %>% 
+            mutate(is_train = FALSE)
+    )
+
+train_data_2 <- 
+    train_data_1 %>% 
+    mutate(t_hour = round_date(t, unit = 'minute')) %>% 
+    left_join(arima_yhat_data %>% filter(is_train == TRUE), 
+              by = c('t_hour'='t','short_name')) %>% 
+    select(-t_hour, -is_train)
+
+test_data_2 <- 
+    test_data_1 %>% 
+    mutate(t_hour = round_date(t,unit = 'minute')) %>% 
+    left_join(arima_yhat_data %>% filter(is_train == FALSE), 
+              by = c('t_hour'='t','short_name')) %>% 
+    select(-t_hour, -is_train)
+
+rmse(train_data_2$arima_yhat, train_data_2$p)
+```
+
+## add lag
+```{r}
+lag_data <- 
+  bind_data %>% 
+    group_by(short_name, is_train) %>% 
+    arrange(t) %>% 
+    transmute(
+        t = t,
+        p_l1 = lag(p, 4),
+        p_l2 = lag(p, 4*24),
+        p_l3 = lag(p, 4*24*7),
+        p_l4 = lag(p, 4*24*30),
+        p_l5 = lag(p, 4*24*90),
+        p_l6 = lag(p, 4*24*180),
+        p_l7 = lag(p, 4*24*360),
+
+        tsi_l1 = lag(tsi, 4),
+        tsi_l2 = lag(tsi, 4*24),
+        tsi_l3 = lag(tsi, 4*24*7),
+        tsi_l4 = lag(tsi, 4*24*30),
+        tsi_l5 = lag(tsi, 4*24*90),
+        tsi_l6 = lag(tsi, 4*24*180),
+        tsi_l7 = lag(tsi, 4*24*360)
+    ) %>% 
+    write_excel_csv(
+        file.path('data', paste(now() %>% str_remove_all('-|\\s|:'), 
+                                'xiaosong_lagdata.csv', sep = '_')
+        )
+    )
+```
+
+## add t
+```{r}
+library(timetk)
+
+train_data_3 <- 
+    train_data_1 %>% 
+    # mutate(year = year(t)
+    #        ,month = month(t)
+    #        ,week = week(t)
+    #        ,hour = hour(t)
+    #        ,minute = minute(t)
+    #        )
+    group_by(short_name) %>% 
+    arrange(t) %>% 
+    tk_augment_timeseries_signature() %>% 
+        mutate_if(is.ordered, as.integer)
+
+test_data_3 <- 
+    test_data_1 %>% 
+    # mutate(year = year(t)
+    #        ,month = month(t)
+    #        ,week = week(t)
+    #        ,hour = hour(t)
+    #        ,minute = minute(t)
+    #        )
+    group_by(short_name) %>% 
+    arrange(t) %>% 
+    tk_augment_timeseries_signature() %>% 
+        mutate_if(is.ordered, as.integer)
+    # 有中文不能识别。
+```
+
+## add sq
+```{r}
+train_data_3.0 <- 
+    train_data_3 %>% 
+    mutate(tsi_2 = tsi^2
+           ,weedspeed_2 = weedspeed^2
+           ,winddirection_2 = winddirection^2
+           ,temperature_2 = temperature^2
+           ,pressure_2 = pressure^2
+           ,humidity_2 = humidity^2
+           
+           ,tsi_3 = tsi^3
+           ,weedspeed_3 = weedspeed^3
+           ,winddirection_3 = winddirection^3
+           ,temperature_3 = temperature^3
+           ,pressure_3 = pressure^3
+           ,humidity_3 = humidity^3
+           )
+    # na_if(-1)
+    # 显然自动处理NA，不好
+```
+
+
+
+
+
+
+
+
+
+
+
+
+# xgboost
+***
+
+## d*data
+```{r}
+set.seed(123)
+
+split <- sample(nrow(train_data_1), nrow(train_data_1)*0.8, replace = F)
+train_data <- train_data_1[split, ]
+valid_data <- train_data_1[-split,]
+
+dtrain <- 
+  train_data %>%
+  select(-t, -tsi_real, windspeed, winddirection, pressure, -temperature, -p) %>%
+  as.matrix() %>%
+  xgb.DMatrix(label = train_data$p + 100)
+
+dvalid <- 
+  valid_data %>%
+  select(-t, -tsi_real, windspeed, winddirection, pressure, -temperature, -p) %>%
+  as.matrix() %>%
+  xgb.DMatrix(label = valid_data$p + 100)
+
+watchlist <- list(train = dtrain, valid = dvalid)
+```
+
+```{r}
+xgb.DMatrix.save(dtrain, 
+                 file.path('data', 
+                           paste(today() %>% str_replace_all('-', '') %>% str_sub(3, -1),
+                                 'dtrain.buffer', sep = '_')
+    )
+)
+
+xgb.DMatrix.save(dvalid, 
+                 file.path('data', 
+                           paste(today() %>% str_replace_all('-', '') %>% str_sub(3, -1), 
+                                 'dvalid.buffer', sep = '_')
+    )
+)
+```
+
+```{r}
+dtrain <- 
+    xgb.DMatrix(
+        file.path('data', 
+                  list.files('data') %>% str_subset('dtrain.buffer') %>% max
+        )
+    )
+
+dvalid <- 
+    xgb.DMatrix(
+        file.path('data',
+                  list.files('data') %>% str_subset('dvalid.buffer') %>% max
+        )
+    )
+```
+
+## model
+```{r}
+set.seed(123)
+
+xgb_base <- xgb.train(
+    data = dtrain,
+    ## 1
+    eta = 0.3,
+    nround = 10000,
+    ## 2
+    max_depth = 7,
+    min_child_weight = 17,  
+    gamma = 0.72,
+    ## 3
+    subsample = 0.8,
+    colsample_bytree = 0.95,
+    ## 评价标准
+    ## eval.metric = "error",
+    eval.metric = "rmse",
+    ## eval.metric = ks_value,
+    ## eval.metric = "auc",
+    ## eval.metric = "logloss",
+    ## objective
+    objective = "reg:linear", ## 这是一个回归问题
+    ## 其他
+    seed = 123,
+    watchlist = watchlist,
+    nfold = 5,
+    early.stop = 50,
+    nthread = 8
+    )
+```
+
+```{r}
+xgb.save(xgb_base, 
+         file.path('data', paste(today() %>% str_replace_all('-', '') %>% str_sub(3, -1), 
+                                 'xgb_base.model', sep = '_')
+    )
+)
+```
+
+```{r}
+xgb_base <- 
+    xgb.load(
+        file.path('data', 
+                  list.files('data') %>% str_subset('xgb_base.model') %>% max
+        )
+    )
+```
+
+```{r}
+pred <- predict(xgb_base, as.matrix(test_data_1 %>% select(-id, -t))) %>% head
+```
+
+
+```{r}
+test_data_1 %>% 
+    select(id) %>% 
+    mutate(
+        predicition = 
+            # 我也是醉了，prediction
+            test_data_1 %>% 
+            select(-id, -t) %>% 
+            as.matrix %>% 
+            predict(xgb_base, .) %>% 
+            `-`(100)
+    ) %>% 
+    write_excel_csv(
+        file.path('data', paste(today() %>% str_replace_all('-', '') %>% str_sub(3, -1), 
+                                'xiaosong_prediction_xgboostbaseline.csv', sep = '_')
+        )
+    )
+```
+
+
+</font>

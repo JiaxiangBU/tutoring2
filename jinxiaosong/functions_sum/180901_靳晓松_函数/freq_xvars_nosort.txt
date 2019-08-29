@@ -1,0 +1,12 @@
+freq_xvars_nosort <- function(data, xvar1, xvar2, colcode, title) {
+  data %>%
+    count(eval(parse(text = xvar1)), eval(parse(text = xvar2))) %>%
+    ggplot(aes(x = `eval(parse(text = xvar1))`, y = n,
+               fill = `eval(parse(text = xvar2))`)) +
+    geom_bar(stat = 'identity', position = 'dodge') +
+    geom_text(aes(label = n), position = position_dodge(0.9),
+              vjust = -0.5, size = 3, family = 'MYH') +
+    labs(x = '', y = '', title = title) +
+    scale_fill_manual(values = colcode) +
+    eval(parse(text = mytheme_b))
+}

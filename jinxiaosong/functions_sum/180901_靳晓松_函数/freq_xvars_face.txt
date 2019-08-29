@@ -1,0 +1,16 @@
+freq_xvars_face <- function(data, xvar1, xvar2, xvar3, colcode, title) {
+  data %>% 
+    count(eval(parse(text = xvar1)),
+          eval(parse(text = xvar2)),
+          eval(parse(text = xvar3))) %>%
+    ggplot(aes(x = `eval(parse(text = xvar1))`, y = n, 
+               fill = `eval(parse(text = xvar2))`)) +
+    geom_bar(stat = 'identity', position = 'dodge') +
+    facet_grid(. ~ `eval(parse(text = xvar3))`) +
+    geom_text(aes(label = n), vjust = -0.5, size = 3, 
+              family = "MYH", position = position_dodge(0.9)) +
+    scale_fill_manual(values = colcode) +
+    labs(x = '', y = '', title = title) +
+    eval(parse(text = mytheme_b)) +
+    theme(legend.position = 'none')
+}

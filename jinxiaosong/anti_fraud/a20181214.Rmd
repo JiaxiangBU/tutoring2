@@ -1,0 +1,24 @@
+---
+output: github_document
+---
+
+等 pull 好，看晓松的数据
+
+```{r message=FALSE, warning=FALSE}
+library(data.table)
+# fread('province_border.csv',encoding = 'UTF-8')
+library(readxl)
+library(tidyverse)
+data <- 
+    read_excel('province_border.xlsx')
+```
+ 
+```{r}
+data %>% 
+    gather(key,value,-X__1) %>% 
+    set_names('i','j','is_border') %>% 
+    group_by(is_border) %>% 
+    count()
+```
+
+1. 第一个问题，$i=j$时，应该都为空，为什么有`0`和`1`

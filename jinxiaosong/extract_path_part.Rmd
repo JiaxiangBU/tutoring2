@@ -1,0 +1,19 @@
+---
+title: "提取路径"
+output: github_document
+---
+
+```{r}
+path <- "D:/tmp/Peking-xwt-1/TestResult/007018-99999/007018-99999-2011"
+```
+
+```{r}
+library(tidyverse)
+path %>% 
+    dirname() %>% 
+    basename() %>% 
+    str_split("-") %>% 
+    .[[1]] %>% 
+    .[1]
+```
+

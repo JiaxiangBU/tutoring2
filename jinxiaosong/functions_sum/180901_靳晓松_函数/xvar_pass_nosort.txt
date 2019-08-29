@@ -1,0 +1,12 @@
+xvar_pass_nosort <- function(data, xvar, yvar, fill = "#ff7f0e", title) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(percent = bad / (bad + good) * 100) %>%
+  ggplot(aes(x = `eval(parse(text = xvar))`, y = percent)) +
+  geom_bar(stat = "identity", fill = fill) +
+  geom_text(aes(label = paste0(round(percent, 1), "%")), 
+            vjust = -0.5, size = 3, family = "MYH") +
+  labs(x = "", y = "", title = title) +
+  eval(parse(text = mytheme_b))
+}

@@ -1,0 +1,28 @@
+---
+title: '\\ 取数'
+output: github_document
+---
+
+```{sql eval=F}
+select "\\u6ce8\\u518c\\u6210\\u529f" as x1
+-- \u6ce8\u518c\u6210\u529f
+
+with a as (
+select "\\u6ce8\\u518c\\u6210\\u529f" as x1
+)
+select 
+    regexp_like(
+        x1
+        ,"\\\\u6ce8\\\\u518c\\\\u6210\\\\u529f"
+    )
+from a
+-- true
+```
+
+理解
+
+`\`的表达(输出)，是需要`\\`来输入的
+因此使用正则化识别的时，实际上识别的是
+`\\`
+而非`\`
+因此使用`\\\\`来识别`\\`

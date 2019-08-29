@@ -1,0 +1,85 @@
+---
+title: 'R动态页面爬虫'
+author: '李家翔'
+date: '`r Sys.Date()`'
+output: github_document
+---
+
+2018-12-25 22:32:24
+: 目前完成带cookie一个页面的爬虫。
+
+<details>
+<summary>动态代码做了一定修改</summary>
+
+
+```{r eval=F}
+library(httr)
+cookie <- ' _u_=1; gr_user_id=40f8d796-9967-4f05-b8e9-5ad94b4fdbce; Hm_lvt_7226f1398a8a1aae74384b0f7635de6f=1545374993; AlteonP=A8KeEQnySd7Wkp8OMNsQTw$$; __RequestVerificationToken=HWDlXbsh0czOhNPjLp5-CBYhP4HOM_IJwBL0FJmEScxG60_bsLhoA8EQ6pQrxO-U_ql7ohw9Ti_LUQtHmYVm-Uh8rAmHo4BVjyOTKmgybXMjHXhkwfh8RxCE2TbaXC-LWzeLDUx2G6vFuk-iLDxElw2; gr_session_id_a58d28f5fdbbcb8b=566fb47d-7fac-46a0-b63c-899eb81d0acd; gr_session_id_a58d28f5fdbbcb8b_566fb47d-7fac-46a0-b63c-899eb81d0acd=true; Hm_lpvt_7226f1398a8a1aae74384b0f7635de6f=1545394443; iplocation=%E4%B8%8A%E6%B5%B7%E5%B8%82%7C0%7C0'
+
+headers <- c('Accept'='text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+             'Content-Type'='text/html; charset=utf-8',          
+             'Referer'='http://www.pizzahut.com.cn/StoreList', 
+             'Host'= 'www.pizzahut.com.cn',
+             'User-Agent'='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106    
+             Safari/537.36','Connection'='keep-alive',
+             'cookie'=cookie)
+
+payload<-list(
+  pageIndex=1,
+  pageSize=50, 
+  relativeOffset=0,
+  frontCategoryId=-1
+)
+
+url <- "http://www.pizzahut.com.cn/StoreList"
+louwill <- POST(url,add_headers(.headers =headers),body = payload)  ##GET还是POST
+# content(louwill)$result
+```
+
+</details>
+
+```{r eval=FALSE, include=FALSE}
+saveRDS(louwill,'xml.rds')
+```
+
+```{r include=FALSE}
+library(readr)
+louwill <- read_rds('xml.rds')
+```
+
+>
+我的想法：只需要一页的结果可以出来，然后利用for对cookie进行循环就可以。
+
+这也是我的想法。
+
+<details>
+<summary>查看结构</summary>
+
+参考[sohu](http://www.sohu.com/a/256181769_455817)
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+louwill %>% str
+```
+
+</details>
+
+```{r message=FALSE, warning=FALSE}
+library(rvest)
+xml <- 
+    read_html(louwill$content) %>%
+    html_nodes('.re_RNew')
+get_text <- 
+    function(text){
+        xml %>% 
+        html_nodes(text) %>% 
+        html_text()    
+    }
+cbind(
+    get_text('.re_NameNew')
+    ,get_text('.re_addr') %>% matrix(ncol = 2,byrow = T)
+) %>% 
+    as.data.frame() %>% 
+    set_names('name','address','tel')
+```
+

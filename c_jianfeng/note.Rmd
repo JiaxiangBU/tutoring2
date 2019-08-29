@@ -1,0 +1,9 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+rmarkdown::render('ptrans.Rmd',encoding = 'UTF-8')
+```
+

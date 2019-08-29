@@ -1,0 +1,18 @@
+---
+output: github_document
+---
+
+```{r}
+df <- data.frame(A = 1:10, B = 1:10, type = rep(letters[1:5], each = 2)); df
+result <- data.frame(A = c(3, 7, 11, 15, 19), B = c(3, 7, 11, 15, 19), type = letters[1:5]); result
+```
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+df %>% 
+    group_by(type) %>% 
+    summarise_all(funs(sum)) %>% 
+    select(A,B,type)
+    # 排序
+```
+

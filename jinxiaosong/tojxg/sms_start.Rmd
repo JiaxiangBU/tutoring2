@@ -1,0 +1,556 @@
+---
+title: "ham or spam"
+author: "Xiaosong Jin"
+date: "2018-05-05"
+output: 
+  html_document:
+    number_sections: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: show
+    fig_width: 9
+    fig_height: 5
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+<font size=3 face="微软雅黑">
+
+这里写我们大致思路。
+
+<>
+
+# Set Work Path
+```{r message=FALSE, warning=FALSE}
+
+setwd("E:/sms_cases")  # 设定工作空间
+
+```
+
+
+# Library All Packages
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(plotly)
+library(jiebaR)
+library(wordcloud2)
+library(caret)
+
+```
+
+
+# Read Data
+<font size=3 face="微软雅黑">
+
+在读取数据的时候，我们使用了<mark>readr</mark>包中的`read_csv()`函数，这个函数是Rstudio首席科学家**HadleyWickham**的杰作之一。这个读取数据的函数主要有以下3个优点：
+
+* 读取数据比基础包的`read.csv()`快十倍左右，并且显示读取进度
+* 不会把字符串强制转换为因子类型
+* 不会像基础包一样继承本地环境的一些行为，导致代码在其他电脑上不适用
+
+</font>
+```{r message=FALSE, warning=FALSE}
+
+sms <- read_csv("all_sms.csv")  # 读取数据
+
+```
+
+
+# Explore Data
+<font size=3 face="微软雅黑">
+
+导入数据之后，下一步操作就行去简单的探索数据的基本结构，这样会为后续的分析打下基础（不同的任务要求不同类型的数据）。比如说在分类任务中，大部分模型要求目标变量是因子型，回归任务中要求目标变量是数值型等。
+
+我们后续的任务是分类，经过简单的数据探索发现：目标变量是整型，然后将其转换为了因子型。
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+sms %>% str()  # 简单探索数据结构
+sms$label <- factor(sms$label)  # 将目标变量转换为因子型
+
+```
+
+
+# Text Processing {.tabset .tabset-fade .tabset-pills}
+<font size=3 face="微软雅黑">
+
+经过上面的探索和转换，下一步就是进行nlp操作。这一部分主要涉及到了分词、去停词、分词再处理、词频统计和绘制词云图。
+
+</font>
+
+## **creat segment engine**
+```{r message=FALSE, warning=FALSE}
+
+engine <- worker(stop_word = "stopwords.txt")
+
+```
+
+## **segment & extract**
+```{r message=FALSE, warning=FALSE}
+
+## 对短信进行分词，并且对分词进行再处理
+cut_all <-
+  sms$message %>%
+  plyr::llply(segment, engine) %>%                # 对短信进行分词
+  lapply(str_replace_all, '[0-9a-zA-Z]', '') %>%  # 将数值和母替换为空字符串
+  plyr::llply(function(x) x[nchar(x) > 1])        # 剔除长度小于1的字符串
+
+## 封装函数去识别“character(0)”
+is_zero <- function(x) { identical(x, character(0)) }
+
+## 分别提取短信的最后文本处理结果
+cut_ham  <- cut_all[which(sms$label == "0")] %>% .[!sapply(., is_zero)]
+cut_spam <- cut_all[which(sms$label == "1")] %>% .[!sapply(., is_zero)]
+
+```
+
+## **wordfreq**
+```{r message=FALSE, warning=FALSE}
+
+## 统计正常短信的词频
+word_freq_ham <-
+  cut_ham %>%
+  unlist() %>%               # 转换为向量
+  as.tibble() %>%            # 转换为数据框
+  rename(words = value) %>%  # 重命名列名
+  group_by(words) %>%        # 按照不同的词就行分组
+  summarise(freq = n()) %>%  # 统计上述分组的词的个数
+  arrange(desc(freq))        # 降序排列
+
+## 统计垃圾短信的词频
+word_freq_spam <-
+  cut_spam %>%
+  unlist() %>%               # 转换为向量
+  as.tibble() %>%            # 转换为数据框
+  rename(words = value) %>%  # 重命名列名
+  group_by(words) %>%        # 按照不同的词就行分组
+  summarise(freq = n()) %>%  # 统计上述分组的词的个数
+  arrange(desc(freq))        # 降序排列
+
+```
+
+# wordcloud
+```{r message=FALSE, warning=FALSE}
+
+wordcloud2(word_freq_ham[1:100, ], minRotation = -pi/2, maxRotation = -pi/2)
+wordcloud2(word_freq_spam[1:100, ], minRotation = -pi/2, maxRotation = -pi/2)
+
+```
+
+
+# Balance Data
+<font size=3 face="微软雅黑">
+
+在进行训练模型分类之前，我们需要把数据平衡一下。在现实生活中到处都是不平衡的事件：
+
+* 欺诈问题中，欺诈类观测毕竟占总样本的少数
+* 客户流失问题中，流失客户往往也是占少部分
+* 会员对某波活动的响应问题，同样真正响应的也只是占很少的比例
+
+<span style="color:red">**如果你的数据存在不平衡的现象，分析得出的结论也一定是右偏的**</span>，往往分类结果会偏向于较多观测的类。我们的这个短信数据同样是不平衡的，垃圾短信：正常短信是9：1，如果不进行数据的平衡，那么分类结果会偏向于正常短信，那么就会导致很多垃圾短信不能成功识别。
+
+</font>
+
+```{r message=FALSE, warning=FALSE}
+
+set.seed(1)
+sms_balance <- 
+  sms %>%
+  filter(label == "0") %>%                   # 筛选出所有的正常短信
+  sample_n(unname(table(sms$label))[2]) %>%  # 随机抽取出与垃圾短信观测数相同的部分正常短信
+  bind_rows(sms %>% filter(label == "1"))    # 将抽取出的正常短信与垃圾短信合并
+
+```
+
+
+# Mutate Features
+```{r message=FALSE, warning=FALSE}
+
+sms_model <- 
+  sms_balance %>%
+  mutate(message = str_replace_all(message, '[0-9a-zA-Z]', 'x'),
+         msg_length = str_length(message),
+         num_x = str_count(message, "[X|x]"),
+         pct_x = str_count(message, "[X|x]") / msg_length,
+         num_puncts = str_count(message, "[:punct:]"),
+         pct_puncts = str_count(message, "[:punct:]") / msg_length,
+         message = NULL)
+
+```
+
+
+# EDA {.tabset .tabset-fade .tabset-pills}
+## **msg_lenth**
+```{r message=FALSE, warning=FALSE}
+
+msg_num_x <- plot_ly(sms_model, 
+                        x = ~msg_length, 
+                        color = ~label, 
+                        type = "histogram")
+msg_num_x
+
+msg_len_box <- plot_ly(sms_model, 
+                       y = ~msg_length, 
+                       color = ~label, 
+                       type = "box")
+msg_len_box
+
+msg_len_summary <- 
+  sms_model %>% 
+  group_by(label) %>%
+  summarise(len_median = median(msg_length),
+            len_mean = mean(msg_length),
+            len_q1 = quantile(msg_length, 0.25),
+            len_q3 = quantile(msg_length, 0.75)) %>%
+  select(-label) %>%
+  t() %>%
+  as_tibble()
+
+msg_len_bar <- 
+  plot_ly(x = c("Median", "Mean", "Q1", "Q3")) %>%
+  add_bars(y = msg_len_summary[[1]], name = "label 0", 
+           text = round(msg_len_summary[[1]], 0), textposition = "auto") %>%
+  add_bars(y = msg_len_summary[[2]], name = "label 1",
+           text = round(msg_len_summary[[2]], 0), textposition = "auto")
+  
+msg_len_bar
+
+```
+
+## **num_x**
+```{r message=FALSE, warning=FALSE}
+
+msg_num_x_hist <- plot_ly(sms_model, 
+                         x = ~num_x, 
+                         color = ~label, 
+                         type = "histogram")
+msg_num_x_hist
+
+msg_num_x_box <- plot_ly(sms_model, 
+                         y = ~num_x, 
+                         color = ~label, 
+                         type = "box")
+msg_num_x_box
+
+msg_num_x_summary <- 
+  sms_model %>% 
+  group_by(label) %>%
+  summarise(num_x_median = median(num_x),
+            num_x_mean = mean(num_x),
+            num_x_q1 = quantile(num_x, 0.25),
+            num_x_q3 = quantile(num_x, 0.75)) %>%
+  select(-label) %>%
+  t() %>%
+  as_tibble()
+
+msg_num_x_bar <- 
+  plot_ly(x = c("Median", "Mean", "Q1", "Q3")) %>%
+  add_bars(y = msg_num_x_summary[[1]], name = "label 0", 
+           text = round(msg_num_x_summary[[1]], 0), textposition = "auto") %>%
+  add_bars(y = msg_num_x_summary[[2]], name = "label 1",
+           text = round(msg_num_x_summary[[2]], 0), textposition = "auto")
+  
+msg_num_x_bar
+
+```
+
+## **pct_x**
+```{r message=FALSE, warning=FALSE}
+
+msg_pct_x_hist <- plot_ly(sms_model, 
+                         x = ~pct_x, 
+                         color = ~label, 
+                         type = "histogram")
+msg_pct_x_hist
+
+msg_pct_x_box <- plot_ly(sms_model, 
+                         y = ~pct_x, 
+                         color = ~label, 
+                         type = "box")
+msg_pct_x_box
+
+msg_pct_x_summary <- 
+  sms_model %>% 
+  group_by(label) %>%
+  summarise(pct_x_median = median(pct_x),
+            pct_x_mean = mean(pct_x),
+            pct_x_q1 = quantile(pct_x, 0.25),
+            pct_x_q3 = quantile(pct_x, 0.75)) %>%
+  select(-label) %>%
+  t() %>%
+  as_tibble()
+
+msg_pct_x_bar <- 
+  plot_ly(x = c("Median", "Mean", "Q1", "Q3")) %>%
+  add_bars(y = msg_pct_x_summary[[1]], name = "label 0", 
+           text = round(msg_pct_x_summary[[1]], 0), textposition = "auto") %>%
+  add_bars(y = msg_pct_x_summary[[2]], name = "label 1",
+           text = round(msg_pct_x_summary[[2]], 0), textposition = "auto")
+  
+msg_pct_x_bar
+
+```
+
+## **num_puncts**
+```{r message=FALSE, warning=FALSE}
+
+msg_num_puncts_hist <- plot_ly(sms_model, 
+                         x = ~num_puncts, 
+                         color = ~label, 
+                         type = "histogram")
+msg_num_puncts_hist
+
+msg_num_puncts_box <- plot_ly(sms_model, 
+                         y = ~num_puncts, 
+                         color = ~label, 
+                         type = "box")
+msg_num_puncts_box
+
+msg_num_puncts_summary <- 
+  sms_model %>% 
+  group_by(label) %>%
+  summarise(num_puncts_median = median(num_puncts),
+            num_puncts_mean = mean(num_puncts),
+            num_puncts_q1 = quantile(num_puncts, 0.25),
+            num_puncts_q3 = quantile(num_puncts, 0.75)) %>%
+  select(-label) %>%
+  t() %>%
+  as_tibble()
+
+msg_num_puncts_bar <- 
+  plot_ly(x = c("Median", "Mean", "Q1", "Q3")) %>%
+  add_bars(y = msg_num_puncts_summary[[1]], name = "label 0", 
+           text = round(msg_num_puncts_summary[[1]], 0), textposition = "auto") %>%
+  add_bars(y = msg_num_puncts_summary[[2]], name = "label 1",
+           text = round(msg_num_puncts_summary[[2]], 0), textposition = "auto")
+  
+msg_num_puncts_bar
+
+```
+
+## **pct_puncts**
+```{r message=FALSE, warning=FALSE}
+
+msg_pct_puncts_hist <- plot_ly(sms_model, 
+                         x = ~pct_puncts, 
+                         color = ~label, 
+                         type = "histogram")
+msg_pct_puncts_hist
+
+msg_pct_puncts_box <- plot_ly(sms_model, 
+                         y = ~pct_puncts, 
+                         color = ~label, 
+                         type = "box")
+msg_pct_puncts_box
+
+msg_pct_puncts_summary <- 
+  sms_model %>% 
+  group_by(label) %>%
+  summarise(pct_puncts_median = median(pct_puncts),
+            pct_puncts_mean = mean(pct_puncts),
+            pct_puncts_q1 = quantile(pct_puncts, 0.25),
+            pct_puncts_q3 = quantile(pct_puncts, 0.75)) %>%
+  select(-label) %>%
+  t() %>%
+  as_tibble()
+
+msg_pct_puncts_bar <- 
+  plot_ly(x = c("Median", "Mean", "Q1", "Q3")) %>%
+  add_bars(y = msg_pct_puncts_summary[[1]], name = "label 0", 
+           text = round(msg_pct_puncts_summary[[1]], 0), textposition = "auto") %>%
+  add_bars(y = msg_pct_puncts_summary[[2]], name = "label 1",
+           text = round(msg_pct_puncts_summary[[2]], 0), textposition = "auto")
+  
+msg_pct_puncts_bar
+
+```
+
+
+# Stratified Sampling
+```{r message=FALSE, warning=FALSE}
+
+set.seed(1)
+idx <- createDataPartition(sms_model$label, p = 0.7, list = F)
+train_set <- sms_model[idx, ]
+test_set  <- sms_model[-idx, ]
+
+```
+
+
+# Training Model {.tabset .tabset-fade .tabset-pills}
+## rpart
+```{r message=FALSE, warning=FALSE}
+
+ctrl <- trainControl(method = "cv", number = 5, selectionFunction = "oneSE")
+
+set.seed(1)
+mod_rpart <- train(label ~ ., 
+                   data = train_set, 
+                   method = "rpart", 
+                   trControl = ctrl
+                   )
+mod_rpart
+
+pred_rpart <- predict(mod_rpart, test_set[-1])
+
+confusionMatrix(pred_rpart, test_set$label)
+
+```
+
+
+## naiveBayes {.tabset}
+```{r message=FALSE, warning=FALSE}
+
+ctrl <- trainControl(method = "cv", number = 5, selectionFunction = "oneSE")
+
+set.seed(1)
+mod_nb <- train(label ~ ., 
+                data = train_set, 
+                method = "nb", 
+                trControl = ctrl
+                )
+mod_nb
+
+pred_nb <- predict(mod_nb, test_set[-1])
+
+confusionMatrix(pred_nb, test_set$label)
+
+```
+
+
+## svm {.tabset}
+```{r message=FALSE, warning=FALSE}
+
+ctrl <- trainControl(method = "cv", number = 3, selectionFunction = "oneSE")
+
+set.seed(1)
+mod_svm <- train(label ~ ., 
+                   data = train_set, 
+                   method = "svmRadial", 
+                   trControl = ctrl
+                   )
+mod_svm
+
+pred_svm <- predict(mod_svm, test_set[-1])
+
+confusionMatrix(pred_svm, test_set$label)
+
+```
+
+## randomforest {.tabset}
+```{r message=FALSE, warning=FALSE}
+
+library(randomForest)
+
+set.seed(1)
+mod_rf <- randomForest(x = train_set[-1], 
+                       y = train_set$label, 
+                       ntree = 100, 
+                       importance = T)
+
+pred_rf <- predict(mod_rf, test_set[-1])
+
+confusionMatrix(pred_rf, test_set$label)
+
+## 构建一个数据框--包含变量的重要性对应值
+(importance2 <- importance(mod_rf))
+var_importance2 <- 
+  data.frame(Variables = row.names(importance2), 
+            Importance = round(importance2[, 'MeanDecreaseGini'], 2)) %>% 
+  arrange(desc(Importance))
+
+# 可视化变量重要性
+ggplot(var_importance2, 
+       aes(x = reorder(Variables, Importance), y = Importance, fill = Variables)) +
+  geom_bar(stat = 'identity') +
+  labs(x = 'Variables') +
+  coord_flip() +
+  theme_minimal() +
+  guides(fill = 'none')
+
+```
+
+<!-- ## stacking -->
+<!-- ```{r message=FALSE, warning=FALSE} -->
+
+<!-- pred_all <- data.frame(rpart = pred_rpart,  -->
+<!--                        randomForest = pred_rf,  -->
+<!--                        svm = pred_svm, -->
+<!--                        label_act = test_set$label) -->
+
+<!-- # 封装求众数函数 -->
+<!-- fun_pred <- function(x) { -->
+<!--   names(which.max(table(x))) -->
+<!-- } -->
+
+<!-- pred_all$label_pred <- as.factor(apply(pred_all[1:3], 1, fun_pred)) -->
+<!-- confusionMatrix(pred_all$label_pred, pred_all$label_act) -->
+
+<!-- ``` -->
+
+## randomforest_new1
+```{r message=FALSE, warning=FALSE}
+
+set.seed(1)
+mod_rf_new1 <- randomForest(x = train_set %>% dplyr::select(num_puncts), 
+                            y = train_set$label, 
+                            ntree = 100)
+
+pred_rf_new1 <- predict(mod_rf_new1, test_set[-1])
+
+confusionMatrix(pred_rf_new1, test_set$label)
+
+```
+
+## randomforest_new2
+```{r message=FALSE, warning=FALSE}
+
+set.seed(1)
+mod_rf_new2 <- randomForest(x = train_set %>% 
+                              dplyr::select(num_puncts, msg_length), 
+                            y = train_set$label, 
+                            ntree = 100)
+
+pred_rf_new2 <- predict(mod_rf_new2, test_set[-1])
+
+confusionMatrix(pred_rf_new2, test_set$label)
+
+```
+
+## randomforest_new3
+```{r message=FALSE, warning=FALSE}
+
+set.seed(1)
+mod_rf_new3 <- randomForest(x = train_set %>% 
+                              dplyr::select(num_puncts, msg_length, pct_puncts), 
+                            y = train_set$label, 
+                            ntree = 100)
+
+pred_rf_new3 <- predict(mod_rf_new3, test_set[-1])
+
+confusionMatrix(pred_rf_new3, test_set$label)
+
+```
+
+## randomforest_new4
+```{r message=FALSE, warning=FALSE}
+
+set.seed(1)
+mod_rf_new4 <- randomForest(x = train_set %>% 
+                              dplyr::select(num_puncts, pct_puncts), 
+                            y = train_set$label, 
+                            ntree = 100)
+
+pred_rf_new4 <- predict(mod_rf_new4, test_set[-1])
+
+confusionMatrix(pred_rf_new4, test_set$label)
+
+```

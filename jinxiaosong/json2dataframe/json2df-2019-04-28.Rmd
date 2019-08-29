@@ -1,0 +1,39 @@
+---
+title: "json manipulation using R 2"
+author: '李家翔'
+date: '`r Sys.Date()`'
+output: github_document
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+df <- read_excel("json2df.xlsx")
+```
+
+```{r}
+df %>% 
+    mutate(
+        json_col = map(audit_context_data, ~jsonlite::fromJSON(paste0("[",.,"]")))
+    ) -> tmp
+```
+
+
+```{r}
+safely(unnest)(tmp)
+```
+
+注意看报错，`col_c`数据类型在多个 json 格式中中，**不一致**
+
+```{r}
+tmp[1,2] %>% pull %>% str
+tmp[2,2] %>% pull %>% str
+```
+
+你可以看到第二行的样本中，`col_c: chr`，因此转换的时候限定下变量类型即可。
+ 
+```{r}
+tmp %>% 
+    mutate(json_col = map(json_col, ~mutate_all(., as.character))) %>% 
+    unnest()
+```

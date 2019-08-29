@@ -1,0 +1,10 @@
+xvar_pass_nosort_kable <- function(data, xvar, yvar) {
+  data %>% 
+  dplyr::count(eval(parse(text = xvar)), eval(parse(text = yvar))) %>%
+  spread(`eval(parse(text = yvar))`, n) %>%
+  mutate(bad = ifelse(bad %in% NA, 0, bad),
+          bad_good = bad + good,
+          percent = round(bad / (bad + good) * 100, 1),
+          percent = paste0(percent, "%")) %>%
+  kable(align = "l")
+}

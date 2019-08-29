@@ -1,0 +1,26 @@
+---
+title: "duration in filter"
+---
+
+```{r}
+library(tidyverse)
+# data_1 <- read_excel(file.path(getwd(),"中水顾问西北院石城子20WM光伏电站测光.xlsx"))
+# data_2 <- read_excel(file.path(getwd(),"中水顾问西北院石城子20WM光伏电站测光表头.xlsx"))
+data_3 <- read_csv(file.path(getwd(),"xiaoxiao_180527.csv"),skip = 1,col_names = FALSE)
+```
+
+`as.integer`函数使得`duration`可以在`filter`中进行筛选。
+
+```{r eval=F}
+library(lubridate)
+data_3 %>% 
+    # head()
+    select(1:5) %>% 
+    transmute(datetime = make_datetime(X1,X2,X3,X4,X5)) %>% 
+    arrange(datetime) %>% 
+    # filter(datetime == ymd_hms("2014-05-26 23:20:00"))
+    mutate(duration = interval(datetime,lag(datetime)) %>% as.duration(),
+           duration_int = as.integer(duration)) %>% 
+    filter(duration_int != -300)
+```
+

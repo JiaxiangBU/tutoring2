@@ -1,0 +1,127 @@
+---
+title: "降维"
+author: "Jiaxiang Li"
+date: "`r Sys.Date()`"
+output: 
+    github_document:
+        df_print: tibble
+        toc: true
+        toc_depth: 2
+bibliography: "`r here::here('add.bib')`"
+---
+
+
+`bibliography`申明问题参考
+[r markdown - Quotes and inline R code in Rmarkdown YAML - Stack Overflow](https://stackoverflow.com/questions/51296364/quotes-and-inline-r-code-in-rmarkdown-yaml/51370607#51370607)
+
+
+# PCA
+
+以数据集`mtcars`为例
+
+```{r setup,warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(data.table)
+library(tidyverse)
+library(irlba)
+```
+
+```{r}
+mtcars
+pca_data <- 
+    mtcars %>% 
+    na.omit() %>% 
+    prcomp_irlba(n=2,center = T,scale. = T) %>% 
+    .$rotation %>% 
+    as.data.frame()
+pca_data
+pca_data %>% 
+    ggplot(aes(PC1,PC2)) +
+    geom_point() +
+    theme_bw() +
+    labs(
+        title = 'Obviously there are two group in the plot'
+        ,subtitle = 'one is in PC1 < 1, the other is in PC > 1.'
+        ,captionn = 'made by Jiaxiang Li - jiaxiangli.netlify.com'
+    )
+pca_data %>% 
+    mutate(name = mtcars %>% names) %>% 
+    top_n(10,abs(PC1)) %>% 
+    mutate(name = as.factor(name)) %>% 
+    ggplot(aes(
+        x = fct_reorder(name,PC1)
+        ,y = PC1
+        ,fill = name
+    )) +
+        geom_col(show.legend = FALSE, alpha = 0.8) +
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+              axis.ticks.x = element_blank()) +
+        labs(
+            x = 'variables in top 10'
+            ,y = 'contribution'
+            ,title = 'Good variable in PC1'
+            ,captionn = 'made by Jiaxiang Li - jiaxiangli.netlify.com'
+        )
+pca_data %>% 
+    mutate(name = mtcars %>% names) %>% 
+    top_n(10,abs(PC2)) %>% 
+    mutate(name = as.factor(name)) %>% 
+    ggplot(aes(
+        x = fct_reorder(name,PC2)
+        ,y = PC2
+        ,fill = name
+    )) +
+        geom_col(show.legend = FALSE, alpha = 0.8) +
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), 
+              axis.ticks.x = element_blank()) +
+        labs(
+            x = 'variables in top 10'
+            ,y = 'contribution'
+            ,title = 'Good variable in PC2'
+            ,captionn = 'made by Jiaxiang Li - jiaxiangli.netlify.com'
+        )
+```
+
+# PCA regression
+
+PCA选择两个comp最优，
+regression 使用这两个comp调参最优
+
+并不代表PCA regession最优，
+部分最优不等于整体最优。
+
+# Self-Organizing Maps
+
+这个方法主要是借鉴神经网络实现降维。
+主要参考
+@Schochdimensionalityreduction
+这是 University of Manchester 的一个研究员介绍的。
+以下做降维测试。
+
+使用Kaggle的
+[FIFA数据集](https://www.kaggle.com/thec03u5/fifa-18-demo-player-dataset)
+
+结果报错，回家再弄。
+
+```{r eval=F}
+library(kohonen)
+fifa_tbl <- fread('PlayerAttributeData.csv')
+fifa_som <- fifa_tbl %>% 
+    select(Acceleration:Volleys) %>%
+    mutate_all(as.numeric) %>% 
+    scale() %>%
+    som(grid = somgrid(20, 20, "hexagonal"), rlen = 300)
+```
+
+```{r eval=F}
+par(mfrow=c(1,2))
+plot(fifa_som, type="mapping", pch=20,
+     col = c("#F8766D","#7CAE00","#00B0B5","#C77CFF")[as.integer(fifa_tbl$position2)],
+     shape = "straight")
+plot(fifa_som, type="codes",shape="straight")
+```
+
+
+# Reference

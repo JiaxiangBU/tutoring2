@@ -1,0 +1,107 @@
+---
+output:
+  word_document: default
+  html_document: default
+---
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(readr)
+data <- read_csv("X1.csv")
+data <- 
+data %>% 
+  select(-name)
+library(knitr)
+library(skimr)
+```
+
+```{r}
+data %>% 
+  head()
+```
+ 
+看到下面的数据结构，模型的异常值非常多，很多分布是不均匀的。 
+
+```{r}
+skim(data)
+```
+
+两个`.R`文档编码不一样，所以我合并了。
+
+# 决策树
+
+```{r}
+library(rpart)
+library(rpart.plot)
+library(lattice)
+library(caret)
+set.seed(1000)
+train_index <- sample(nrow(data),0.7*nrow(data),replace = F)
+train <- data[train_index,]
+test <- data[-train_index,]
+nrow(train)
+nrow(test)
+```
+ 
+```{r}
+bfit <- rpart(roe ~ ., train,method = "anova")
+rpart.plot(x = bfit)
+```
+
+`roe`是$Y$变量
+
+`labs do not fit even at cex 0.15, there may be some overplotting`
+这是警告信息，说明模型需要剪枝，过拟合了。
+
+
+这里使用到变量少的原因是
+
+```
+rpart.control(minsplit = 20, minbucket = round(minsplit/3), cp = 0.01, 
+              maxcompete = 4, maxsurrogate = 5, usesurrogate = 2, xval = 10,
+              surrogatestyle = 0, maxdepth = 30, ...)
+```
+
+`minsplit`在分之前，每个node上必须拥有的样本量最小值。
+因此这些防止过拟合的方式，使得树不能太大，因此有些变量就没有用到。
+但是你看看通过bagging的随机森林就不会，它使用过很多次，因此理论上，每个变量都可能会用到，因此Importances表上基本上反馈的变量就多了。
+
+# 随机森林
+
+```{r}
+library(randomForest)
+rf1 <- randomForest(
+  roe ~ ., 
+  data=train, 
+  importance=TRUE, 
+  mtry=2, 
+  ntree=100,
+  proximity=TRUE)
+print(rf1) 
+print(importance(rf1,type = 2))
+varImpPlot(rf1)
+```
+
+模型结果出来了，但是我觉得效果不好。
+看参数结果。
+`Type of random forest: regression`，但是$R^2$只有39.43。
+因此如果你是完全做预测的话，需要还要调整参数。
+
+你看参考这个[日志](https://jiaxiangli.netlify.com/2018/01/machine-learning-with-tree-based-models-in-r/)调整参数。
+
+<!-- ```{r} -->
+
+
+<!-- output.forest <- randomForest(roe ~ net_profit_ratio + gross_profit_rate + net_profits+eps+business_income+bips+arturnover+arturndays+inventory_turnover+inventory_days+currentasset_turnover+currentasset_days+mbrg+nprg+nav+targ+epsg+seg+currentratio+quickratio+cashratio+icratio+sheqratio+adratio+cf_sales+rateofreturn+cf_nm+cf_liabilities+cashflowratio, data=data, importance=TRUE, mtry=2, ntree=100,proximity=TRUE) -->
+<!-- 这句就做不出来了。 -->
+
+<!-- library(party) -->
+<!-- bn<-cforest(roe ~ net_profit_ratio + gross_profit_rate + net_profits, data=data) -->
+<!-- 也做不出来 -->
+<!-- ``` -->
+
+# 导出`.R`文档
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+purl("code.Rmd")
+```
+
