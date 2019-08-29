@@ -1,0 +1,25 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# tutoring2
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of tutoring2 is to collect the issues and related answers.
+[tutoring](https://github.com/JiaxiangBU/tutoring) is depreciated on the security grounds.
+
+***
+
+`r add2pkg::add_disclaimer("Jiaxiang Li")`
