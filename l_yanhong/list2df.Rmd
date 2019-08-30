@@ -1,0 +1,16 @@
+```{r}
+l <- list(
+    C001 = c("A", "A", "B", "c", "c"),
+    C002 = c("c", "c", "B", "A"),
+    C003 = c("m", "A", "B")
+)
+```
+
+```{r}
+library(magrittr)
+l %>% 
+    unlist() %>% 
+    data.frame()
+```
+
+这个方法是目前最简洁的。
