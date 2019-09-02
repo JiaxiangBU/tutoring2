@@ -43,9 +43,9 @@ ipynb_df <-
         publish_sub_path = path %>% str_remove(here::here()) %>%
             str_remove("^/") %>%
             str_replace_all("/", "%2F"),
-        publish_root_path = "https://mybinder.org/v2/gh/JiaxiangBU/tutoring/master?filepath=",
+        publish_root_path = "https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=",
         publish_path = paste0(publish_root_path, publish_sub_path)
-        
+
     )
 
 
@@ -61,7 +61,7 @@ md_df <-
     mutate(title = map_chr(path, safely_get_md_title, md_pattern = md_pattern)) %>%
     mutate(
         publish_path = path %>%
-            str_replace(here::here(), "https://jiaxiangbu.github.io/tutoring/") %>%
+            str_replace(here::here(), "https://jiaxiangbu.github.io/tutoring2/") %>%
             str_remove(md_pattern)
     )
 
@@ -75,13 +75,13 @@ tmp_toc_df <-
         owner_name = path %>% dirname() %>% str_remove(here::here()) %>% str_to_title(),
         owner_path = path %>% str_replace(
             here::here(),
-            "https://github.com/JiaxiangBU/tutoring/tree/master/"
+            "https://github.com/JiaxiangBU/tutoring2/tree/master/"
         )
     ) %>%
     mutate(md_link = glue(
         "1. [{title}]({publish_path}) ([{owner_name}]({owner_path}))"
     ))
-    
+
 
 # github issue ------------------------------------------------------------
 
@@ -91,12 +91,23 @@ issue_df <-
     issue_list %>%
     as_tibble() %>%
     rename(publish_path = url) %>%
-    mutate(modification_time = as_datetime(updated_at)) %>% 
+    mutate(modification_time = as_datetime(updated_at)) %>%
     mutate(
         owner_name = user_login,
         owner_path = glue("https://github.com/users/{user_login}")
     )
 
+repo <- create_repo_ref("JiaxiangBU", "tutoring2")
+issue_list <- get_issues(repo, state = "all") %>% parse_issues()
+issue_df2 <-
+    issue_list %>%
+    as_tibble() %>%
+    rename(publish_path = url) %>%
+    mutate(modification_time = as_datetime(updated_at)) %>%
+    mutate(
+        owner_name = user_login,
+        owner_path = glue("https://github.com/users/{user_login}")
+    )
 
 
 # toc ---------------------------------------------------------------------
@@ -106,7 +117,8 @@ tmp_toc_df2 <-
     select(md_link, modification_time)
 tmp_issue_df2 <-
     issue_df %>%
-    # select(owner_name, owner_path, title, publish_path) %>% 
+    bind_rows(issue_df2) %>%
+    # select(owner_name, owner_path, title, publish_path) %>%
     # .$owner_path
     transmute(
         md_link = glue("1. [{title}]({publish_path}) ([{owner_name}]({owner_path}))"),
