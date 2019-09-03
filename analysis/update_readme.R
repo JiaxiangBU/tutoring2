@@ -20,9 +20,8 @@ rmarkdown::render(here::here("README.Rmd"), encoding = "UTF-8")
 if (file.exists("README.html")) {file.remove("README.html")}
 
 git2r::add(path = ".")
-system("git commit --no-verify -m 'automatically update'")
-system("git push origin master")
-
+git2r::commit(message = "automatically update")
+git2r::push(name = "origin")
 
 job_print("Job End: ")
 
