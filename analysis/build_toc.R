@@ -86,8 +86,6 @@ tmp_toc_df2 <-
 tmp_issue_df2 <-
     issue_df %>%
     bind_rows(issue_df2) %>%
-    # select(owner_name, owner_path, title, publish_path) %>%
-    # .$owner_path
     transmute(
         md_link = glue(
             "1. [{title}]({publish_path}) ([{owner_name}]({owner_path}))"
@@ -97,3 +95,15 @@ tmp_issue_df2 <-
 
 toc_df <-
     bind_rows(tmp_toc_df2, tmp_issue_df2) %>% arrange(desc(modification_time))
+
+
+# delete something --------------------------------------------------------
+
+toc_df <-
+    toc_df %>%
+    filter(
+        md_link %>% str_detect("README", negate = TRUE),
+        md_link %>% str_detect("utf8.md", negate = TRUE),
+        md_link %>% str_detect("NEWS", negate = TRUE),
+        md_link %>% str_detect("R Notebook", negate = TRUE)
+    )
