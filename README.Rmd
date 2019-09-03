@@ -19,8 +19,8 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 ```{r include=FALSE}
-library(tidyverse)
-source(here::here("R/build_toc.R"))
+devtools::load_all()
+source(here::here("analysis/build_toc.R"))
 ```
 
 1. 这个项目主要是保存和分享提问的问题，为了后期迭代和查询。
