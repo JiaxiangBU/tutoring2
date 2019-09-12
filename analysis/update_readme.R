@@ -16,12 +16,12 @@ system("git pull")
 # pull first if any updated
 
 rmarkdown::render(here::here("README.Rmd"), encoding = "UTF-8")
+rstudioapi::viewer("README.html")
 if (file.exists("README.html")) {file.remove("README.html")}
 
-system("git add -A .")
-system("git commit --no-verify -m 'automatically update'")
+git2r::add(path = ".")
+git2r::commit(message = "automatically update")
 system("git push origin master")
-
 
 job_print("Job End: ")
 
