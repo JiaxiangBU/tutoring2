@@ -1,0 +1,33 @@
+---
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(magrittr)
+df <- read_excel("../refs/20190918_kaifanghongguan_nvxing(2)(1).xlsx")
+```
+
+```{r}
+df %>% dim
+```
+
+```{r}
+df %<>%
+    `names<-`(df %>% names %>% make.names() %>% str_remove_all("^X"))
+# 字段名不要加空格
+```
+
+```{r}
+df2 <- 
+df %>% 
+    gather(year, value, -Country.Name, -Series.Name) %>% 
+    spread(Series.Name, value)
+```
+
+```{r}
+df2[1:6,1:6]
+# 审阅
+```
+
