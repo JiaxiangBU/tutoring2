@@ -109,3 +109,22 @@ library(fs)
 file_copy("dev_history_r_proj.R", "../dev_history/refs/dev_history_r_proj.R",
           overwrite = TRUE)
 # open it!
+
+
+# gitdown -----------------------------------------------------------------
+
+gitdown::git_down(
+    repo = ".",
+    book_path = "gitdown",
+    open = TRUE,
+    author = "Jiaxiang Li",
+    pattern = c("ticket[[:digit:]]+", "#[[:digit:]]+"),
+    names_section = c("Ticket", "Issues"),
+    ref = "master"
+)
+
+library(gitdown)
+get_commits_pattern(repo, pattern = "#[[:digit:]]+", ref = "master") %>%
+    select(pattern, everything())
+
+get_commits_tags(ref = NULL)
