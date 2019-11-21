@@ -1,0 +1,176 @@
+---
+title: "前列腺病例 & 生化数据"
+date : "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+    number_sections: TRUE
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: hide
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T, warning = F, message = F, fig.align = "center")
+```
+
+
+<font size=4 face="微软雅黑">
+
+# 前期配置
+***
+
+
+```{r}
+# rm(list = ls())
+# setwd("D:/")
+# 不要使用这个代码
+
+library(plyr)
+library(caret)
+library(Hmisc)
+library(readxl)
+library(GGally)
+library(tidyverse)
+library(data.table)
+library(formattable)
+library(xgboost)
+```
+
+# 读取数据
+***
+
+```{r}
+df_raw <- read_excel("../refs/prostate_biochemistry.xlsx", sheet = 1)
+```
+
+
+
+# 简单探索
+***
+
+## 变量类型
+```{r}
+# glimpse(df_raw)
+```
+
+
+## 描述性统计量
+```{r}
+c_colnames_new <- c('label','age','body_heigh','body_weight', str_c('x_', 1:28))
+
+df_mutate <- df_raw %>%
+  select(-Case_ID) %>%
+  mutate_all(as.numeric) %>%
+  filter(LABEL < 3) %>%
+  setnames(old = names(.), new = c_colnames_new)
+
+# summary(df_mutate)
+```
+
+
+## 缺失值统计
+```{r}
+df_na_col <- df_mutate %>%
+  mutate_all(is.na) %>%
+  summarise_all(sum) %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(col_name = rownames(.),
+         na_per = percent(V1 / nrow(df_mutate))) %>%
+  dplyr::rename(na_cnt = V1) %>%
+  select(col_name, everything())
+
+df_na_row <- df_mutate %>%
+  mutate_all(is.na) %>%
+  mutate(
+    row_name = 1:nrow(.),
+    na_cnt = rowSums(.),
+    na_per = na_cnt / ncol(.)
+  ) %>%
+  select(row_name, na_cnt, na_per)
+
+c_col_drop_na <- df_na_col %>% filter(na_per > 0.7) %>% .$col_name
+c_row_drop_na <- df_na_row %>% filter(na_per > 0.5) %>% .$row_name
+
+df_filter <- df_mutate %>%
+  select(-c_col_drop_na) %>%
+  filter(!rownames(.) %in% c_row_drop_na) %>%
+  mutate(label = ifelse(label == 1, 0, 1))
+```
+
+
+# xgb
+***
+
+```{r}
+set.seed(45L)
+train_idx  <-
+  createDataPartition(df_filter$label, p = 0.8, list = F) %>% as.vector()
+length(train_idx)
+nrow(df_filter)
+train_data <- df_filter[train_idx,]
+test_data  <- df_filter[-train_idx, ]
+
+get_dmatrix <- function(x) {
+  xgb.DMatrix(data = as.matrix(x %>% select(-label)),
+              label = x$label)
+}
+
+xgboost_dtrain <- get_dmatrix(train_data)
+xgboost_dtest  <- get_dmatrix(test_data)
+
+watchlist <- list(train = xgboost_dtrain, test = xgboost_dtest)
+xgb <- xgb.train(
+  data             = xgboost_dtrain,
+  eta              = 0.1,
+  nround           = 100,
+  max_depth        = 3,
+  min_child_weight = 17,
+  # gamma            = 0.72,
+  subsample        = 0.1,
+  colsample_bytree = 0.1,
+  eval.metric      = "auc",
+  objective        = "binary:logistic",
+  seed             = 45,
+  watchlist        = watchlist,
+  nfold            = 10,
+  early_stopping_rounds = 50,
+  nthread          = 8
+)
+```
+
+```{r}
+xgb$evaluation_log %>% knitr::kable(format = "markdown") %>% 
+  clipr::write_clip()
+```
+
+
+```{r}
+xgb$evaluation_log %>% 
+  ggplot() +
+  geom_line(aes(x = iter, y = train_auc), col = 'red') +
+  geom_line(aes(x = iter, y = test_auc), col = 'blue') +
+  theme_minimal()
+```
+
+
+```{r}
+pred <- predict(xgb, xgboost_dtest)
+
+df_pred <- data.frame(y = test_data$label, pred = pred)
+
+df_pred_mutate <- df_pred %>%
+  mutate(
+    pred_bin = cut2(pred, g = 10)
+  )
+
+df_pred_mutate %>%
+  group_by(pred_bin) %>%
+  summarise(
+    cnt  = n(),
+    rate = mean(y)
+  )
+```
