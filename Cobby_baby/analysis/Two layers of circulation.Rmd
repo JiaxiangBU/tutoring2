@@ -5,12 +5,6 @@ date: "2019/11/26"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-
 ```library(ROCR)
 ###rank snps
 rankByPvalue<-function(Data){
