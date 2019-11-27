@@ -1,0 +1,21 @@
+---
+title: "AIC"
+author: "Cobby_baby"
+date: "2019/11/27"
+output: html_document
+---
+
+```
+
+###使用stepAICs时需要加载的包
+###library(MASS)
+geno <-read.table("../data/imputed_geno.txt",header = T,stringsAsFactors = F)
+
+geno_linear <- geno[-1]
+
+lm.fit <- lm(MPB~.,data=geno_linear)
+lm.step <- step(lm.fit)
+##或者stepAIC(lm.fit.direction="backward")
+###下面不知道如何提取里面的AIC来做比较，主要是这些自变量的相对重要程度而已
+###我认为第一步是就是全部变量都加进去的回归，这第一步的start返回的AIC和变量顺序的逆序就是我想要的自变量的相对重要程度吧。（自己的想法）
+```
