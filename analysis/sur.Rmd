@@ -1,0 +1,24 @@
+---
+title: SUR demo
+output: github_document
+bibliography: ../../blog_181126/content/post/add.bib
+---
+
+参考 @Kleiber2008Applied
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(systemfit)
+library(plm)
+data("Grunfeld", package = "AER")
+gr2 <- subset(Grunfeld, firm %in% c("Chrysler", "IBM")) # Id 太多会很慢
+pgr2 <- pdata.frame(gr2, c("firm", "year"))
+# use of 'plm.data' is discouraged, better use 'pdata.frame' instead
+gr_ols <- systemfit(invest ~ value + capital, method = "OLS", data = pgr2)
+gr_sur <- systemfit(invest ~ value + capital, method = "SUR", data = pgr2)
+summary(gr_ols, residCov = FALSE, equations = FALSE) # 展示每个id每个beta
+summary(gr_sur, residCov = FALSE, equations = FALSE)
+```
