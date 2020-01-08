@@ -1,6 +1,23 @@
 SUR demo
 ================
 
+> Systems of regression equations have been a hallmark of econometrics
+> for severaldecades. Standard examples include seemingly unrelated
+> regressions andvarious macroeconomic simultaneous equation models. The
+> package systemfit(Henningsen and Hamann 2007) can estimate a number of
+> multiple-equationmodels. As an example, we present a seemingly
+> unrelated regression (SUR)model (Zellner 1962) for the Grunfeld data.
+> As noted by Greene (2003, p. 329, fn. 39), “\[a\]lthough admittedly
+> not current, these data are unusually cooperativefor illustrating the
+> di???erent aspects of estimating systems of regressionequations”.
+> Unlike the panel data models considered in the preceding section,
+> which permit only individual-specific intercepts, the SUR model also
+> allowsfor individual-specific slopes. (As regards terminology, the
+> “individuals” of thepreceding section will now be referred to as
+> “equations”.) The model assumescontemporaneous correlation across
+> equations, and thus joint estimation of allparameters is, in general,
+> more efficient than OLS on each equation.
+
 参考 Kleiber and Zeileis (2008)
 
 ``` r
