@@ -1,0 +1,12 @@
+---
+output: github_document
+---
+
+参考 https://q.cnblogs.com/q/120407/
+
+```{r echo=FALSE, results='asis'}
+library(magrittr)
+readr::read_lines("quote.txt") %>% 
+    gluedown::md_quote()
+```
+
