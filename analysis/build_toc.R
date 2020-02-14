@@ -1,8 +1,6 @@
-# source ------------------------------------------------------------------
 
-source(here::here("R/load.R"))
-source(here::here("R/get_title.R"))
-source(here::here("R/subset_by_type.R"))
+# source ------------------------------------------------------------------
+devtools::load_all()
 
 repo_name <- "tutoring2"
 pattern_path <- "\\.(md|ipynb|html)$"
@@ -107,3 +105,7 @@ toc_df <-
         md_link %>% str_detect("NEWS", negate = TRUE),
         md_link %>% str_detect("R Notebook", negate = TRUE)
     )
+
+tmp_path <- "tmp"
+if (!dir.exists(tmp_path)) dir.create(tmp_path)
+toc_df %>% write_rds("tmp/toc_df.rds")
