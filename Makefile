@@ -17,3 +17,5 @@ push:
 	git push
 
 README: toc render clean push
+
+all: README
