@@ -1,7 +1,7 @@
 
 ``` r
 # setwd("F:/rwork") #不要使用这行代码，没必要。
-library(nCov2019)
+# library(nCov2019)
 library(tidyverse)
 ```
 
@@ -23,7 +23,16 @@ library(tidyverse)
     ## x dplyr::lag()    masks stats::lag()
 
 ``` r
-x <- load_nCov2019()
+# x <- load_nCov2019()
+# x %>% write_rds("x.rds")
+# 为了方便你调用，我把 x 这个对象离线保存下来了
+```
+
+``` r
+x <- readr::read_rds("x.rds")
+```
+
+``` r
 data_path <- "data"
 dir.create(data_path, recursive = TRUE)
 ```

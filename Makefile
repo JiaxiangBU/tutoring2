@@ -19,3 +19,7 @@ push:
 README: toc render clean push
 
 all: README
+
+copy:
+
+	RScript code/copy-md.R

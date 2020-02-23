@@ -1,82 +1,44 @@
 
-code reproduction <https://lexparsimon.github.io/coronavirus/>
+前面的`sessionInfo()`我进行了删除，为了你每次打开这个issue简洁和快一些。
 
-``` bash
-$ jupyter nbconvert --to markdown wuruiqi/coronavirus.ipynb
-[NbConvertApp] Converting notebook wuruiqi/coronavirus.ipynb to markdown
-[NbConvertApp] Writing 3648 bytes to wuruiqi\coronavirus.md
+``` r
+# x <- load_nCov2019()
+# x %>% write_rds("x.rds")
+# 为了方便你调用，我把 x 这个对象离线保存下来了
 ```
 
-`wuruiqi/coronavirus.ipynb` 这是复现的 notebook，我 reformat 了代码。
-
-``` python
-import numpy as np
-
-# initialize the population vector from the origin-destination flow matrix
-N_k = np.abs(np.diagonal(OD) + OD.sum(axis=0) - OD.sum(axis=1))
-locs_len = len(N_k)  # number of locations
-SIR = np.zeros(
-    shape=(locs_len, 3)
-)  # make a numpy array with 3 columns for keeping track of the S, I, R groups
-SIR[:, 0] = N_k  # initialize the S group with the respective populations
-
-first_infections = np.where(
-    SIR[:, 0] <= thresh, SIR[:, 0] // 20, 0
-)  # for demo purposes, randomly introduce infections
-SIR[:, 0] = SIR[:, 0] - first_infections
-SIR[:, 1] = SIR[:, 1] + first_infections  # move infections to the I group
-
-# row normalize the SIR matrix for keeping track of group proportions
-row_sums = SIR.sum(axis=1)
-SIR_n = SIR / row_sums[:, np.newaxis]
-
-# initialize parameters
-beta = 1.6
-gamma = 0.04
-public_trans = 0.5  # alpha
-R0 = beta / gamma
-beta_vec = np.random.gamma(1.6, 2, locs_len)
-gamma_vec = np.full(locs_len, gamma)
-public_trans_vec = np.full(locs_len, public_trans)
-
-# make copy of the SIR matrices
-SIR_sim = SIR.copy()
-SIR_nsim = SIR_n.copy()
-
-# run model
-print(SIR_sim.sum(axis=0).sum() == N_k.sum())
-from tqdm import tqdm_notebook
-
-infected_pop_norm = []
-susceptible_pop_norm = []
-recovered_pop_norm = []
+``` r
+x <- readr::read_rds("x.rds")
 ```
 
-    ---------------------------------------------------------------------------
-    
-    NameError                                 Traceback (most recent call last)
-    
-    <ipython-input-7-aa271ab2f1eb> in <module>
-          2 
-          3 # initialize the population vector from the origin-destination flow matrix
-    ----> 4 N_k = np.abs(np.diagonal(OD) + OD.sum(axis=0) - OD.sum(axis=1))
-          5 locs_len = len(N_k)  # number of locations
-          6 SIR = np.zeros(
-    
-    
-    NameError: name 'OD' is not defined
+``` r
+data_path <- "data"
+dir.create(data_path, recursive = TRUE)
+```
 
-> For this analysis, we will use the aggregated \(OD\) flow matrix of a
-> typical day obtained from GPS data provided by local ride sharing
-> company gg as a proxy for the mobility patterns in Yerevan city.
+    ## Warning in dir.create(data_path, recursive = TRUE): 'data'已存在
 
-这是 OD 的定义。 需要在 <https://www.ggtaxi.com/signin> 下载。
+``` r
+for (i in unique(x[["data"]][["province"]])) {
+    x[["data"]][i, c(1:6, 9:11)] %>%
+        write_excel_csv(file.path(data_path, paste(i, '.csv', sep = '')))
+}
+```
 
-> Next, we need the population counts in each 250×250 m grid cell, which
-> we approximate by proportionally scaling the extracted flow counts so
-> that the total inflows in different locations sum up to approximately
-> half of Yerevan’s population of 1.1 million. This is actually a bold
-> assumption, but since varying this portion yielded very similar
-> results, we will stick to it.
+``` r
+fs::dir_ls(data_path)
+```
 
-然后下载后的数据做一个计数矩阵，进行标准化处理即可。 这部分你可以把数据下载下来后，我这边处理。
+    ## data/上海.csv  data/云南.csv  data/内蒙古.csv data/北京.csv  data/台湾.csv  data/吉林.csv  
+    ## data/四川.csv  data/天津.csv  data/宁夏.csv  data/安徽.csv  data/山东.csv  data/山西.csv  
+    ## data/广东.csv  data/广西.csv  data/新疆.csv  data/江苏.csv  data/江西.csv  data/河北.csv  
+    ## data/河南.csv  data/浙江.csv  data/海南.csv  data/湖北.csv  data/湖南.csv  data/澳门.csv  
+    ## data/甘肃.csv  data/福建.csv  data/西藏.csv  data/贵州.csv  data/辽宁.csv  data/重庆.csv  
+    ## data/陕西.csv  data/青海.csv  data/香港.csv  data/黑龙江.csv
+
+我搭建了一个临时环境，如图
+
+你可以在这个临时环境测试代码。 临时环境启动的时候，稍等2-3分钟就构建完成。
+
+<http://beta.mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?urlpath=rstudio>
+打开文件`liyongtao/write_csv.Rmd`

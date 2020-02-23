@@ -2,5 +2,3 @@
 output: github_document
 ---
 
-1. `liyongtao/write_csv.Rmd` 复现例子。
-1. `liyongtao/write_csv.md`
