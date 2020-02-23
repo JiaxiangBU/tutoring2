@@ -19,13 +19,15 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 ```{r include=FALSE}
-devtools::load_all()
+library(tidyverse)
 toc_df <- read_rds("tmp/toc_df.rds")
 ```
 
 1. 这个项目主要是保存和分享提问的问题，为了后期迭代和查询。
 1. 文件夹构造的逻辑，按照人名完成，`R/` 是一些集成的函数，方便调用，避免重复代码。
-1. 目前完成问题`r nrow(toc_df)`个，如下。
+1. 目前完成问题`r nrow(toc_df)`个。
+1. 点击 [![Launch RStudio](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?urlpath=rstudio) 进入 RStudio Server 页面。
+
 
 The goal of tutoring2 is to collect the issues and related answers.
 [tutoring](https://github.com/JiaxiangBU/tutoring) is depreciated on the security grounds.

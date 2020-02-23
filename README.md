@@ -11,7 +11,10 @@ RStudio](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Jiaxia
 
 1.  这个项目主要是保存和分享提问的问题，为了后期迭代和查询。
 2.  文件夹构造的逻辑，按照人名完成，`R/` 是一些集成的函数，方便调用，避免重复代码。
-3.  目前完成问题217个，如下。
+3.  目前完成问题217个。
+4.  点击 [![Launch
+    RStudio](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?urlpath=rstudio)
+    进入 RStudio Server 页面。
 
 The goal of tutoring2 is to collect the issues and related answers.
 [tutoring](https://github.com/JiaxiangBU/tutoring) is depreciated on the
