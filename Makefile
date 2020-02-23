@@ -2,13 +2,12 @@ toc:
 
 	RScript analysis/build_toc.R
 
-render: toc
+render:
 
 	RScript analysis/build_readme.R
 
 clean:
 
-	rm -R tmp
 	rm README.html
 
 push:

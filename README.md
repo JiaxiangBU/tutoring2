@@ -5,12 +5,13 @@
 
 <!-- badges: start -->
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master)
+[![Launch
+RStudio](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?urlpath=rstudio)
 <!-- badges: end -->
 
 1.  这个项目主要是保存和分享提问的问题，为了后期迭代和查询。
 2.  文件夹构造的逻辑，按照人名完成，`R/` 是一些集成的函数，方便调用，避免重复代码。
-3.  目前完成问题216个，如下。
+3.  目前完成问题217个，如下。
 
 The goal of tutoring2 is to collect the issues and related answers.
 [tutoring](https://github.com/JiaxiangBU/tutoring) is depreciated on the
@@ -18,503 +19,505 @@ security grounds.
 
 ## 目录
 
-1.  [write
-    csv](https://jiaxiangbu.github.io/tutoring2//liyongtao/write_csv)
-    ([/Liyongtao](https://github.com/JiaxiangBU/tutoring2/tree/master//liyongtao/write_csv.md))
+1.  [](https://jiaxiangbu.github.io/tutoring2//git-commit.html)
+    ([](https://github.com/JiaxiangBU/tutoring2/tree/master//git-commit.html))
 2.  [git commit](https://jiaxiangbu.github.io/tutoring2//git-commit)
     ([](https://github.com/JiaxiangBU/tutoring2/tree/master//git-commit.md))
-3.  [coronavirus](https://jiaxiangbu.github.io/tutoring2//wuruiqi/coronavirus)
+3.  [write
+    csv](https://jiaxiangbu.github.io/tutoring2//liyongtao/write_csv)
+    ([/Liyongtao](https://github.com/JiaxiangBU/tutoring2/tree/master//liyongtao/write_csv.md))
+4.  [coronavirus](https://jiaxiangbu.github.io/tutoring2//wuruiqi/coronavirus)
     ([/Wuruiqi](https://github.com/JiaxiangBU/tutoring2/tree/master//wuruiqi/coronavirus.md))
-4.  [coronavirus](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=wuruiqi%2Fcoronavirus.ipynb)
+5.  [coronavirus](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=wuruiqi%2Fcoronavirus.ipynb)
     ([/Wuruiqi](https://github.com/JiaxiangBU/tutoring2/tree/master//wuruiqi/coronavirus.ipynb))
-5.  [code reproduction
+6.  [code reproduction
     \<https://lexparsimon.github.io/coronavirus/\>](https://github.com/JiaxiangBU/tutoring2/issues/35)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-6.  [Error in `[.data.frame`(obj, ii, j, drop = FALSE) : undefined
+7.  [Error in `[.data.frame`(obj, ii, j, drop = FALSE) : undefined
     columns selected](https://github.com/JiaxiangBU/tutoring2/issues/34)
     ([hehuanshu96](https://github.com/users/hehuanshu96))
-7.  [R语言学习的模块](https://github.com/JiaxiangBU/tutoring2/issues/25)
+8.  [R语言学习的模块](https://github.com/JiaxiangBU/tutoring2/issues/25)
     ([hehuanshu96](https://github.com/users/hehuanshu96))
-8.  [针对tibble中的数值型数据，如何自定义保留小数位数？](https://github.com/JiaxiangBU/tutoring2/issues/33)
+9.  [针对tibble中的数值型数据，如何自定义保留小数位数？](https://github.com/JiaxiangBU/tutoring2/issues/33)
     ([slsongge](https://github.com/users/slsongge))
-9.  [enlarge
+10. [enlarge
     plot](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=gaowenxin%2Fenlarge-plot.ipynb)
     ([/Gaowenxin](https://github.com/JiaxiangBU/tutoring2/tree/master//gaowenxin/enlarge-plot.ipynb))
-10. [spread 函数 key
+11. [spread 函数 key
     有重复值](https://github.com/JiaxiangBU/tutoring2/issues/32)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-11. [Python
+12. [Python
     引入同一个包的两个版本](https://github.com/JiaxiangBU/tutoring2/issues/31)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-12. [反欺诈相关资料](https://github.com/JiaxiangBU/tutoring2/issues/23)
+13. [反欺诈相关资料](https://github.com/JiaxiangBU/tutoring2/issues/23)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-13. [GMM 估计](https://github.com/JiaxiangBU/tutoring2/issues/21)
+14. [GMM 估计](https://github.com/JiaxiangBU/tutoring2/issues/21)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-14. [stacking notes](https://github.com/JiaxiangBU/tutoring2/issues/20)
+15. [stacking notes](https://github.com/JiaxiangBU/tutoring2/issues/20)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-15. [短信文本处理 词向量](https://github.com/JiaxiangBU/tutoring2/issues/19)
+16. [短信文本处理 词向量](https://github.com/JiaxiangBU/tutoring2/issues/19)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-16. [逐步回归AIC问题](https://github.com/JiaxiangBU/tutoring2/issues/17)
+17. [逐步回归AIC问题](https://github.com/JiaxiangBU/tutoring2/issues/17)
     ([Cobbybaby](https://github.com/users/Cobbybaby))
-17. [两层循环的解决方法](https://github.com/JiaxiangBU/tutoring2/issues/16)
+18. [两层循环的解决方法](https://github.com/JiaxiangBU/tutoring2/issues/16)
     ([Cobbybaby](https://github.com/users/Cobbybaby))
-18. [一月对于股价的影响是否显著高于二月](https://github.com/JiaxiangBU/tutoring2/issues/13)
+19. [一月对于股价的影响是否显著高于二月](https://github.com/JiaxiangBU/tutoring2/issues/13)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-19. [传感器数据分析](https://github.com/JiaxiangBU/tutoring2/issues/11)
+20. [传感器数据分析](https://github.com/JiaxiangBU/tutoring2/issues/11)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-20. [if
+21. [if
     else](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fif-else.ipynb)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/if-else.ipynb))
-21. [数据框某列分段方法](https://github.com/JiaxiangBU/tutoring2/issues/30)
+22. [数据框某列分段方法](https://github.com/JiaxiangBU/tutoring2/issues/30)
     ([slsongge](https://github.com/users/slsongge))
-22. [gt 安装](https://github.com/JiaxiangBU/tutoring2/issues/29)
+23. [gt 安装](https://github.com/JiaxiangBU/tutoring2/issues/29)
     ([hehuanshu96](https://github.com/users/hehuanshu96))
-23. [R计量结果输出，类似STATA中的outreg2命令。多谢啦](https://github.com/JiaxiangBU/tutoring2/issues/28)
+24. [R计量结果输出，类似STATA中的outreg2命令。多谢啦](https://github.com/JiaxiangBU/tutoring2/issues/28)
     ([hehuanshu96](https://github.com/users/hehuanshu96))
-24. [无法安装xgboost，标注版本下无法安装](https://github.com/JiaxiangBU/tutoring2/issues/27)
+25. [无法安装xgboost，标注版本下无法安装](https://github.com/JiaxiangBU/tutoring2/issues/27)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-25. [理解 train、test 和 OOT
+26. [理解 train、test 和 OOT
     的区别和时间区间](https://github.com/JiaxiangBU/tutoring2/issues/26)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-26. [map for columns](https://github.com/JiaxiangBU/tutoring2/issues/24)
+27. [map for columns](https://github.com/JiaxiangBU/tutoring2/issues/24)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-27. [作文用到的词汇](https://jiaxiangbu.github.io/tutoring2//p_runqi/voca)
+28. [作文用到的词汇](https://jiaxiangbu.github.io/tutoring2//p_runqi/voca)
     ([/P\_runqi](https://github.com/JiaxiangBU/tutoring2/tree/master//p_runqi/voca.md))
-28. [depreciated
+29. [depreciated
     func](https://jiaxiangbu.github.io/tutoring2//zhangqian/analysis/depreciated-func)
     ([/Zhangqian/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//zhangqian/analysis/depreciated-func.md))
-29. [fin data get man
+30. [fin data get man
     save](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=zhangqian%2Ffin_data_get_man_save.ipynb)
     ([/Zhangqian](https://github.com/JiaxiangBU/tutoring2/tree/master//zhangqian/fin_data_get_man_save.ipynb))
-30. [SUR demo](https://jiaxiangbu.github.io/tutoring2//analysis/sur)
+31. [SUR demo](https://jiaxiangbu.github.io/tutoring2//analysis/sur)
     ([/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//analysis/sur.md))
-31. [SUR 例子](https://github.com/JiaxiangBU/tutoring2/issues/22)
+32. [SUR 例子](https://github.com/JiaxiangBU/tutoring2/issues/22)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-32. [找到首逾突然变高的用户](https://github.com/JiaxiangBU/tutoring2/issues/15)
+33. [找到首逾突然变高的用户](https://github.com/JiaxiangBU/tutoring2/issues/15)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-33. [Kaggle 验证 local
+34. [Kaggle 验证 local
     validation](https://github.com/JiaxiangBU/tutoring2/issues/3)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-34. [R实现python的分组+统计+unstack](https://github.com/JiaxiangBU/tutoring2/issues/18)
+35. [R实现python的分组+统计+unstack](https://github.com/JiaxiangBU/tutoring2/issues/18)
     ([slsongge](https://github.com/users/slsongge))
-35. [回复 kaggle | use EDA to measure
+36. [回复 kaggle | use EDA to measure
     corr](https://github.com/JiaxiangBU/tutoring/issues/58)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-36. [二分类-自变量区分度很低](https://github.com/JiaxiangBU/tutoring2/issues/14)
+37. [二分类-自变量区分度很低](https://github.com/JiaxiangBU/tutoring2/issues/14)
     ([slsongge](https://github.com/users/slsongge))
-37. [pandas set
+38. [pandas set
     option](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fanalysis%2Fpandas-set_option.ipynb)
     ([/Jinxiaosong/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/analysis/pandas-set_option.ipynb))
-38. [pd.set\_option
+39. [pd.set\_option
     的问题](https://github.com/JiaxiangBU/tutoring2/issues/12)
     ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-39. [模拟学习的资料](https://jiaxiangbu.github.io/tutoring2//zhangzhongyan/sim-learning)
+40. [模拟学习的资料](https://jiaxiangbu.github.io/tutoring2//zhangzhongyan/sim-learning)
     ([/Zhangzhongyan](https://github.com/JiaxiangBU/tutoring2/tree/master//zhangzhongyan/sim-learning.md))
-40. [set
+41. [set
     cutoff](https://jiaxiangbu.github.io/tutoring2//zhangzhongyan/set-cutoff)
     ([/Zhangzhongyan](https://github.com/JiaxiangBU/tutoring2/tree/master//zhangzhongyan/set-cutoff.md))
-41. [计算 lasso 的 p
+42. [计算 lasso 的 p
     值](https://jiaxiangbu.github.io/tutoring2//zhangzhongyan/glmnet.html)
     ([/Zhangzhongyan](https://github.com/JiaxiangBU/tutoring2/tree/master//zhangzhongyan/glmnet.html))
-42. [美元流动性的衡量指标](https://jiaxiangbu.github.io/tutoring2//z_xinxue/target)
+43. [美元流动性的衡量指标](https://jiaxiangbu.github.io/tutoring2//z_xinxue/target)
     ([/Z\_xinxue](https://github.com/JiaxiangBU/tutoring2/tree/master//z_xinxue/target.md))
-43. [国家接壤](https://jiaxiangbu.github.io/tutoring2//z_xinxue/border)
+44. [国家接壤](https://jiaxiangbu.github.io/tutoring2//z_xinxue/border)
     ([/Z\_xinxue](https://github.com/JiaxiangBU/tutoring2/tree/master//z_xinxue/border.md))
-44. [bibtex](https://jiaxiangbu.github.io/tutoring2//z_xinxue/bibtex)
+45. [bibtex](https://jiaxiangbu.github.io/tutoring2//z_xinxue/bibtex)
     ([/Z\_xinxue](https://github.com/JiaxiangBU/tutoring2/tree/master//z_xinxue/bibtex.md))
-45. [R动态页面爬虫](https://jiaxiangbu.github.io/tutoring2//youdahai/rcookies)
+46. [R动态页面爬虫](https://jiaxiangbu.github.io/tutoring2//youdahai/rcookies)
     ([/Youdahai](https://github.com/JiaxiangBU/tutoring2/tree/master//youdahai/rcookies.md))
-46. [python](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=youdahai%2Fpython.ipynb)
+47. [python](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=youdahai%2Fpython.ipynb)
     ([/Youdahai](https://github.com/JiaxiangBU/tutoring2/tree/master//youdahai/python.ipynb))
-47. [bibtex 例子](https://jiaxiangbu.github.io/tutoring2//yangjia/bibtex)
+48. [bibtex 例子](https://jiaxiangbu.github.io/tutoring2//yangjia/bibtex)
     ([/Yangjia](https://github.com/JiaxiangBU/tutoring2/tree/master//yangjia/bibtex.md))
-48. [yangyang](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=y_yang%2Fyangyang.ipynb)
+49. [yangyang](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=y_yang%2Fyangyang.ipynb)
     ([/Y\_yang](https://github.com/JiaxiangBU/tutoring2/tree/master//y_yang/yangyang.ipynb))
-49. [](https://jiaxiangbu.github.io/tutoring2//xiaoxiao/xiaoxiao_180602.html)
+50. [](https://jiaxiangbu.github.io/tutoring2//xiaoxiao/xiaoxiao_180602.html)
     ([/Xiaoxiao](https://github.com/JiaxiangBU/tutoring2/tree/master//xiaoxiao/xiaoxiao_180602.html))
-50. [regex](https://jiaxiangbu.github.io/tutoring2//x_mingde/regex)
+51. [regex](https://jiaxiangbu.github.io/tutoring2//x_mingde/regex)
     ([/X\_mingde](https://github.com/JiaxiangBU/tutoring2/tree/master//x_mingde/regex.md))
-51. [pca](https://jiaxiangbu.github.io/tutoring2//x_binghui/pca.nb.html)
+52. [pca](https://jiaxiangbu.github.io/tutoring2//x_binghui/pca.nb.html)
     ([/X\_binghui](https://github.com/JiaxiangBU/tutoring2/tree/master//x_binghui/pca.nb.html))
-52. [pandas
+53. [pandas
     lag](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=x_binghui%2Fanalysis%2Fpandas-lag.ipynb)
     ([/X\_binghui/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//x_binghui/analysis/pandas-lag.ipynb))
-53. [降维](https://jiaxiangbu.github.io/tutoring2//x_binghui/pca)
+54. [降维](https://jiaxiangbu.github.io/tutoring2//x_binghui/pca)
     ([/X\_binghui](https://github.com/JiaxiangBU/tutoring2/tree/master//x_binghui/pca.md))
-54. [xgboost
+55. [xgboost
     dart](https://jiaxiangbu.github.io/tutoring2//wuruiqi/xgboost-dart/xgboost-dart)
     ([/Wuruiqi/Xgboost-Dart](https://github.com/JiaxiangBU/tutoring2/tree/master//wuruiqi/xgboost-dart/xgboost-dart.md))
-55. [xgboost
+56. [xgboost
     dart](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=wuruiqi%2Fxgboost-dart%2Fxgboost-dart.ipynb)
     ([/Wuruiqi/Xgboost-Dart](https://github.com/JiaxiangBU/tutoring2/tree/master//wuruiqi/xgboost-dart/xgboost-dart.ipynb))
-56. [](https://jiaxiangbu.github.io/tutoring2//wuruiqi/xgboost-dart/xgboost-dart.html)
+57. [](https://jiaxiangbu.github.io/tutoring2//wuruiqi/xgboost-dart/xgboost-dart.html)
     ([/Wuruiqi/Xgboost-Dart](https://github.com/JiaxiangBU/tutoring2/tree/master//wuruiqi/xgboost-dart/xgboost-dart.html))
-57. [test wu
+58. [test wu
     code](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=wuruiqi%2Fxgboost-dart%2Ftest-wu-code.ipynb)
     ([/Wuruiqi/Xgboost-Dart](https://github.com/JiaxiangBU/tutoring2/tree/master//wuruiqi/xgboost-dart/test-wu-code.ipynb))
-58. [Code
+59. [Code
     log](https://jiaxiangbu.github.io/tutoring2//w_yuqiu/regex_code_log)
     ([/W\_yuqiu](https://github.com/JiaxiangBU/tutoring2/tree/master//w_yuqiu/regex_code_log.md))
-59. [regex
+60. [regex
     learning](https://jiaxiangbu.github.io/tutoring2//w_yuqiu/regex_learning)
     ([/W\_yuqiu](https://github.com/JiaxiangBU/tutoring2/tree/master//w_yuqiu/regex_learning.md))
-60. [身份证数据处理成经纬度](https://jiaxiangbu.github.io/tutoring2//w_yuqiu/lat_and_long)
+61. [身份证数据处理成经纬度](https://jiaxiangbu.github.io/tutoring2//w_yuqiu/lat_and_long)
     ([/W\_yuqiu](https://github.com/JiaxiangBU/tutoring2/tree/master//w_yuqiu/lat_and_long.md))
-61. [leecode](https://jiaxiangbu.github.io/tutoring2//w_yuqiu/leecode)
+62. [leecode](https://jiaxiangbu.github.io/tutoring2//w_yuqiu/leecode)
     ([/W\_yuqiu](https://github.com/JiaxiangBU/tutoring2/tree/master//w_yuqiu/leecode.md))
-62. [演绎法计算概率](https://jiaxiangbu.github.io/tutoring2//w_juan/analysis/prob-deduction)
+63. [演绎法计算概率](https://jiaxiangbu.github.io/tutoring2//w_juan/analysis/prob-deduction)
     ([/W\_juan/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//w_juan/analysis/prob-deduction.md))
-63. [ilets
+64. [ilets
     writing 20190709](https://jiaxiangbu.github.io/tutoring2//w_juan/analysis/ilets_writing_20190709)
     ([/W\_juan/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//w_juan/analysis/ilets_writing_20190709.md))
-64. [extract subelement in
+65. [extract subelement in
     json](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=w_juan%2Fanalysis%2Fextract_subelement_in_json.ipynb)
     ([/W\_juan/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//w_juan/analysis/extract_subelement_in_json.ipynb))
-65. [json](https://jiaxiangbu.github.io/tutoring2//someone/json/json.nb.html)
+66. [json](https://jiaxiangbu.github.io/tutoring2//someone/json/json.nb.html)
     ([/Someone/Json](https://github.com/JiaxiangBU/tutoring2/tree/master//someone/json/json.nb.html))
-66. [json](https://jiaxiangbu.github.io/tutoring2//someone/json/json)
+67. [json](https://jiaxiangbu.github.io/tutoring2//someone/json/json)
     ([/Someone/Json](https://github.com/JiaxiangBU/tutoring2/tree/master//someone/json/json.md))
-67. [map
+68. [map
     用法](https://jiaxiangbu.github.io/tutoring2//pansiyu/analysis/map/map)
     ([/Pansiyu/Analysis/Map](https://github.com/JiaxiangBU/tutoring2/tree/master//pansiyu/analysis/map/map.md))
-68. [ggplot annotate
+69. [ggplot annotate
     bar](https://jiaxiangbu.github.io/tutoring2//pansiyu/analysis/ggplot-annotate_bar)
     ([/Pansiyu/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//pansiyu/analysis/ggplot-annotate_bar.md))
-69. [找最近的点](https://jiaxiangbu.github.io/tutoring2//pansiyu/analysis/distance-calculas/readme-dist-cal)
+70. [找最近的点](https://jiaxiangbu.github.io/tutoring2//pansiyu/analysis/distance-calculas/readme-dist-cal)
     ([/Pansiyu/Analysis/Distance-Calculas](https://github.com/JiaxiangBU/tutoring2/tree/master//pansiyu/analysis/distance-calculas/readme-dist-cal.md))
-70. [整理短信的规则](https://jiaxiangbu.github.io/tutoring2//p_ruiting/rule)
+71. [整理短信的规则](https://jiaxiangbu.github.io/tutoring2//p_ruiting/rule)
     ([/P\_ruiting](https://github.com/JiaxiangBU/tutoring2/tree/master//p_ruiting/rule.md))
-71. [code
+72. [code
     log](https://jiaxiangbu.github.io/tutoring2//p_ruiting/code_log)
     ([/P\_ruiting](https://github.com/JiaxiangBU/tutoring2/tree/master//p_ruiting/code_log.md))
-72. [整理文本到分析的安排](https://jiaxiangbu.github.io/tutoring2//p_ruiting/ana)
+73. [整理文本到分析的安排](https://jiaxiangbu.github.io/tutoring2//p_ruiting/ana)
     ([/P\_ruiting](https://github.com/JiaxiangBU/tutoring2/tree/master//p_ruiting/ana.md))
-73. [filter](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=ma%2Ffilter.ipynb)
+74. [filter](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=ma%2Ffilter.ipynb)
     ([/Ma](https://github.com/JiaxiangBU/tutoring2/tree/master//ma/filter.ipynb))
-74. [path in
+75. [path in
     python](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=liuligong%2Fpath_in_python.ipynb)
     ([/Liuligong](https://github.com/JiaxiangBU/tutoring2/tree/master//liuligong/path_in_python.ipynb))
-75. [【产品】P2P新闻速报](https://jiaxiangbu.github.io/tutoring2//l_yueqing/useMarkdown.html)
+76. [【产品】P2P新闻速报](https://jiaxiangbu.github.io/tutoring2//l_yueqing/useMarkdown.html)
     ([/L\_yueqing](https://github.com/JiaxiangBU/tutoring2/tree/master//l_yueqing/useMarkdown.html))
-76. [practice](https://jiaxiangbu.github.io/tutoring2//l_yueqing/practice)
+77. [practice](https://jiaxiangbu.github.io/tutoring2//l_yueqing/practice)
     ([/L\_yueqing](https://github.com/JiaxiangBU/tutoring2/tree/master//l_yueqing/practice.md))
-77. [eda](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/笔试题/eda.nb.html)
+78. [eda](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/笔试题/eda.nb.html)
     ([/Jinxiaosong/笔试题](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/笔试题/eda.nb.html))
-78. [字符模糊匹配](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/字符模糊匹配/join)
+79. [字符模糊匹配](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/字符模糊匹配/join)
     ([/Jinxiaosong/字符模糊匹配](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/字符模糊匹配/join.md))
-79. [ham or
+80. [ham or
     spam](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/tojxg/sms_start.html)
     ([/Jinxiaosong/Tojxg](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/tojxg/sms_start.html))
-80. [时间测试](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/time)
+81. [时间测试](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/time)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/time.md))
-81. [t-SNE理论部分补充](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/t-sne-theory.html)
+82. [t-SNE理论部分补充](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/t-sne-theory.html)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/t-sne-theory.html))
-82. [string syntax
+83. [string syntax
     python](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fstring-syntax-python.ipynb)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/string-syntax-python.ipynb))
-83. [string](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/string)
+84. [string](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/string)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/string.md))
-84. [Help\_1](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/spread/song_help_1.html)
+85. [Help\_1](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/spread/song_help_1.html)
     ([/Jinxiaosong/Spread](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/spread/song_help_1.html))
-85. [code
+86. [code
     log](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/spread/code_log)
     ([/Jinxiaosong/Spread](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/spread/code_log.md))
-86. [正则化](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/regexp/str_match-02)
+87. [正则化](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/regexp/str_match-02)
     ([/Jinxiaosong/Regexp](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/regexp/str_match-02.md))
-87. [正则化](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/regexp/str_match)
+88. [正则化](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/regexp/str_match)
     ([/Jinxiaosong/Regexp](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/regexp/str_match.md))
-88. [按行向加](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/row_sum)
+89. [按行向加](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/row_sum)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/row_sum.md))
-89. [poly
+90. [poly
     regression](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/poly-regression)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/poly-regression.md))
-90. [note](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/range_time/note)
+91. [note](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/range_time/note)
     ([/Jinxiaosong/Range\_time](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/range_time/note.md))
-91. [](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/pandas-profiling/Profiling_test.html)
+92. [](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/pandas-profiling/Profiling_test.html)
     ([/Jinxiaosong/Pandas-Profiling](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/pandas-profiling/Profiling_test.html))
-92. [缺失值表](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/na-summary)
+93. [缺失值表](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/na-summary)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/na-summary.md))
-93. [multiple
+94. [multiple
     joins](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fmultiple-joins.ipynb)
     ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/multiple-joins.ipynb))
-94. [test
+95. [test
     fun](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/meal_subsidy/test_fun)
     ([/Jinxiaosong/Meal\_subsidy](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/meal_subsidy/test_fun.md))
-95. [profvis](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/meal_subsidy/profile.html)
+96. [profvis](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/meal_subsidy/profile.html)
     ([/Jinxiaosong/Meal\_subsidy](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/meal_subsidy/profile.html))
-96. [餐补 -
+97. [餐补 -
     difftime](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/meal_subsidy/difftime)
     ([/Jinxiaosong/Meal\_subsidy](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/meal_subsidy/difftime.md))
-97. [json manipulation using
+98. [json manipulation using
     R 2](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/json2dataframe/json2df-2019-04-28)
     ([/Jinxiaosong/Json2dataframe](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/json2dataframe/json2df-2019-04-28.md))
-98. [json manipulation using
+99. [json manipulation using
     R](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/json2dataframe/json2dataframe)
     ([/Jinxiaosong/Json2dataframe](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/json2dataframe/json2dataframe.md))
-99. [身份证导出识别为int](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/id_fix2str/note.html)
-    ([/Jinxiaosong/Id\_fix2str](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/id_fix2str/note.html))
-100. [groupby
+100. [身份证导出识别为int](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/id_fix2str/note.html)
+     ([/Jinxiaosong/Id\_fix2str](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/id_fix2str/note.html))
+101. [groupby
      apply](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fgroup_by%2Fgroupby-apply.ipynb)
      ([/Jinxiaosong/Group\_by](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/group_by/groupby-apply.ipynb))
-101. [group
+102. [group
      by](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/group_by/group_by)
      ([/Jinxiaosong/Group\_by](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/group_by/group_by.md))
-102. [Function
+103. [Function
      Review](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/functions_sum/note.nb.html)
      ([/Jinxiaosong/Functions\_sum](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/functions_sum/note.nb.html))
-103. [提取路径](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/extract_path_part)
+104. [提取路径](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/extract_path_part)
      ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/extract_path_part.md))
-104. [《Advanced
+105. [《Advanced
      R》Note](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/english_display.html)
      ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/english_display.html))
-105. [双峰分布构建](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/distribution-trick)
+106. [双峰分布构建](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/distribution-trick)
      ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/distribution-trick.md))
-106. [create dir
+107. [create dir
      exe](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/create_dir_exe)
      ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/create_dir_exe.md))
-107. [探索C5.0决策树对于高相关变量的处理方式](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/corr_c50_test.html)
+108. [探索C5.0决策树对于高相关变量的处理方式](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/corr_c50_test.html)
      ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/corr_c50_test.html))
-108. [批量建立路径](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/batch_create_dir)
+109. [批量建立路径](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/batch_create_dir)
      ([/Jinxiaosong](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/batch_create_dir.md))
-109. [mlr](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/archive/mlr.html)
+110. [mlr](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/archive/mlr.html)
      ([/Jinxiaosong/Archive](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/archive/mlr.html))
-110. [data.table](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/archive/data_table.html)
+111. [data.table](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/archive/data_table.html)
      ([/Jinxiaosong/Archive](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/archive/data_table.html))
-111. [anti
+112. [anti
      fraud](https://jiaxiangbu.github.io/tutoring2//jinxiaosong/anti_fraud/note)
      ([/Jinxiaosong/Anti\_fraud](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/anti_fraud/note.md))
-112. [cate custom
+113. [cate custom
      rank](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fanalysis%2Fcate_custom_rank.ipynb)
      ([/Jinxiaosong/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/analysis/cate_custom_rank.ipynb))
-113. [qcut with missing
+114. [qcut with missing
      value](https://mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?filepath=jinxiaosong%2Fanalysis%2Fqcut_with_missing_value.ipynb)
      ([/Jinxiaosong/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//jinxiaosong/analysis/qcut_with_missing_value.ipynb))
-114. [wide2long](https://jiaxiangbu.github.io/tutoring2//huangxuliang/analysis/wide2long)
+115. [wide2long](https://jiaxiangbu.github.io/tutoring2//huangxuliang/analysis/wide2long)
      ([/Huangxuliang/Analysis](https://github.com/JiaxiangBU/tutoring2/tree/master//huangxuliang/analysis/wide2long.md))
-115. [计算 OLS 的 t 值 和 p
+116. [计算 OLS 的 t 值 和 p
      值](https://jiaxiangbu.github.io/tutoring2//gaowenxin/calculate_t_and_p)
      ([/Gaowenxin](https://github.com/JiaxiangBU/tutoring2/tree/master//gaowenxin/calculate_t_and_p.md))
-116. [Write SQL Code in an elegant
+117. [Write SQL Code in an elegant
      way](https://jiaxiangbu.github.io/tutoring2//f_jingke/write_sql_in_elegant_way)
      ([/F\_jingke](https://github.com/JiaxiangBU/tutoring2/tree/master//f_jingke/write_sql_in_elegant_way.md))
-117. [trees](https://jiaxiangbu.github.io/tutoring2//dataMaid/html-type/dataMaid_trees.html)
+118. [trees](https://jiaxiangbu.github.io/tutoring2//dataMaid/html-type/dataMaid_trees.html)
      ([/Datamaid/Html-Type](https://github.com/JiaxiangBU/tutoring2/tree/master//dataMaid/html-type/dataMaid_trees.html))
-118. [trees](https://jiaxiangbu.github.io/tutoring2//dataMaid/html-type-mac/dataMaid_trees.html)
+119. [trees](https://jiaxiangbu.github.io/tutoring2//dataMaid/html-type-mac/dataMaid_trees.html)
      ([/Datamaid/Html-Type-Mac](https://github.com/JiaxiangBU/tutoring2/tree/master//dataMaid/html-type-mac/dataMaid_trees.html))
-119. [regexp\_like](https://jiaxiangbu.github.io/tutoring2//c_weina/regexp_like)
+120. [regexp\_like](https://jiaxiangbu.github.io/tutoring2//c_weina/regexp_like)
      ([/C\_weina](https://github.com/JiaxiangBU/tutoring2/tree/master//c_weina/regexp_like.md))
-120. [ 取数](https://jiaxiangbu.github.io/tutoring2//c_weina/regex)
+121. [ 取数](https://jiaxiangbu.github.io/tutoring2//c_weina/regex)
      ([/C\_weina](https://github.com/JiaxiangBU/tutoring2/tree/master//c_weina/regex.md))
-121. [k fold
+122. [k fold
      cv](https://jiaxiangbu.github.io/tutoring2//c_weina/k-fold-cv)
      ([/C\_weina](https://github.com/JiaxiangBU/tutoring2/tree/master//c_weina/k-fold-cv.md))
-122. [insert](https://jiaxiangbu.github.io/tutoring2//c_weina/insert)
+123. [insert](https://jiaxiangbu.github.io/tutoring2//c_weina/insert)
      ([/C\_weina](https://github.com/JiaxiangBU/tutoring2/tree/master//c_weina/insert.md))
-123. [一周债转人数金额统计](https://jiaxiangbu.github.io/tutoring2//c_jianfeng/ptrans.html)
+124. [一周债转人数金额统计](https://jiaxiangbu.github.io/tutoring2//c_jianfeng/ptrans.html)
      ([/C\_jianfeng](https://github.com/JiaxiangBU/tutoring2/tree/master//c_jianfeng/ptrans.html))
-124. [LICENSE](https://jiaxiangbu.github.io/tutoring2//LICENSE)
+125. [LICENSE](https://jiaxiangbu.github.io/tutoring2//LICENSE)
      ([](https://github.com/JiaxiangBU/tutoring2/tree/master//LICENSE.md))
-125. [CODE OF
+126. [CODE OF
      CONDUCT](https://jiaxiangbu.github.io/tutoring2//CODE_OF_CONDUCT)
      ([](https://github.com/JiaxiangBU/tutoring2/tree/master//CODE_OF_CONDUCT.md))
-126. [build-in string function in
+127. [build-in string function in
      Python](https://github.com/JiaxiangBU/tutoring2/issues/10)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-127. [宽表转置成长表](https://github.com/JiaxiangBU/tutoring2/issues/9)
+128. [宽表转置成长表](https://github.com/JiaxiangBU/tutoring2/issues/9)
      ([XuliangSUFE](https://github.com/users/XuliangSUFE))
-128. [plan: 关闭项目](https://github.com/JiaxiangBU/tutoring2/issues/8)
+129. [plan: 关闭项目](https://github.com/JiaxiangBU/tutoring2/issues/8)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-129. [swap analysis](https://github.com/JiaxiangBU/tutoring2/issues/7)
+130. [swap analysis](https://github.com/JiaxiangBU/tutoring2/issues/7)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-130. [NLP XGBoost
+131. [NLP XGBoost
      不适应的情况](https://github.com/JiaxiangBU/tutoring2/issues/6)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-131. [Python for 循环](https://github.com/JiaxiangBU/tutoring2/issues/5)
+132. [Python for 循环](https://github.com/JiaxiangBU/tutoring2/issues/5)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-132. [yolov3 quick start
+133. [yolov3 quick start
      bugs](https://github.com/JiaxiangBU/tutoring2/issues/4)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-133. [Python中groupby+agg框架中，如何自定义levels\[1\]的列名？](https://github.com/JiaxiangBU/tutoring2/issues/2)
+134. [Python中groupby+agg框架中，如何自定义levels\[1\]的列名？](https://github.com/JiaxiangBU/tutoring2/issues/2)
      ([slsongge](https://github.com/users/slsongge))
-134. [多元一次线性回归的例子](https://github.com/JiaxiangBU/tutoring/issues/50)
+135. [多元一次线性回归的例子](https://github.com/JiaxiangBU/tutoring/issues/50)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-135. [学长
+136. [学长
      gdata和XLconnect这两个包忽略就可以呀？](https://github.com/JiaxiangBU/tutoring/issues/34)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-136. [文本分析问题](https://github.com/JiaxiangBU/tutoring/issues/27)
+137. [文本分析问题](https://github.com/JiaxiangBU/tutoring/issues/27)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-137. [here::here 使用](https://github.com/JiaxiangBU/tutoring2/issues/1)
+138. [here::here 使用](https://github.com/JiaxiangBU/tutoring2/issues/1)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-138. [自变量异常值（离群点）检测](https://github.com/JiaxiangBU/tutoring/issues/87)
+139. [自变量异常值（离群点）检测](https://github.com/JiaxiangBU/tutoring/issues/87)
      ([slsongge](https://github.com/users/slsongge))
-139. [在回归问题中使用分层抽样？](https://github.com/JiaxiangBU/tutoring/issues/86)
+140. [在回归问题中使用分层抽样？](https://github.com/JiaxiangBU/tutoring/issues/86)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-140. [sns.pairplot中target为啥也被绘制到了图中？](https://github.com/JiaxiangBU/tutoring/issues/85)
+141. [sns.pairplot中target为啥也被绘制到了图中？](https://github.com/JiaxiangBU/tutoring/issues/85)
      ([slsongge](https://github.com/users/slsongge))
-141. [回归中，若进行分层抽样，如何选取“分层变量”？](https://github.com/JiaxiangBU/tutoring/issues/82)
+142. [回归中，若进行分层抽样，如何选取“分层变量”？](https://github.com/JiaxiangBU/tutoring/issues/82)
      ([slsongge](https://github.com/users/slsongge))
-142. [pandas-profiling
+143. [pandas-profiling
      学习](https://github.com/JiaxiangBU/tutoring/issues/84)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-143. [二分类模型训练 工作思路](https://github.com/JiaxiangBU/tutoring/issues/83)
+144. [二分类模型训练 工作思路](https://github.com/JiaxiangBU/tutoring/issues/83)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-144. [机器学习-拆分数据集的方法选择（hash or
+145. [机器学习-拆分数据集的方法选择（hash or
      Stratified）](https://github.com/JiaxiangBU/tutoring/issues/81)
      ([slsongge](https://github.com/users/slsongge))
-145. [直方图添加频数](https://github.com/JiaxiangBU/tutoring/issues/79)
+146. [直方图添加频数](https://github.com/JiaxiangBU/tutoring/issues/79)
      ([Cobbybaby](https://github.com/users/Cobbybaby))
-146. [“pairs.panel()” in
+147. [“pairs.panel()” in
      python](https://github.com/JiaxiangBU/tutoring/issues/80)
      ([slsongge](https://github.com/users/slsongge))
-147. [生成H5页面笔记的源代码](https://github.com/JiaxiangBU/tutoring/issues/71)
+148. [生成H5页面笔记的源代码](https://github.com/JiaxiangBU/tutoring/issues/71)
      ([VinaTsai](https://github.com/users/VinaTsai))
-148. [Integer encoding
+149. [Integer encoding
      refs](https://github.com/JiaxiangBU/tutoring/issues/78)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-149. [CV 的主要问题](https://github.com/JiaxiangBU/tutoring/issues/77)
+150. [CV 的主要问题](https://github.com/JiaxiangBU/tutoring/issues/77)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-150. [OOT 定义](https://github.com/JiaxiangBU/tutoring/issues/75)
+151. [OOT 定义](https://github.com/JiaxiangBU/tutoring/issues/75)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-151. [How to read special cells use read\_excel in
+152. [How to read special cells use read\_excel in
      R](https://github.com/JiaxiangBU/tutoring/issues/74)
      ([slsongge](https://github.com/users/slsongge))
-152. [皮尔逊相关系数假设条件的小疑问。](https://github.com/JiaxiangBU/tutoring/issues/73)
+153. [皮尔逊相关系数假设条件的小疑问。](https://github.com/JiaxiangBU/tutoring/issues/73)
      ([slsongge](https://github.com/users/slsongge))
-153. [Python 路径管理](https://github.com/JiaxiangBU/tutoring/issues/72)
+154. [Python 路径管理](https://github.com/JiaxiangBU/tutoring/issues/72)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-154. [汪娟 雅思作文](https://github.com/JiaxiangBU/tutoring/issues/68)
+155. [汪娟 雅思作文](https://github.com/JiaxiangBU/tutoring/issues/68)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-155. [回归中，某些离散型变量特征值不平衡如何处理？](https://github.com/JiaxiangBU/tutoring/issues/61)
+156. [回归中，某些离散型变量特征值不平衡如何处理？](https://github.com/JiaxiangBU/tutoring/issues/61)
      ([slsongge](https://github.com/users/slsongge))
-156. [R 提取指定字符后的字符串](https://github.com/JiaxiangBU/tutoring/issues/70)
+157. [R 提取指定字符后的字符串](https://github.com/JiaxiangBU/tutoring/issues/70)
      ([slsongge](https://github.com/users/slsongge))
-157. [求p值改Bug](https://github.com/JiaxiangBU/tutoring/issues/69)
+158. [求p值改Bug](https://github.com/JiaxiangBU/tutoring/issues/69)
      ([zhangzhongyan18](https://github.com/users/zhangzhongyan18))
-158. [p值找bug](https://github.com/JiaxiangBU/tutoring/issues/66)
+159. [p值找bug](https://github.com/JiaxiangBU/tutoring/issues/66)
      ([zhangzhongyan18](https://github.com/users/zhangzhongyan18))
-159. [Create
+160. [Create
      ilets\_writing\_20190709](https://github.com/JiaxiangBU/tutoring/pull/67)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-160. [python中pptx模块如何做到实时返回ppt？](https://github.com/JiaxiangBU/tutoring/issues/65)
+161. [python中pptx模块如何做到实时返回ppt？](https://github.com/JiaxiangBU/tutoring/issues/65)
      ([slsongge](https://github.com/users/slsongge))
-161. [求p值](https://github.com/JiaxiangBU/tutoring/issues/64)
+162. [求p值](https://github.com/JiaxiangBU/tutoring/issues/64)
      ([zhangzhongyan18](https://github.com/users/zhangzhongyan18))
-162. [计算 lasso 的 p 值](https://github.com/JiaxiangBU/tutoring/issues/63)
+163. [计算 lasso 的 p 值](https://github.com/JiaxiangBU/tutoring/issues/63)
      ([zhangzhongyan18](https://github.com/users/zhangzhongyan18))
-163. [如何将list数据转化成df](https://github.com/JiaxiangBU/tutoring/issues/62)
+164. [如何将list数据转化成df](https://github.com/JiaxiangBU/tutoring/issues/62)
      ([jmbb93](https://github.com/users/jmbb93))
-164. [回归中，y经过boxcox转换之后，自变量系数的解释？](https://github.com/JiaxiangBU/tutoring/issues/60)
+165. [回归中，y经过boxcox转换之后，自变量系数的解释？](https://github.com/JiaxiangBU/tutoring/issues/60)
      ([slsongge](https://github.com/users/slsongge))
-165. [Gitbook 使用](https://github.com/JiaxiangBU/tutoring/issues/59)
+166. [Gitbook 使用](https://github.com/JiaxiangBU/tutoring/issues/59)
      ([slsongge](https://github.com/users/slsongge))
-166. [多元回归中哑变量的疑问](https://github.com/JiaxiangBU/tutoring/issues/57)
+167. [多元回归中哑变量的疑问](https://github.com/JiaxiangBU/tutoring/issues/57)
      ([slsongge](https://github.com/users/slsongge))
-167. [wkNN 算法 逻辑](https://github.com/JiaxiangBU/tutoring/issues/55)
+168. [wkNN 算法 逻辑](https://github.com/JiaxiangBU/tutoring/issues/55)
      ([slsongge](https://github.com/users/slsongge))
-168. [多个模型融合疑问](https://github.com/JiaxiangBU/tutoring/issues/54)
+169. [多个模型融合疑问](https://github.com/JiaxiangBU/tutoring/issues/54)
      ([slsongge](https://github.com/users/slsongge))
-169. [相关性和决策树的关系](https://github.com/JiaxiangBU/tutoring/issues/48)
+170. [相关性和决策树的关系](https://github.com/JiaxiangBU/tutoring/issues/48)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-170. [在线性回归中如何变换x，从而使x与y高度线性相关](https://github.com/JiaxiangBU/tutoring/issues/49)
+171. [在线性回归中如何变换x，从而使x与y高度线性相关](https://github.com/JiaxiangBU/tutoring/issues/49)
      ([slsongge](https://github.com/users/slsongge))
-171. [交叉项](https://github.com/JiaxiangBU/tutoring/issues/52)
+172. [交叉项](https://github.com/JiaxiangBU/tutoring/issues/52)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-172. [需要总结 新建 Issue](https://github.com/JiaxiangBU/tutoring/issues/51)
+173. [需要总结 新建 Issue](https://github.com/JiaxiangBU/tutoring/issues/51)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-173. [GitHub 上传文件](https://github.com/JiaxiangBU/tutoring/issues/47)
+174. [GitHub 上传文件](https://github.com/JiaxiangBU/tutoring/issues/47)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-174. [合并ggplot返回的gg类型数据](https://github.com/JiaxiangBU/tutoring/issues/46)
+175. [合并ggplot返回的gg类型数据](https://github.com/JiaxiangBU/tutoring/issues/46)
      ([slsongge](https://github.com/users/slsongge))
-175. [合并ggplot函数返回的数据gg](https://github.com/JiaxiangBU/tutoring/issues/45)
+176. [合并ggplot函数返回的数据gg](https://github.com/JiaxiangBU/tutoring/issues/45)
      ([slsongge](https://github.com/users/slsongge))
-176. [博客 `iframe` 进行 `knitr::include_url`
+177. [博客 `iframe` 进行 `knitr::include_url`
      替换。](https://github.com/JiaxiangBU/tutoring/issues/44)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-177. [xgb中缺失值的处理方式](https://github.com/JiaxiangBU/tutoring/issues/43)
+178. [xgb中缺失值的处理方式](https://github.com/JiaxiangBU/tutoring/issues/43)
      ([slsongge](https://github.com/users/slsongge))
-178. [一个网络结构的阈值确定](https://github.com/JiaxiangBU/tutoring/issues/42)
+179. [一个网络结构的阈值确定](https://github.com/JiaxiangBU/tutoring/issues/42)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-179. [正则化表达](https://github.com/JiaxiangBU/tutoring/issues/41)
+180. [正则化表达](https://github.com/JiaxiangBU/tutoring/issues/41)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-180. [janus
+181. [janus
      cs3这个数据集，找不到下载资源](https://github.com/JiaxiangBU/tutoring/issues/40)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-181. [DBI中的部分问题](https://github.com/JiaxiangBU/tutoring/issues/39)
+182. [DBI中的部分问题](https://github.com/JiaxiangBU/tutoring/issues/39)
      ([XuliangSUFE](https://github.com/users/XuliangSUFE))
-182. [here 包的问题](https://github.com/JiaxiangBU/tutoring/issues/36)
+183. [here 包的问题](https://github.com/JiaxiangBU/tutoring/issues/36)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-183. [writexl 安装问题](https://github.com/JiaxiangBU/tutoring/issues/35)
+184. [writexl 安装问题](https://github.com/JiaxiangBU/tutoring/issues/35)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-184. [解决GitHub访问慢方案](https://github.com/JiaxiangBU/tutoring/issues/38)
+185. [解决GitHub访问慢方案](https://github.com/JiaxiangBU/tutoring/issues/38)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-185. [pipline 的使用方法](https://github.com/JiaxiangBU/tutoring/issues/31)
+186. [pipline 的使用方法](https://github.com/JiaxiangBU/tutoring/issues/31)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-186. [机器学习书的推荐](https://github.com/JiaxiangBU/tutoring/issues/30)
+187. [机器学习书的推荐](https://github.com/JiaxiangBU/tutoring/issues/30)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-187. [list 的定义](https://github.com/JiaxiangBU/tutoring/issues/37)
+188. [list 的定义](https://github.com/JiaxiangBU/tutoring/issues/37)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-188. [cat2int 函数建立包](https://github.com/JiaxiangBU/tutoring/issues/33)
+189. [cat2int 函数建立包](https://github.com/JiaxiangBU/tutoring/issues/33)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-189. [txt 文件保持
+190. [txt 文件保持
      UTF-8格式](https://github.com/JiaxiangBU/tutoring/issues/32)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-190. [R 安装问题](https://github.com/JiaxiangBU/tutoring/issues/11)
+191. [R 安装问题](https://github.com/JiaxiangBU/tutoring/issues/11)
      ([XuliangSUFE](https://github.com/users/XuliangSUFE))
-191. [百度地图 API 调用的包](https://github.com/JiaxiangBU/tutoring/issues/29)
+192. [百度地图 API 调用的包](https://github.com/JiaxiangBU/tutoring/issues/29)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-192. [Older Versions of
+193. [Older Versions of
      RStudio](https://github.com/JiaxiangBU/tutoring/issues/28)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-193. [cutoff 的切分讨论](https://github.com/JiaxiangBU/tutoring/issues/26)
+194. [cutoff 的切分讨论](https://github.com/JiaxiangBU/tutoring/issues/26)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-194. [树模型可视化](https://github.com/JiaxiangBU/tutoring/issues/25)
+195. [树模型可视化](https://github.com/JiaxiangBU/tutoring/issues/25)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-195. [group by + mutate in
+196. [group by + mutate in
      pandas](https://github.com/JiaxiangBU/tutoring/issues/24)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-196. [xgb 变量变少了？](https://github.com/JiaxiangBU/tutoring/issues/23)
+197. [xgb 变量变少了？](https://github.com/JiaxiangBU/tutoring/issues/23)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-197. [Xgboost
+198. [Xgboost
      binary:logistic](https://github.com/JiaxiangBU/tutoring/issues/22)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-198. [json2dataframe](https://github.com/JiaxiangBU/tutoring/issues/21)
+199. [json2dataframe](https://github.com/JiaxiangBU/tutoring/issues/21)
      ([slsongge](https://github.com/users/slsongge))
-199. [Xgboost
+200. [Xgboost
      处理分类变量的方式](https://github.com/JiaxiangBU/tutoring/issues/20)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-200. [R 内存问题](https://github.com/JiaxiangBU/tutoring/issues/19)
+201. [R 内存问题](https://github.com/JiaxiangBU/tutoring/issues/19)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-201. [Xgboost Dart](https://github.com/JiaxiangBU/tutoring/issues/18)
+202. [Xgboost Dart](https://github.com/JiaxiangBU/tutoring/issues/18)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-202. [路径优化](https://github.com/JiaxiangBU/tutoring/issues/17)
+203. [路径优化](https://github.com/JiaxiangBU/tutoring/issues/17)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-203. [load.R](https://github.com/JiaxiangBU/tutoring/issues/16)
+204. [load.R](https://github.com/JiaxiangBU/tutoring/issues/16)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-204. [DBSCAN 模型讨论](https://github.com/JiaxiangBU/tutoring/issues/14)
+205. [DBSCAN 模型讨论](https://github.com/JiaxiangBU/tutoring/issues/14)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-205. [用户价值分析-精准营销方法](https://github.com/JiaxiangBU/tutoring/issues/13)
+206. [用户价值分析-精准营销方法](https://github.com/JiaxiangBU/tutoring/issues/13)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-206. [聚类效果比较](https://github.com/JiaxiangBU/tutoring/issues/12)
+207. [聚类效果比较](https://github.com/JiaxiangBU/tutoring/issues/12)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-207. [熟悉 GitHub 提交问题](https://github.com/JiaxiangBU/tutoring/issues/10)
+208. [熟悉 GitHub 提交问题](https://github.com/JiaxiangBU/tutoring/issues/10)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-208. [Python index](https://github.com/JiaxiangBU/tutoring/issues/9)
+209. [Python index](https://github.com/JiaxiangBU/tutoring/issues/9)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-209. [双峰问题，区分度](https://github.com/JiaxiangBU/tutoring/issues/8)
+210. [双峰问题，区分度](https://github.com/JiaxiangBU/tutoring/issues/8)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-210. [t-SNE](https://github.com/JiaxiangBU/tutoring/issues/7)
+211. [t-SNE](https://github.com/JiaxiangBU/tutoring/issues/7)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-211. [分组统计各列缺失值的个数和占比](https://github.com/JiaxiangBU/tutoring/issues/6)
+212. [分组统计各列缺失值的个数和占比](https://github.com/JiaxiangBU/tutoring/issues/6)
      ([slsongge](https://github.com/users/slsongge))
-212. [数据不统一](https://github.com/JiaxiangBU/tutoring/issues/5)
+213. [数据不统一](https://github.com/JiaxiangBU/tutoring/issues/5)
      ([slsongge](https://github.com/users/slsongge))
-213. [批量 render](https://github.com/JiaxiangBU/tutoring/issues/4)
+214. [批量 render](https://github.com/JiaxiangBU/tutoring/issues/4)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-214. [博客字体问题](https://github.com/JiaxiangBU/tutoring/issues/3)
+215. [博客字体问题](https://github.com/JiaxiangBU/tutoring/issues/3)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-215. [增加问题数量和目录](https://github.com/JiaxiangBU/tutoring/issues/2)
+216. [增加问题数量和目录](https://github.com/JiaxiangBU/tutoring/issues/2)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
-216. [encoding bug](https://github.com/JiaxiangBU/tutoring/pull/1)
+217. [encoding bug](https://github.com/JiaxiangBU/tutoring/pull/1)
      ([JiaxiangBU](https://github.com/users/JiaxiangBU))
 
 -----
