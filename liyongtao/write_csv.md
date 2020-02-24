@@ -30,6 +30,7 @@ library(tidyverse)
 
 ``` r
 x <- readr::read_rds("x.rds")
+df <- x[['data']]
 ```
 
 ``` r
@@ -40,14 +41,15 @@ dir.create(data_path, recursive = TRUE)
     ## Warning in dir.create(data_path, recursive = TRUE): 'data'已存在
 
 ``` r
-for (i in unique(x[["data"]][["province"]])) {
-    x[["data"]][i, c(1:6, 9:11)] %>%
+for (i in unique(df[["province"]])) {
+    df[df$province==i, c(1:6, 9:11)] %>%
         write_excel_csv(file.path(data_path, paste(i, '.csv', sep = '')))
 }
 ```
 
 ``` r
-fs::dir_ls(data_path)
+dir_ls0 <- fs::dir_ls(data_path)
+dir_ls0
 ```
 
     ## data/上海.csv  data/云南.csv  data/内蒙古.csv data/北京.csv  data/台湾.csv  data/吉林.csv  
@@ -56,6 +58,33 @@ fs::dir_ls(data_path)
     ## data/河南.csv  data/浙江.csv  data/海南.csv  data/湖北.csv  data/湖南.csv  data/澳门.csv  
     ## data/甘肃.csv  data/福建.csv  data/西藏.csv  data/贵州.csv  data/辽宁.csv  data/重庆.csv  
     ## data/陕西.csv  data/青海.csv  data/香港.csv  data/黑龙江.csv
+
+``` r
+read_csv(dir_ls0[1]) %>% head()
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   province = col_character(),
+    ##   city = col_character(),
+    ##   time = col_date(format = ""),
+    ##   cum_confirm = col_double(),
+    ##   cum_heal = col_double(),
+    ##   cum_dead = col_double(),
+    ##   confirm = col_character(),
+    ##   dead = col_double(),
+    ##   heal = col_double()
+    ## )
+
+    ## # A tibble: 6 x 9
+    ##   province city  time       cum_confirm cum_heal cum_dead confirm  dead  heal
+    ##   <chr>    <chr> <date>           <dbl>    <dbl>    <dbl> <chr>   <dbl> <dbl>
+    ## 1 上海     上海  2020-02-13         318       62        1 <NA>       NA    NA
+    ## 2 上海     上海  2020-02-12         313       57        1 <NA>       NA    NA
+    ## 3 上海     上海  2020-02-11         306       53        1 <NA>       NA    NA
+    ## 4 上海     上海  2020-02-10         302       48        1 <NA>       NA    NA
+    ## 5 上海     上海  2020-02-09         295       44        1 <NA>       NA    NA
+    ## 6 上海     上海  2020-02-08         292       41        1 <NA>       NA    NA
 
 `dat.temp <-` 可以去掉，因为 `data %>% write.csv`
 是把数据导出，不需要把这个操作赋值到变量`dat.temp`上。

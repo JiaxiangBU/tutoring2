@@ -17,20 +17,26 @@ library(tidyverse)
 
 ```{r}
 x <- readr::read_rds("x.rds")
+df <- x[['data']]
 ```
 
 
 ```{r}
 data_path <- "data"
 dir.create(data_path, recursive = TRUE)
-for (i in unique(x[["data"]][["province"]])) {
-    x[["data"]][i, c(1:6, 9:11)] %>%
+for (i in unique(df[["province"]])) {
+    df[df$province==i, c(1:6, 9:11)] %>%
         write_excel_csv(file.path(data_path, paste(i, '.csv', sep = '')))
 }
 ```
 
 ```{r}
-fs::dir_ls(data_path)
+dir_ls0 <- fs::dir_ls(data_path)
+dir_ls0
+```
+
+```{r}
+read_csv(dir_ls0[1]) %>% head()
 ```
 
 

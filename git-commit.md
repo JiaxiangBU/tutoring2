@@ -1,5 +1,35 @@
 
-前面的`sessionInfo()`我进行了删除，为了你每次打开这个issue简洁和快一些。
+空值的原因找到了以为这行语法写错了。
+
+`df[df$province==i, c(1:6, 9:11)]`才是正确的， `df[i,c(1:6, 9:11)]]`中i必须是连续
+int，不能是文本。
+
+`i in unique(df[["province"]])`
+
+我们知道省份这个字段都是文本，所以导致 `df[i,c(1:6, 9:11)]]` 筛选出来都是空。
+
+``` r
+# setwd("F:/rwork") #不要使用这行代码，没必要。
+# library(nCov2019)
+library(tidyverse)
+```
+
+    ## -- Attaching packages -------------------------------------------------------------- tidyverse 1.2.1 --
+    
+    ## √ ggplot2 3.2.1     √ purrr   0.3.3
+    ## √ tibble  2.1.3     √ dplyr   0.8.3
+    ## √ tidyr   0.8.3     √ stringr 1.4.0
+    ## √ readr   1.3.1     √ forcats 0.4.0
+    
+    ## Warning: package 'ggplot2' was built under R version 3.6.2
+    
+    ## Warning: package 'purrr' was built under R version 3.6.1
+    
+    ## Warning: package 'dplyr' was built under R version 3.6.1
+    
+    ## -- Conflicts ----------------------------------------------------------------- tidyverse_conflicts() --
+    ## x dplyr::filter() masks stats::filter()
+    ## x dplyr::lag()    masks stats::lag()
 
 ``` r
 # x <- load_nCov2019()
@@ -9,6 +39,7 @@
 
 ``` r
 x <- readr::read_rds("x.rds")
+df <- x[['data']]
 ```
 
 ``` r
@@ -19,14 +50,15 @@ dir.create(data_path, recursive = TRUE)
     ## Warning in dir.create(data_path, recursive = TRUE): 'data'已存在
 
 ``` r
-for (i in unique(x[["data"]][["province"]])) {
-    x[["data"]][i, c(1:6, 9:11)] %>%
+for (i in unique(df[["province"]])) {
+    df[df$province==i, c(1:6, 9:11)] %>%
         write_excel_csv(file.path(data_path, paste(i, '.csv', sep = '')))
 }
 ```
 
 ``` r
-fs::dir_ls(data_path)
+dir_ls0 <- fs::dir_ls(data_path)
+dir_ls0
 ```
 
     ## data/上海.csv  data/云南.csv  data/内蒙古.csv data/北京.csv  data/台湾.csv  data/吉林.csv  
@@ -36,9 +68,29 @@ fs::dir_ls(data_path)
     ## data/甘肃.csv  data/福建.csv  data/西藏.csv  data/贵州.csv  data/辽宁.csv  data/重庆.csv  
     ## data/陕西.csv  data/青海.csv  data/香港.csv  data/黑龙江.csv
 
-我搭建了一个临时环境，如图
+``` r
+read_csv(dir_ls0[1]) %>% head()
+```
 
-你可以在这个临时环境测试代码。 临时环境启动的时候，稍等2-3分钟就构建完成。
-
-<http://beta.mybinder.org/v2/gh/JiaxiangBU/tutoring2/master?urlpath=rstudio>
-打开文件`liyongtao/write_csv.Rmd`
+    ## Parsed with column specification:
+    ## cols(
+    ##   province = col_character(),
+    ##   city = col_character(),
+    ##   time = col_date(format = ""),
+    ##   cum_confirm = col_double(),
+    ##   cum_heal = col_double(),
+    ##   cum_dead = col_double(),
+    ##   confirm = col_character(),
+    ##   dead = col_double(),
+    ##   heal = col_double()
+    ## )
+    
+    ## # A tibble: 6 x 9
+    ##   province city  time       cum_confirm cum_heal cum_dead confirm  dead  heal
+    ##   <chr>    <chr> <date>           <dbl>    <dbl>    <dbl> <chr>   <dbl> <dbl>
+    ## 1 上海     上海  2020-02-13         318       62        1 <NA>       NA    NA
+    ## 2 上海     上海  2020-02-12         313       57        1 <NA>       NA    NA
+    ## 3 上海     上海  2020-02-11         306       53        1 <NA>       NA    NA
+    ## 4 上海     上海  2020-02-10         302       48        1 <NA>       NA    NA
+    ## 5 上海     上海  2020-02-09         295       44        1 <NA>       NA    NA
+    ## 6 上海     上海  2020-02-08         292       41        1 <NA>       NA    NA
