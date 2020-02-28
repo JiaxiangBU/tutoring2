@@ -1,0 +1,15 @@
+---
+output: github_document
+bibliography: temp-refs/add.bib
+---
+
+@leilei ...
+
+> 引用 [@leilei]
+
+```r
+> dir.create("miaoleilei")
+> file.edit("miaoleilei/rmarkdown.Rmd")
+> dir.create("miaoleilei/temp-refs")
+> file.edit("miaoleilei/temp-refs/add.bib")
+```
