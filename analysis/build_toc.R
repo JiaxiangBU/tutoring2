@@ -103,7 +103,8 @@ toc_df <-
         md_link %>% str_detect("README", negate = TRUE),
         md_link %>% str_detect("utf8.md", negate = TRUE),
         md_link %>% str_detect("NEWS", negate = TRUE),
-        md_link %>% str_detect("R Notebook", negate = TRUE)
+        md_link %>% str_detect("R Notebook", negate = TRUE),
+        md_link %>% str_detect("commit", negate = TRUE)
     )
 
 tmp_path <- "tmp"
