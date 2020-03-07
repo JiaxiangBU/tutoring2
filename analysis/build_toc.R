@@ -104,7 +104,9 @@ toc_df <-
         md_link %>% str_detect("utf8.md", negate = TRUE),
         md_link %>% str_detect("NEWS", negate = TRUE),
         md_link %>% str_detect("R Notebook", negate = TRUE),
-        md_link %>% str_detect("commit", negate = TRUE)
+        md_link %>% str_detect("commit", negate = TRUE),
+        md_link %>% str_detect("LICENSE", negate = TRUE),
+        md_link %>% str_detect("CODE_OF_CONDUCT", negate = TRUE)
     )
 
 tmp_path <- "tmp"
