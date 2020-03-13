@@ -1,0 +1,71 @@
+---
+title: 断点回归
+output: github_document
+---
+
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(fs)
+```
+
+
+```{r}
+load(here::here("../tutoring_private/dingxiang/data/dingxiang.Rdata"))
+```
+
+```{r}
+df <- data2 %>% 
+    as.data.frame()
+```
+
+```{r}
+df %>% head()
+```
+
+```{r}
+df %>% dim()
+```
+
+
+```{r}
+# install.packages("SiZer")
+library(SiZer)
+```
+
+
+```{r eval=FALSE}
+# 测试 demo
+data(Arkansas)
+Arkansas %>% dim
+x <- Arkansas$year
+y <- Arkansas$sqrt.mayflies
+
+model <- piecewise.linear(x,y, CI=FALSE)
+plot(model)
+print(model)
+predict(model, 2001)
+```
+
+```{r}
+fit <-
+    piecewise.linear(
+        df$Temp,
+        df$value,
+        middle = 1,
+        CI = TRUE,
+        bootstrap.samples = 100,
+        sig.level = 0.05
+    )
+```
+
+```{r}
+print(fit)
+```
+
+通过`str(fit)`发现其中对象`.$model`就是`lm`然后提取F值。
+
+```{r}
+summary(fit$model)
+```
+
