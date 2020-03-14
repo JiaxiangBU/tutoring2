@@ -1,53 +1,31 @@
 
 ``` r
 library(tidyverse)
-df <- data.frame(A = 1:5)
-df_tmp <- matrix(NA, ncol = 3, nrow = 5) %>%
-    as.data.frame() %>%
-    `names<-`(paste0(c('a', 'b', 'd'), "_score"))
 
-df_bind <- bind_cols(df, df_tmp)
-
-for (i in c('a', 'b', 'd')) {
-    df_bind[, paste0(c('a', 'b', 'd'), "_score")] <- df$A
-    
-}
-
-df_bind
+test_df <- data.frame(a = 1:5, b = 1:5)
+x <- data.frame(a = c(1:15),
+          b = c(1:15))
+y <- c(1:15)
 ```
-
-    ##   A a_score b_score d_score
-    ## 1 1       1       1       1
-    ## 2 2       2       2       2
-    ## 3 3       3       3       3
-    ## 4 4       4       4       4
-    ## 5 5       5       5       5
-
-> 其实我更想知道的是，能不能再循环中增加列
 
 ``` r
-df # 还是这个数据，假设每次我都随机增加一列
+for (i in 1:length(x)) {
+    x_input <- x[[i]]
+    y_input <- y
+    fit <- lm(y_input ~ x_input)
+    x_input <- data.frame(x_input = test_df[[i]])
+    new_name <- test_df %>% names %>% .[[i]] %>% paste0("_score")
+    test_df[new_name] <- predict.lm(fit, newdata = x_input)
+}
 ```
-
-    ##   A
-    ## 1 1
-    ## 2 2
-    ## 3 3
-    ## 4 4
-    ## 5 5
 
 ``` r
-set.seed(123)
-for (i in 1:3) {
-    feature_name <- paste0(letters[i],'_score')
-    df[[feature_name]] <- runif(nrow(df),0,1)
-}
-df
+test_df
 ```
 
-    ##   A   a_score   b_score   c_score
-    ## 1 1 0.2875775 0.0455565 0.9568333
-    ## 2 2 0.7883051 0.5281055 0.4533342
-    ## 3 3 0.4089769 0.8924190 0.6775706
-    ## 4 4 0.8830174 0.5514350 0.5726334
-    ## 5 5 0.9404673 0.4566147 0.1029247
+    ##   a b a_score b_score
+    ## 1 1 1       1       1
+    ## 2 2 2       2       2
+    ## 3 3 3       3       3
+    ## 4 4 4       4       4
+    ## 5 5 5       5       5

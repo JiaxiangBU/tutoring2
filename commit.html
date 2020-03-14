@@ -601,49 +601,26 @@ body {
 <body>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" title="2">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">A =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb1-3" title="3">df_tmp &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="st">    </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="st">    `</span><span class="dt">names&lt;-</span><span class="st">`</span>(<span class="kw">paste0</span>(<span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;d&#39;</span>), <span class="st">&quot;_score&quot;</span>))</a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7">df_bind &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(df, df_tmp)</a>
-<a class="sourceLine" id="cb1-8" title="8"></a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;d&#39;</span>)) {</a>
-<a class="sourceLine" id="cb1-10" title="10">    df_bind[, <span class="kw">paste0</span>(<span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;d&#39;</span>), <span class="st">&quot;_score&quot;</span>)] &lt;-<span class="st"> </span>df<span class="op">$</span>A</a>
-<a class="sourceLine" id="cb1-11" title="11">    </a>
-<a class="sourceLine" id="cb1-12" title="12">}</a>
-<a class="sourceLine" id="cb1-13" title="13"></a>
-<a class="sourceLine" id="cb1-14" title="14">df_bind</a></code></pre></div>
-<pre><code>##   A a_score b_score d_score
-## 1 1       1       1       1
-## 2 2       2       2       2
-## 3 3       3       3       3
-## 4 4       4       4       4
-## 5 5       5       5       5
-</code></pre>
-<blockquote>
-<p>其实我更想知道的是，能不能再循环中增加列</p>
-</blockquote>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">df <span class="co"># 还是这个数据，假设每次我都随机增加一列</span></a></code></pre></div>
-<pre><code>##   A
-## 1 1
-## 2 2
-## 3 3
-## 4 4
-## 5 5
-</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {</a>
-<a class="sourceLine" id="cb5-3" title="3">    feature_name &lt;-<span class="st"> </span><span class="kw">paste0</span>(letters[i],<span class="st">&#39;_score&#39;</span>)</a>
-<a class="sourceLine" id="cb5-4" title="4">    df[[feature_name]] &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="kw">nrow</span>(df),<span class="dv">0</span>,<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb5-5" title="5">}</a>
-<a class="sourceLine" id="cb5-6" title="6">df</a></code></pre></div>
-<pre><code>##   A   a_score   b_score   c_score
-## 1 1 0.2875775 0.0455565 0.9568333
-## 2 2 0.7883051 0.5281055 0.4533342
-## 3 3 0.4089769 0.8924190 0.6775706
-## 4 4 0.8830174 0.5514350 0.5726334
-## 5 5 0.9404673 0.4566147 0.1029247
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">test_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">b =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb1-4" title="4">x &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>),</a>
+<a class="sourceLine" id="cb1-5" title="5">          <span class="dt">b =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>))</a>
+<a class="sourceLine" id="cb1-6" title="6">y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(x)) {</a>
+<a class="sourceLine" id="cb2-2" title="2">    x_input &lt;-<span class="st"> </span>x[[i]]</a>
+<a class="sourceLine" id="cb2-3" title="3">    y_input &lt;-<span class="st"> </span>y</a>
+<a class="sourceLine" id="cb2-4" title="4">    fit &lt;-<span class="st"> </span><span class="kw">lm</span>(y_input <span class="op">~</span><span class="st"> </span>x_input)</a>
+<a class="sourceLine" id="cb2-5" title="5">    x_input &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x_input =</span> test_df[[i]])</a>
+<a class="sourceLine" id="cb2-6" title="6">    new_name &lt;-<span class="st"> </span>test_df <span class="op">%&gt;%</span><span class="st"> </span>names <span class="op">%&gt;%</span><span class="st"> </span>.[[i]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;_score&quot;</span>)</a>
+<a class="sourceLine" id="cb2-7" title="7">    test_df[new_name] &lt;-<span class="st"> </span><span class="kw">predict.lm</span>(fit, <span class="dt">newdata =</span> x_input)</a>
+<a class="sourceLine" id="cb2-8" title="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">test_df</a></code></pre></div>
+<pre><code>##   a b a_score b_score
+## 1 1 1       1       1
+## 2 2 2       2       2
+## 3 3 3       3       3
+## 4 4 4       4       4
+## 5 5 5       5       5
 </code></pre>
 
 </body>
