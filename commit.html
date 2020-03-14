@@ -600,38 +600,46 @@ body {
 
 <body>
 
-<p>假设矩阵</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">df &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>,<span class="dt">nrow =</span> <span class="dv">10</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">df</a></code></pre></div>
-<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-##  [1,]    1   11   21   31   41   51   61   71   81    91
-##  [2,]    2   12   22   32   42   52   62   72   82    92
-##  [3,]    3   13   23   33   43   53   63   73   83    93
-##  [4,]    4   14   24   34   44   54   64   74   84    94
-##  [5,]    5   15   25   35   45   55   65   75   85    95
-##  [6,]    6   16   26   36   46   56   66   76   86    96
-##  [7,]    7   17   27   37   47   57   67   77   87    97
-##  [8,]    8   18   28   38   48   58   68   78   88    98
-##  [9,]    9   19   29   39   49   59   69   79   89    99
-## [10,]   10   20   30   40   50   60   70   80   90   100
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb1-2" title="2">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">A =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb1-3" title="3">df_tmp &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="st">    </span><span class="kw">as.data.frame</span>() <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="st">    `</span><span class="dt">names&lt;-</span><span class="st">`</span>(<span class="kw">paste0</span>(<span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;d&#39;</span>), <span class="st">&quot;_score&quot;</span>))</a>
+<a class="sourceLine" id="cb1-6" title="6"></a>
+<a class="sourceLine" id="cb1-7" title="7">df_bind &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(df, df_tmp)</a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;d&#39;</span>)) {</a>
+<a class="sourceLine" id="cb1-10" title="10">    df_bind[, <span class="kw">paste0</span>(<span class="kw">c</span>(<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;d&#39;</span>), <span class="st">&quot;_score&quot;</span>)] &lt;-<span class="st"> </span>df<span class="op">$</span>A</a>
+<a class="sourceLine" id="cb1-11" title="11">    </a>
+<a class="sourceLine" id="cb1-12" title="12">}</a>
+<a class="sourceLine" id="cb1-13" title="13"></a>
+<a class="sourceLine" id="cb1-14" title="14">df_bind</a></code></pre></div>
+<pre><code>##   A a_score b_score d_score
+## 1 1       1       1       1
+## 2 2       2       2       2
+## 3 3       3       3       3
+## 4 4       4       4       4
+## 5 5       5       5       5
 </code></pre>
-<p>批量设置10个列名字</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">df <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="st">    `</span><span class="dt">names&lt;-</span><span class="st">`</span>(<span class="kw">paste0</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,<span class="st">&quot;_score&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="st">    </span><span class="kw">as.data.frame</span>()</a></code></pre></div>
-<pre><code>##    V1 V2 V3 V4 V5 V6 V7 V8 V9 V10
-## 1   1 11 21 31 41 51 61 71 81  91
-## 2   2 12 22 32 42 52 62 72 82  92
-## 3   3 13 23 33 43 53 63 73 83  93
-## 4   4 14 24 34 44 54 64 74 84  94
-## 5   5 15 25 35 45 55 65 75 85  95
-## 6   6 16 26 36 46 56 66 76 86  96
-## 7   7 17 27 37 47 57 67 77 87  97
-## 8   8 18 28 38 48 58 68 78 88  98
-## 9   9 19 29 39 49 59 69 79 89  99
-## 10 10 20 30 40 50 60 70 80 90 100
+<blockquote>
+<p>这是我解决这个问题的间接方法</p>
+</blockquote>
+<p>如果最终目的是生成这个数据集<code>df_bind</code>， 每列都一样，我觉得可以这么搞。</p>
+<p>比如你想要新增三列。</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">matrix</span>(<span class="kw">rep</span>(df<span class="op">$</span>A, <span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb3-2" title="2">       <span class="dt">nrow =</span> <span class="kw">nrow</span>(df))    <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="st">    `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>(), <span class="kw">paste0</span>(letters[<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>], <span class="st">&quot;_score&quot;</span>))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="st">    </span><span class="kw">as.data.frame</span>()</a></code></pre></div>
+<pre><code>##   A a_score b_score c_score
+## 1 1       1       1       1
+## 2 2       2       2       2
+## 3 3       3       3       3
+## 4 4       4       4       4
+## 5 5       5       5       5
 </code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># 变量</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co"># df</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co"># 3 也就是新增多少行</span></a></code></pre></div>
 
 </body>
 </html>
