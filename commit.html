@@ -622,24 +622,29 @@ body {
 ## 5 5       5       5       5
 </code></pre>
 <blockquote>
-<p>这是我解决这个问题的间接方法</p>
+<p>其实我更想知道的是，能不能再循环中增加列</p>
 </blockquote>
-<p>如果最终目的是生成这个数据集<code>df_bind</code>， 每列都一样，我觉得可以这么搞。</p>
-<p>比如你想要新增三列。</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">matrix</span>(<span class="kw">rep</span>(df<span class="op">$</span>A, <span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb3-2" title="2">       <span class="dt">nrow =</span> <span class="kw">nrow</span>(df))    <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="st">    `</span><span class="dt">colnames&lt;-</span><span class="st">`</span>(<span class="kw">c</span>(df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>(), <span class="kw">paste0</span>(letters[<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>], <span class="st">&quot;_score&quot;</span>))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-4" title="4"><span class="st">    </span><span class="kw">as.data.frame</span>()</a></code></pre></div>
-<pre><code>##   A a_score b_score c_score
-## 1 1       1       1       1
-## 2 2       2       2       2
-## 3 3       3       3       3
-## 4 4       4       4       4
-## 5 5       5       5       5
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">df <span class="co"># 还是这个数据，假设每次我都随机增加一列</span></a></code></pre></div>
+<pre><code>##   A
+## 1 1
+## 2 2
+## 3 3
+## 4 4
+## 5 5
 </code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># 变量</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="co"># df</span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="co"># 3 也就是新增多少行</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {</a>
+<a class="sourceLine" id="cb5-3" title="3">    feature_name &lt;-<span class="st"> </span><span class="kw">paste0</span>(letters[i],<span class="st">&#39;_score&#39;</span>)</a>
+<a class="sourceLine" id="cb5-4" title="4">    df[[feature_name]] &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="kw">nrow</span>(df),<span class="dv">0</span>,<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb5-5" title="5">}</a>
+<a class="sourceLine" id="cb5-6" title="6">df</a></code></pre></div>
+<pre><code>##   A   a_score   b_score   c_score
+## 1 1 0.2875775 0.0455565 0.9568333
+## 2 2 0.7883051 0.5281055 0.4533342
+## 3 3 0.4089769 0.8924190 0.6775706
+## 4 4 0.8830174 0.5514350 0.5726334
+## 5 5 0.9404673 0.4566147 0.1029247
+</code></pre>
 
 </body>
 </html>

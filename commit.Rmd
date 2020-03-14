@@ -20,21 +20,18 @@ for (i in c('a', 'b', 'd')) {
 df_bind
 ```
 
-> 这是我解决这个问题的间接方法
-
-如果最终目的是生成这个数据集`df_bind`，
-每列都一样，我觉得可以这么搞。
-
-比如你想要新增三列。
-
+> 其实我更想知道的是，能不能再循环中增加列
 
 ```{r}
-matrix(rep(df$A, 3 + 1),
-       nrow = nrow(df))    %>%
-    `colnames<-`(c(df %>% names(), paste0(letters[0:3], "_score"))) %>%
-    as.data.frame()
-# 变量
-# df
-# 3 也就是新增多少行
+df # 还是这个数据，假设每次我都随机增加一列
+```
+
+```{r}
+set.seed(123)
+for (i in 1:3) {
+    feature_name <- paste0(letters[i],'_score')
+    df[[feature_name]] <- runif(nrow(df),0,1)
+}
+df
 ```
 
