@@ -4,27 +4,24 @@ bibliography: refs/add.bib
 ---
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(tidyverse)
 
-test_df <- data.frame(a = 1:5, b = 1:5)
-x <- data.frame(a = c(1:15),
-          b = c(1:15))
-y <- c(1:15)
+df_1 <- data.frame(A = c('asd', 'adf', 'afg', 'agh', 'ahj'), stringsAsFactors = FALSE)
+df_2 <- data.frame(B = c('as', 'af', 'aj'), stringsAsFactors = FALSE)
 ```
+
+这里 for 循环我觉得复杂了，可以向量化操作。
 
 ```{r}
-for (i in 1:length(x)) {
-    x_input <- x[[i]]
-    y_input <- y
-    fit <- lm(y_input ~ x_input)
-    x_input <- data.frame(x_input = test_df[[i]])
-    new_name <- test_df %>% names %>% .[[i]] %>% paste0("_score")
-    test_df[new_name] <- predict.lm(fit, newdata = x_input)
-}
+left_join(df_1 %>% mutate(on = 1),
+          df_2 %>% mutate(on = 1), by = 'on') %>% 
+    select(-on) %>% 
+    group_by(A) %>% 
+    mutate(match = str_detect(A,B),
+           text = ifelse(match==1,B,"")) %>% 
+    summarise(
+        match = sum(match),
+        text = str_flatten(text,"")
+    )
 ```
-
-```{r}
-test_df
-```
-
