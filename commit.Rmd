@@ -4,24 +4,28 @@ bibliography: refs/add.bib
 ---
 
 
-```{r}
-library(tidyverse)
+参考
 
-df_1 <- data.frame(A = c('asd', 'adf', 'afg', 'agh', 'ahj'), stringsAsFactors = FALSE)
-df_2 <- data.frame(B = c('as', 'af', 'aj'), stringsAsFactors = FALSE)
+1. `jinxiaosong/concatenate-csv.ipynb`
+
+这是假设的三个表格
+
+1. `jinxiaosong/data/df1.csv` 
+1. `jinxiaosong/data/df2.csv`
+1. `jinxiaosong/data/df3.csv`
+
+**批量导入**，主要就是 for 循环加上 append 完成就好了。
+**批量导出**，主要就是 pd.DataFrame.groupby 加上 for 循环
+
+导出文件如
+
+1. `jinxiaosong/data/outputdf1.csv.csv`
+1. `jinxiaosong/data/outputdf2.csv.csv`
+1. `jinxiaosong/data/outputdf3.csv.csv`
+
+```python
+for idx, i in df.groupby('groups'):
+    file_name = 'output' + str(idx) + '.csv'
+    i.to_csv(os.path.join('data',file_name))
 ```
 
-这里 for 循环我觉得复杂了，可以向量化操作。
-
-```{r}
-left_join(df_1 %>% mutate(on = 1),
-          df_2 %>% mutate(on = 1), by = 'on') %>% 
-    select(-on) %>% 
-    group_by(A) %>% 
-    mutate(match = str_detect(A,B),
-           text = ifelse(match==1,B,"")) %>% 
-    summarise(
-        match = sum(match),
-        text = str_flatten(text,"")
-    )
-```
