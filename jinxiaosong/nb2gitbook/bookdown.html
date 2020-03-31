@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>xxx</title>
+  <meta name="description" content="xxx" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="xxx" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="xxx" />
+  
+  
+  
+
+<meta name="author" content="xxx" />
+
+
+<meta name="date" content="2020-04-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path=""><a href="#前期准备"><i class="fa fa-check"></i><b>1</b> 前期准备</a></li>
+<li class="chapter" data-level="2" data-path=""><a href="#封装函数"><i class="fa fa-check"></i><b>2</b> 封装函数</a></li>
+<li class="chapter" data-level="3" data-path=""><a href="#读取数据"><i class="fa fa-check"></i><b>3</b> 读取数据</a><ul>
+<li class="chapter" data-level="3.1" data-path=""><a href="#数据处理"><i class="fa fa-check"></i><b>3.1</b> 数据处理</a><ul>
+<li class="chapter" data-level="3.1.1" data-path=""><a href="#绘图"><i class="fa fa-check"></i><b>3.1.1</b> 绘图</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#附录"><i class="fa fa-check"></i>附录</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#参考文献"><i class="fa fa-check"></i>参考文献</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">xxx</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">xxx</h1>
+<p class="author"><em>xxx</em></p>
+<p class="date"><em>2020-04-01</em></p>
+</div>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<ol style="list-style-type: decimal">
+<li>使用 RMarkdown 的 <code>child</code> 参数，进行文档拼接。</li>
+<li>这样拼接以后的笔记方便复习。</li>
+<li>相关问题提交到
+<a class="github-button" href="https://github.com/JiaxiangBU/tutoring2/issues" data-show-count="true" aria-label="Issue JiaxiangBU/tutoring on GitHub">Issue</a></li>
+</ol>
+<div id="前期准备" class="section level1">
+<h1><span class="header-section-number">1</span> 前期准备</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" title="1"><span class="im">import</span> qgrid</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="im">import</span> random</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="im">import</span> warnings</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="im">import</span> numpy <span class="im">as</span> np</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="im">import</span> pandas <span class="im">as</span> pd</a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="im">import</span> seaborn <span class="im">as</span> sns</a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="im">from</span> sklearn <span class="im">import</span> metrics</a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="im">from</span> functools <span class="im">import</span> <span class="bu">reduce</span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="im">from</span> pyecharts.charts <span class="im">import</span> Bar, Line, Page</a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="im">from</span> pyecharts <span class="im">import</span> options <span class="im">as</span> opts</a>
+<a class="sourceLine" id="cb1-12" title="12"></a>
+<a class="sourceLine" id="cb1-13" title="13"><span class="op">%</span>matplotlib inline</a>
+<a class="sourceLine" id="cb1-14" title="14">warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</a>
+<a class="sourceLine" id="cb1-15" title="15">pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">50</span>)</a></code></pre></div>
+</div>
+<div id="封装函数" class="section level1">
+<h1><span class="header-section-number">2</span> 封装函数</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">def</span> liftchart_num(data, score_bins, loan_cnt, bad_rate, bad_rate_cum, cover, auc, ks):</a>
+<a class="sourceLine" id="cb2-2" title="2">    bar <span class="op">=</span> (</a>
+<a class="sourceLine" id="cb2-3" title="3">        Bar(init_opts<span class="op">=</span>opts.InitOpts(width<span class="op">=</span><span class="st">&quot;900px&quot;</span>, height<span class="op">=</span><span class="st">&quot;400px&quot;</span>))</a>
+<a class="sourceLine" id="cb2-4" title="4">        .add_xaxis(<span class="bu">list</span>(data[score_bins]))</a>
+<a class="sourceLine" id="cb2-5" title="5">        .add_yaxis(<span class="st">&quot;样本量&quot;</span>, <span class="bu">list</span>(data[loan_cnt]), color<span class="op">=</span><span class="st">&quot;#1f77b4&quot;</span>)</a>
+<a class="sourceLine" id="cb2-6" title="6">        .extend_axis(yaxis<span class="op">=</span>opts.AxisOpts(axislabel_opts<span class="op">=</span>opts.LabelOpts(formatter<span class="op">=</span><span class="st">&quot;</span><span class="sc">{value}</span><span class="st">%&quot;</span>)))</a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))</span></a>
+<a class="sourceLine" id="cb2-8" title="8">        .set_global_opts(</a>
+<a class="sourceLine" id="cb2-9" title="9">            toolbox_opts<span class="op">=</span>opts.ToolboxOpts(),</a>
+<a class="sourceLine" id="cb2-10" title="10">            legend_opts<span class="op">=</span>opts.LegendOpts(pos_top<span class="op">=</span><span class="st">&quot;7%&quot;</span>),</a>
+<a class="sourceLine" id="cb2-11" title="11">            datazoom_opts<span class="op">=</span>opts.DataZoomOpts(range_start<span class="op">=</span><span class="dv">0</span>,range_end<span class="op">=</span><span class="dv">100</span>),</a>
+<a class="sourceLine" id="cb2-12" title="12">            title_opts<span class="op">=</span>opts.TitleOpts(title<span class="op">=</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> score_bins, </a>
+<a class="sourceLine" id="cb2-13" title="13">                                      subtitle<span class="op">=</span><span class="st">&#39;COVER=</span><span class="sc">{0:.3f}</span><span class="st">   AUC=</span><span class="sc">{1:.3f}</span><span class="st">   KS=</span><span class="sc">{2:.3f}</span><span class="st">&#39;</span>.<span class="bu">format</span>(cover,auc,ks))</a>
+<a class="sourceLine" id="cb2-14" title="14">        )</a>
+<a class="sourceLine" id="cb2-15" title="15">    )</a>
+<a class="sourceLine" id="cb2-16" title="16">    </a>
+<a class="sourceLine" id="cb2-17" title="17">    line <span class="op">=</span> (</a>
+<a class="sourceLine" id="cb2-18" title="18">        Line()</a>
+<a class="sourceLine" id="cb2-19" title="19">        .add_xaxis(data[score_bins])</a>
+<a class="sourceLine" id="cb2-20" title="20">        .add_yaxis(<span class="st">&quot;每段首逾率&quot;</span>, <span class="bu">list</span>(data[bad_rate]), yaxis_index<span class="op">=</span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb2-21" title="21">                   linestyle_opts<span class="op">=</span>opts.LineStyleOpts(color<span class="op">=</span><span class="st">&quot;#DE47C8&quot;</span>, width<span class="op">=</span><span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb2-22" title="22">                   itemstyle_opts<span class="op">=</span>opts.ItemStyleOpts(color<span class="op">=</span><span class="st">&quot;#DE47C8&quot;</span>))</a>
+<a class="sourceLine" id="cb2-23" title="23">        .add_yaxis(<span class="st">&quot;累积首逾率&quot;</span>, <span class="bu">list</span>(data[bad_rate_cum]), yaxis_index<span class="op">=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb2-24" title="24">                   linestyle_opts<span class="op">=</span>opts.LineStyleOpts(color<span class="op">=</span><span class="st">&quot;#ff7f0e&quot;</span>, width<span class="op">=</span><span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb2-25" title="25">                   itemstyle_opts<span class="op">=</span>opts.ItemStyleOpts(color<span class="op">=</span><span class="st">&quot;#ff7f0e&quot;</span>))</a>
+<a class="sourceLine" id="cb2-26" title="26"><span class="co">#         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))</span></a>
+<a class="sourceLine" id="cb2-27" title="27">    )<span class="op">;</span> bar.overlap(line)<span class="op">;</span> <span class="cf">return</span> bar</a>
+<a class="sourceLine" id="cb2-28" title="28"></a>
+<a class="sourceLine" id="cb2-29" title="29"></a>
+<a class="sourceLine" id="cb2-30" title="30"><span class="kw">def</span> liftchart_cat(data, score_bins, loan_cnt, bad_rate, bad_rate_all, cover):</a>
+<a class="sourceLine" id="cb2-31" title="31">    bar <span class="op">=</span> (</a>
+<a class="sourceLine" id="cb2-32" title="32">        Bar(init_opts<span class="op">=</span>opts.InitOpts(width<span class="op">=</span><span class="st">&quot;1000px&quot;</span>, height<span class="op">=</span><span class="st">&quot;400px&quot;</span>))</a>
+<a class="sourceLine" id="cb2-33" title="33">        .add_xaxis([<span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> data[score_bins]])</a>
+<a class="sourceLine" id="cb2-34" title="34">        .add_yaxis(<span class="st">&quot;样本量&quot;</span>, <span class="bu">list</span>(data[loan_cnt]), color<span class="op">=</span><span class="st">&quot;#1f77b4&quot;</span>)</a>
+<a class="sourceLine" id="cb2-35" title="35">        .extend_axis(yaxis<span class="op">=</span>opts.AxisOpts(axislabel_opts<span class="op">=</span>opts.LabelOpts(formatter<span class="op">=</span><span class="st">&quot;</span><span class="sc">{value}</span><span class="st">%&quot;</span>)))</a>
+<a class="sourceLine" id="cb2-36" title="36"><span class="co">#         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))</span></a>
+<a class="sourceLine" id="cb2-37" title="37">        .set_global_opts(</a>
+<a class="sourceLine" id="cb2-38" title="38">            title_opts<span class="op">=</span>opts.TitleOpts(title<span class="op">=</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">&quot;</span> <span class="op">%</span> score_bins, subtitle<span class="op">=</span><span class="st">&#39;COVER=</span><span class="sc">{0:.3f}</span><span class="st">&#39;</span>.<span class="bu">format</span>(cover)),</a>
+<a class="sourceLine" id="cb2-39" title="39">            legend_opts<span class="op">=</span>opts.LegendOpts(pos_top<span class="op">=</span><span class="st">&quot;7%&quot;</span>),</a>
+<a class="sourceLine" id="cb2-40" title="40">            toolbox_opts<span class="op">=</span>opts.ToolboxOpts(),</a>
+<a class="sourceLine" id="cb2-41" title="41">            datazoom_opts<span class="op">=</span>opts.DataZoomOpts(range_start<span class="op">=</span><span class="dv">0</span>,range_end<span class="op">=</span><span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb2-42" title="42">        )</a>
+<a class="sourceLine" id="cb2-43" title="43">    )</a>
+<a class="sourceLine" id="cb2-44" title="44">    </a>
+<a class="sourceLine" id="cb2-45" title="45">    line <span class="op">=</span> (</a>
+<a class="sourceLine" id="cb2-46" title="46">        Line()</a>
+<a class="sourceLine" id="cb2-47" title="47">        .add_xaxis([<span class="bu">str</span>(x) <span class="cf">for</span> x <span class="kw">in</span> data[score_bins]])</a>
+<a class="sourceLine" id="cb2-48" title="48">        .add_yaxis(<span class="st">&quot;每段首逾率&quot;</span>, <span class="bu">list</span>(data[bad_rate]), yaxis_index<span class="op">=</span><span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb2-49" title="49">                   linestyle_opts<span class="op">=</span>opts.LineStyleOpts(color<span class="op">=</span><span class="st">&quot;#ff7f0e&quot;</span>, width<span class="op">=</span><span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb2-50" title="50">                   itemstyle_opts<span class="op">=</span>opts.ItemStyleOpts(color<span class="op">=</span><span class="st">&quot;#ff7f0e&quot;</span>))</a>
+<a class="sourceLine" id="cb2-51" title="51">         .set_series_opts(</a>
+<a class="sourceLine" id="cb2-52" title="52"><span class="co">#           label_opts=opts.LabelOpts(is_show=False)</span></a>
+<a class="sourceLine" id="cb2-53" title="53">            markline_opts<span class="op">=</span>opts.MarkLineOpts(data<span class="op">=</span>[opts.MarkLineItem(y<span class="op">=</span>bad_rate_all, name<span class="op">=</span><span class="st">&quot;整体首逾率&quot;</span>)])</a>
+<a class="sourceLine" id="cb2-54" title="54">        )</a>
+<a class="sourceLine" id="cb2-55" title="55">    )<span class="op">;</span> bar.overlap(line)<span class="op">;</span> <span class="cf">return</span> bar</a>
+<a class="sourceLine" id="cb2-56" title="56"></a>
+<a class="sourceLine" id="cb2-57" title="57"></a>
+<a class="sourceLine" id="cb2-58" title="58"><span class="kw">def</span> liftchart(data, xvars, yvar, uv, g<span class="op">=</span><span class="dv">10</span>):</a>
+<a class="sourceLine" id="cb2-59" title="59">    </a>
+<a class="sourceLine" id="cb2-60" title="60">    data_tmp <span class="op">=</span> data.copy()</a>
+<a class="sourceLine" id="cb2-61" title="61">    page <span class="op">=</span> Page()</a>
+<a class="sourceLine" id="cb2-62" title="62">    <span class="cf">for</span> xvar <span class="kw">in</span> xvars:</a>
+<a class="sourceLine" id="cb2-63" title="63">        </a>
+<a class="sourceLine" id="cb2-64" title="64">        <span class="co">######## 可视化离散型变量</span></a>
+<a class="sourceLine" id="cb2-65" title="65">        <span class="cf">if</span> data_tmp[xvar].nunique() <span class="op">&lt;=</span> uv <span class="kw">or</span> data_tmp[xvar].dtype <span class="op">==</span> <span class="st">&#39;object&#39;</span>:</a>
+<a class="sourceLine" id="cb2-66" title="66">            </a>
+<a class="sourceLine" id="cb2-67" title="67">            <span class="co">## 处理缺失值与-9999999</span></a>
+<a class="sourceLine" id="cb2-68" title="68"><span class="co">#             data_tmp[xvar] = data_tmp[xvar].astype(&#39;str&#39;)</span></a>
+<a class="sourceLine" id="cb2-69" title="69">            cover <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> <span class="bu">sum</span>(pd.isnull(data_tmp[xvar])) <span class="op">/</span> <span class="bu">len</span>(data_tmp)</a>
+<a class="sourceLine" id="cb2-70" title="70">            bad_rate_all <span class="op">=</span> <span class="bu">round</span>(data_tmp[yvar].mean()<span class="op">*</span><span class="dv">100</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb2-71" title="71"><span class="co">#             data_tmp[xvar].replace(&#39;-9999999&#39;, &#39;-999&#39;, inplace=True)</span></a>
+<a class="sourceLine" id="cb2-72" title="72">    </a>
+<a class="sourceLine" id="cb2-73" title="73">            result_cat <span class="op">=</span> data_tmp <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-74" title="74">                .groupby(xvar, as_index<span class="op">=</span><span class="va">False</span>)[yvar] <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-75" title="75">                .agg({<span class="st">&#39;good&#39;</span> : <span class="kw">lambda</span> x: <span class="bu">sum</span>(x<span class="op">==</span><span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb2-76" title="76">                      <span class="st">&#39;bad&#39;</span>  : <span class="kw">lambda</span> x: <span class="bu">sum</span>(x<span class="op">==</span><span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb2-77" title="77">                      <span class="st">&#39;total&#39;</span>: <span class="kw">lambda</span> x: <span class="bu">len</span>(x)}) <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-78" title="78">                .fillna(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2-79" title="79">    </a>
+<a class="sourceLine" id="cb2-80" title="80">            result_cat[<span class="st">&#39;bad_rate&#39;</span>] <span class="op">=</span> (result_cat[<span class="st">&#39;bad&#39;</span>] <span class="op">/</span> result_cat[<span class="st">&#39;total&#39;</span>]).<span class="bu">map</span>(<span class="kw">lambda</span> x: <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span>(x<span class="op">*</span><span class="dv">100</span>))</a>
+<a class="sourceLine" id="cb2-81" title="81">        </a>
+<a class="sourceLine" id="cb2-82" title="82">            plot_cat <span class="op">=</span> liftchart_cat(result_cat, xvar, <span class="st">&#39;total&#39;</span>, <span class="st">&#39;bad_rate&#39;</span>, bad_rate_all, cover)<span class="op">;</span> page.add(plot_cat)</a>
+<a class="sourceLine" id="cb2-83" title="83">        </a>
+<a class="sourceLine" id="cb2-84" title="84">        <span class="co">######## 可视化连续性变量</span></a>
+<a class="sourceLine" id="cb2-85" title="85">        <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb2-86" title="86">            </a>
+<a class="sourceLine" id="cb2-87" title="87">            data_tmp[xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>] <span class="op">=</span> np.where(data_tmp[xvar] <span class="op">&lt;</span> <span class="dv">0</span>, <span class="st">&#39;999999999&#39;</span>, pd.qcut(data_tmp[xvar], q<span class="op">=</span>g, duplicates<span class="op">=</span><span class="st">&#39;drop&#39;</span>, precision<span class="op">=</span><span class="dv">1</span>).astype(<span class="st">&#39;str&#39;</span>))</a>
+<a class="sourceLine" id="cb2-88" title="88">            </a>
+<a class="sourceLine" id="cb2-89" title="89">            result_num <span class="op">=</span> data_tmp <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-90" title="90">                .groupby(xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>, as_index<span class="op">=</span><span class="va">False</span>)[yvar] <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-91" title="91">                .agg({<span class="st">&#39;good&#39;</span> : <span class="kw">lambda</span> x: <span class="bu">sum</span>(x<span class="op">==</span><span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb2-92" title="92">                      <span class="st">&#39;bad&#39;</span>  : <span class="kw">lambda</span> x: <span class="bu">sum</span>(x<span class="op">==</span><span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb2-93" title="93">                      <span class="st">&#39;total&#39;</span>: <span class="kw">lambda</span> x: <span class="bu">len</span>(x)}) <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-94" title="94">                .fillna(<span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb2-95" title="95">            </a>
+<a class="sourceLine" id="cb2-96" title="96">            result_num[<span class="st">&#39;bins_fst&#39;</span>] <span class="op">=</span> result_num[xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="bu">float</span>(x.split(<span class="st">&#39;,&#39;</span>)[<span class="dv">0</span>].replace(<span class="st">&#39;(&#39;</span>, <span class="st">&#39;&#39;</span>)))</a>
+<a class="sourceLine" id="cb2-97" title="97">            result_num <span class="op">=</span> result_num.sort_values(<span class="st">&#39;bins_fst&#39;</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</a>
+<a class="sourceLine" id="cb2-98" title="98">            </a>
+<a class="sourceLine" id="cb2-99" title="99">            data_tmp_g0 <span class="op">=</span> data_tmp[data_tmp[xvar] <span class="op">&gt;</span> <span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb2-100" title="100">            score_median <span class="op">=</span> data_tmp_g0[xvar].median()</a>
+<a class="sourceLine" id="cb2-101" title="101">            fst_rate_g <span class="op">=</span> data_tmp_g0.loc[data_tmp_g0[xvar] <span class="op">&gt;</span> score_median, yvar].mean()</a>
+<a class="sourceLine" id="cb2-102" title="102">            fst_rate_l <span class="op">=</span> data_tmp_g0.loc[data_tmp_g0[xvar] <span class="op">&lt;</span> score_median, yvar].mean()</a>
+<a class="sourceLine" id="cb2-103" title="103">            </a>
+<a class="sourceLine" id="cb2-104" title="104">            <span class="cf">if</span> fst_rate_g <span class="op">&lt;</span> fst_rate_l:</a>
+<a class="sourceLine" id="cb2-105" title="105">                </a>
+<a class="sourceLine" id="cb2-106" title="106">                result_num <span class="op">=</span> result_num <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-107" title="107">                    .assign(<span class="op">**</span>{<span class="st">&#39;is_neg_999&#39;</span>: result_num[xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>] <span class="op">==</span> <span class="st">&#39;999999999&#39;</span>, </a>
+<a class="sourceLine" id="cb2-108" title="108">                               <span class="st">&#39;is_nan&#39;</span>    : result_num[xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>] <span class="op">==</span> <span class="st">&#39;nan&#39;</span>}) <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-109" title="109">                    .sort_values([<span class="st">&#39;is_neg_999&#39;</span>, <span class="st">&#39;is_nan&#39;</span>, <span class="st">&#39;bins_fst&#39;</span>], ascending<span class="op">=</span>[<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>])</a>
+<a class="sourceLine" id="cb2-110" title="110"></a>
+<a class="sourceLine" id="cb2-111" title="111">            result_num <span class="op">=</span> result_num <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-112" title="112">                .assign(bad_cum  <span class="op">=</span> result_num[<span class="st">&#39;bad&#39;</span>].cumsum(),</a>
+<a class="sourceLine" id="cb2-113" title="113">                        good_cum <span class="op">=</span> result_num[<span class="st">&#39;good&#39;</span>].cumsum(),</a>
+<a class="sourceLine" id="cb2-114" title="114">                        bad_rate <span class="op">=</span> result_num[<span class="st">&#39;bad&#39;</span>] <span class="op">/</span> result_num[<span class="st">&#39;total&#39;</span>])</a>
+<a class="sourceLine" id="cb2-115" title="115">            </a>
+<a class="sourceLine" id="cb2-116" title="116">            result_num[<span class="st">&#39;bad_rate_cum&#39;</span>] <span class="op">=</span> result_num[<span class="st">&#39;bad_cum&#39;</span>] <span class="op">/</span> result_num[<span class="st">&#39;total&#39;</span>].cumsum()</a>
+<a class="sourceLine" id="cb2-117" title="117">            result_num[[<span class="st">&#39;bad_rate&#39;</span>,<span class="st">&#39;bad_rate_cum&#39;</span>]] <span class="op">=</span> result_num[[<span class="st">&#39;bad_rate&#39;</span>,<span class="st">&#39;bad_rate_cum&#39;</span>]].applymap(<span class="kw">lambda</span> x: <span class="st">&#39;</span><span class="sc">{:.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span>(x<span class="op">*</span><span class="dv">100</span>))</a>
+<a class="sourceLine" id="cb2-118" title="118">            result_num.replace(to_replace<span class="op">=</span>[<span class="st">&#39;999999999&#39;</span>], value<span class="op">=</span>[<span class="st">&#39;-999&#39;</span>], inplace<span class="op">=</span><span class="va">True</span>)</a>
+<a class="sourceLine" id="cb2-119" title="119"><span class="co">#             result_num[xvar+&#39;_bin&#39;] = result_num[xvar+&#39;_bin&#39;].str.replace(&#39;\\.0&#39;, &#39;&#39;)</span></a>
+<a class="sourceLine" id="cb2-120" title="120">            </a>
+<a class="sourceLine" id="cb2-121" title="121">            <span class="co">#### 计算AUC、KS和IV</span></a>
+<a class="sourceLine" id="cb2-122" title="122">            result_num_woe <span class="op">=</span> result_num[<span class="op">~</span>result_num[xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>].isin([<span class="st">&#39;-999&#39;</span>,<span class="st">&#39;nan&#39;</span>])]</a>
+<a class="sourceLine" id="cb2-123" title="123">            result_num_woe.reset_index(drop<span class="op">=</span><span class="va">True</span>, inplace<span class="op">=</span><span class="va">True</span>)</a>
+<a class="sourceLine" id="cb2-124" title="124">            </a>
+<a class="sourceLine" id="cb2-125" title="125">            result_num_woe <span class="op">=</span> result_num_woe <span class="op">\</span></a>
+<a class="sourceLine" id="cb2-126" title="126">                .assign(bad_rate_woe  <span class="op">=</span> result_num_woe[<span class="st">&#39;bad&#39;</span>] <span class="op">/</span> result_num_woe[<span class="st">&#39;bad_cum&#39;</span>][<span class="bu">len</span>(result_num_woe)<span class="op">-</span><span class="dv">1</span>],</a>
+<a class="sourceLine" id="cb2-127" title="127">                        good_rate_woe <span class="op">=</span> result_num_woe[<span class="st">&#39;good&#39;</span>] <span class="op">/</span> result_num_woe[<span class="st">&#39;good_cum&#39;</span>][<span class="bu">len</span>(result_num_woe)<span class="op">-</span><span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb2-128" title="128">            </a>
+<a class="sourceLine" id="cb2-129" title="129">            result_num_woe[<span class="st">&#39;woe_v&#39;</span>] <span class="op">=</span> np.log(result_num_woe[<span class="st">&#39;bad_rate_woe&#39;</span>] <span class="op">/</span> result_num_woe[<span class="st">&#39;good_rate_woe&#39;</span>])</a>
+<a class="sourceLine" id="cb2-130" title="130">            result_num_woe[<span class="st">&#39;woe_w&#39;</span>] <span class="op">=</span> result_num_woe[<span class="st">&#39;bad_rate_woe&#39;</span>] <span class="op">-</span> result_num_woe[<span class="st">&#39;good_rate_woe&#39;</span>]</a>
+<a class="sourceLine" id="cb2-131" title="131">            </a>
+<a class="sourceLine" id="cb2-132" title="132">            pred, real <span class="op">=</span> data_tmp.loc[data_tmp[xvar] <span class="op">&gt;=</span> <span class="dv">0</span>, xvar], data_tmp.loc[data_tmp[xvar] <span class="op">&gt;=</span> <span class="dv">0</span>, yvar]</a>
+<a class="sourceLine" id="cb2-133" title="133">            fpr, tpr, thresholds <span class="op">=</span> metrics.roc_curve(real, pred, pos_label<span class="op">=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-134" title="134">            </a>
+<a class="sourceLine" id="cb2-135" title="135">            cover <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> <span class="bu">sum</span>(pd.isnull(data_tmp[xvar])) <span class="op">/</span> <span class="bu">len</span>(data_tmp)</a>
+<a class="sourceLine" id="cb2-136" title="136">            auc <span class="op">=</span> metrics.auc(fpr, tpr)</a>
+<a class="sourceLine" id="cb2-137" title="137">            ks  <span class="op">=</span> <span class="bu">max</span>(<span class="bu">abs</span>(tpr <span class="op">-</span> fpr))</a>
+<a class="sourceLine" id="cb2-138" title="138">            iv  <span class="op">=</span> <span class="bu">sum</span>(result_num_woe[<span class="st">&#39;woe_w&#39;</span>] <span class="op">*</span> result_num_woe[<span class="st">&#39;woe_v&#39;</span>])</a>
+<a class="sourceLine" id="cb2-139" title="139">            </a>
+<a class="sourceLine" id="cb2-140" title="140">            plot_num <span class="op">=</span> liftchart_num(result_num, xvar<span class="op">+</span><span class="st">&#39;_bin&#39;</span>, <span class="st">&#39;total&#39;</span>, <span class="st">&#39;bad_rate&#39;</span>, <span class="st">&#39;bad_rate_cum&#39;</span>, cover, auc, ks)<span class="op">;</span> page.add(plot_num)</a>
+<a class="sourceLine" id="cb2-141" title="141"><span class="co">#     return result_num_woe</span></a>
+<a class="sourceLine" id="cb2-142" title="142">    <span class="cf">return</span> page</a></code></pre></div>
+</div>
+<div id="读取数据" class="section level1">
+<h1><span class="header-section-number">3</span> 读取数据</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" title="1">df_loc_raw <span class="op">=</span> pd.read_excel(<span class="st">&quot;../data/return/join.xlsx&quot;</span>)</a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3">df_return_raw <span class="op">=</span> pd.read_excel(<span class="st">&quot;../data/return/df_return.xlsx&quot;</span>)</a></code></pre></div>
+<div id="数据处理" class="section level2">
+<h2><span class="header-section-number">3.1</span> 数据处理</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb4-1" title="1">df_return_raw.rename(columns<span class="op">=</span>{<span class="st">&#39;asdlfkjalskjf&#39;</span>:<span class="st">&#39;score&#39;</span>}, inplace<span class="op">=</span><span class="va">True</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb5-1" title="1">df_return_select <span class="op">=</span> df_return_raw[[<span class="st">&#39;score&#39;</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb6-1" title="1">df_return_select[<span class="st">&#39;y&#39;</span>] <span class="op">=</span> [random.randint(<span class="dv">0</span>,<span class="dv">1</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(df_return_select))]</a></code></pre></div>
+<div id="绘图" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> 绘图</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb7-1" title="1">p_all <span class="op">=</span> liftchart(df_return_select, xvars<span class="op">=</span>[<span class="st">&#39;score&#39;</span>], yvar<span class="op">=</span><span class="st">&#39;y&#39;</span>, uv<span class="op">=</span><span class="dv">20</span>, g<span class="op">=</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2">p_all.render_notebook()</a></code></pre></div>
+<script>
+    require.config({
+        paths: {
+            'echarts':'https://assets.pyecharts.org/assets/echarts.min'
+        }
+    });
+</script>
+<pre><code>    &lt;div id=&quot;8e83fda3b7a94eacb5d6531aa59f6d99&quot; style=&quot;width:900px; height:400px;&quot;&gt;&lt;/div&gt;</code></pre>
+<script>
+        require(['echarts'], function(echarts) {
+                var chart_8e83fda3b7a94eacb5d6531aa59f6d99 = echarts.init(
+                    document.getElementById('8e83fda3b7a94eacb5d6531aa59f6d99'), 'white', {renderer: 'canvas'});
+                var option_8e83fda3b7a94eacb5d6531aa59f6d99 = {
+    "animation": true,
+    "animationThreshold": 2000,
+    "animationDuration": 1000,
+    "animationEasing": "cubicOut",
+    "animationDelay": 0,
+    "animationDurationUpdate": 300,
+    "animationEasingUpdate": "cubicOut",
+    "animationDelayUpdate": 0,
+    "color": [
+        "#1f77b4",
+        "#c23531",
+        "#2f4554",
+        "#61a0a8",
+        "#d48265",
+        "#749f83",
+        "#ca8622",
+        "#bda29a",
+        "#6e7074",
+        "#546570",
+        "#c4ccd3",
+        "#f05b72",
+        "#ef5b9c",
+        "#f47920",
+        "#905a3d",
+        "#fab27b",
+        "#2a5caa",
+        "#444693",
+        "#726930",
+        "#b2d235",
+        "#6d8346",
+        "#ac6767",
+        "#1d953f",
+        "#6950a1",
+        "#918597"
+    ],
+    "series": [
+        {
+            "type": "bar",
+            "name": "\u6837\u672c\u91cf",
+            "data": [
+                2950,
+                2955,
+                2859,
+                3035,
+                2999,
+                3039,
+                2946,
+                2991,
+                3072,
+                3049
+            ],
+            "barCategoryGap": "20%",
+            "label": {
+                "show": true,
+                "position": "top",
+                "margin": 8
+            }
+        },
+        {
+            "type": "line",
+            "name": "\u6bcf\u6bb5\u9996\u903e\u7387",
+            "connectNulls": false,
+            "yAxisIndex": 1,
+            "symbolSize": 4,
+            "showSymbol": true,
+            "smooth": false,
+            "step": false,
+            "data": [
+                [
+                    "(661.0, 765.0]",
+                    "49.80"
+                ],
+                [
+                    "(641.0, 661.0]",
+                    "49.81"
+                ],
+                [
+                    "(629.0, 641.0]",
+                    "51.00"
+                ],
+                [
+                    "(617.0, 629.0]",
+                    "50.44"
+                ],
+                [
+                    "(605.0, 617.0]",
+                    "48.68"
+                ],
+                [
+                    "(593.0, 605.0]",
+                    "50.38"
+                ],
+                [
+                    "(581.0, 593.0]",
+                    "49.90"
+                ],
+                [
+                    "(567.0, 581.0]",
+                    "49.68"
+                ],
+                [
+                    "(548.0, 567.0]",
+                    "48.99"
+                ],
+                [
+                    "(299.9, 548.0]",
+                    "51.00"
+                ]
+            ],
+            "hoverAnimation": true,
+            "label": {
+                "show": true,
+                "position": "top",
+                "margin": 8
+            },
+            "lineStyle": {
+                "width": 3,
+                "opacity": 1,
+                "curveness": 0,
+                "type": "solid",
+                "color": "#DE47C8"
+            },
+            "areaStyle": {
+                "opacity": 0
+            },
+            "itemStyle": {
+                "color": "#DE47C8"
+            }
+        },
+        {
+            "type": "line",
+            "name": "\u7d2f\u79ef\u9996\u903e\u7387",
+            "connectNulls": false,
+            "yAxisIndex": 1,
+            "symbolSize": 4,
+            "showSymbol": true,
+            "smooth": false,
+            "step": false,
+            "data": [
+                [
+                    "(661.0, 765.0]",
+                    "49.80"
+                ],
+                [
+                    "(641.0, 661.0]",
+                    "49.81"
+                ],
+                [
+                    "(629.0, 641.0]",
+                    "50.19"
+                ],
+                [
+                    "(617.0, 629.0]",
+                    "50.26"
+                ],
+                [
+                    "(605.0, 617.0]",
+                    "49.94"
+                ],
+                [
+                    "(593.0, 605.0]",
+                    "50.01"
+                ],
+                [
+                    "(581.0, 593.0]",
+                    "50.00"
+                ],
+                [
+                    "(567.0, 581.0]",
+                    "49.96"
+                ],
+                [
+                    "(548.0, 567.0]",
+                    "49.85"
+                ],
+                [
+                    "(299.9, 548.0]",
+                    "49.96"
+                ]
+            ],
+            "hoverAnimation": true,
+            "label": {
+                "show": true,
+                "position": "top",
+                "margin": 8
+            },
+            "lineStyle": {
+                "width": 3,
+                "opacity": 1,
+                "curveness": 0,
+                "type": "solid",
+                "color": "#ff7f0e"
+            },
+            "areaStyle": {
+                "opacity": 0
+            },
+            "itemStyle": {
+                "color": "#ff7f0e"
+            }
+        }
+    ],
+    "legend": [
+        {
+            "data": [
+                "\u6837\u672c\u91cf",
+                "\u6bcf\u6bb5\u9996\u903e\u7387",
+                "\u7d2f\u79ef\u9996\u903e\u7387"
+            ],
+            "selected": {
+                "\u6837\u672c\u91cf": true
+            },
+            "show": true,
+            "top": "7%"
+        }
+    ],
+    "tooltip": {
+        "show": true,
+        "trigger": "item",
+        "triggerOn": "mousemove|click",
+        "axisPointer": {
+            "type": "line"
+        },
+        "textStyle": {
+            "fontSize": 14
+        },
+        "borderWidth": 0
+    },
+    "xAxis": [
+        {
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": false,
+                "lineStyle": {
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            },
+            "data": [
+                "(661.0, 765.0]",
+                "(641.0, 661.0]",
+                "(629.0, 641.0]",
+                "(617.0, 629.0]",
+                "(605.0, 617.0]",
+                "(593.0, 605.0]",
+                "(581.0, 593.0]",
+                "(567.0, 581.0]",
+                "(548.0, 567.0]",
+                "(299.9, 548.0]"
+            ]
+        }
+    ],
+    "yAxis": [
+        {
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": false,
+                "lineStyle": {
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            }
+        },
+        {
+            "show": true,
+            "scale": false,
+            "nameLocation": "end",
+            "nameGap": 15,
+            "gridIndex": 0,
+            "axisLabel": {
+                "show": true,
+                "position": "top",
+                "margin": 8,
+                "formatter": "{value}%"
+            },
+            "inverse": false,
+            "offset": 0,
+            "splitNumber": 5,
+            "minInterval": 0,
+            "splitLine": {
+                "show": false,
+                "lineStyle": {
+                    "width": 1,
+                    "opacity": 1,
+                    "curveness": 0,
+                    "type": "solid"
+                }
+            }
+        }
+    ],
+    "title": [
+        {
+            "text": "score_bin",
+            "subtext": "COVER=1.000   AUC=0.501   KS=0.008"
+        }
+    ],
+    "toolbox": {
+        "show": true,
+        "orient": "horizontal",
+        "itemSize": 15,
+        "itemGap": 10,
+        "left": "80%",
+        "feature": {
+            "saveAsImage": {
+                "show": true,
+                "title": "save as image",
+                "type": "png"
+            },
+            "restore": {
+                "show": true,
+                "title": "restore"
+            },
+            "dataView": {
+                "show": true,
+                "title": "data view",
+                "readOnly": false
+            },
+            "dataZoom": {
+                "show": true,
+                "title": {
+                    "zoom": "data zoom",
+                    "back": "data zoom restore"
+                }
+            }
+        }
+    },
+    "dataZoom": {
+        "show": true,
+        "type": "slider",
+        "realtime": true,
+        "start": 0,
+        "end": 100,
+        "orient": "horizontal",
+        "zoomLock": false
+    }
+};
+                chart_8e83fda3b7a94eacb5d6531aa59f6d99.setOption(option_8e83fda3b7a94eacb5d6531aa59f6d99);
+        });
+    </script>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+</div>
+</div>
+</div>
+<div id="附录" class="section level1 unnumbered">
+<h1>附录</h1>
+</div>
+<div id="参考文献" class="section level1 unnumbered">
+<h1>参考文献</h1>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+},
+"search": false
+});
+});
+</script>
+
+</body>
+
+</html>

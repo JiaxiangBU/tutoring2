@@ -1,52 +1,52 @@
 
-``` r
-library(tidyverse)
+nb 相关参考 <https://jiaxiangbu.github.io/learn_nbdev/learning_notes.html>
+
+``` bash
+$ cd jinxiaosong/nb2gitbook/
+$ jupyter nbconvert --to markdown --output-dir . --NbConvertApp.output_files_dir=libs nb_with_toc.ipynb
+[NbConvertApp] Converting notebook nb_with_toc.ipynb to markdown
+[NbConvertApp] Writing 17799 bytes to .\nb_with_toc.md
 ```
 
-    ## -- Attaching packages --------------------------------------- tidyverse 1.2.1 --
-
-    ## √ ggplot2 3.2.1     √ purrr   0.3.3
-    ## √ tibble  2.1.3     √ dplyr   0.8.3
-    ## √ tidyr   1.0.2     √ stringr 1.4.0
-    ## √ readr   1.3.1     √ forcats 0.4.0
-
-    ## Warning: package 'ggplot2' was built under R version 3.6.2
-
-    ## Warning: package 'tidyr' was built under R version 3.6.2
-
-    ## Warning: package 'purrr' was built under R version 3.6.1
-
-    ## Warning: package 'dplyr' was built under R version 3.6.1
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
 ``` r
-df_1 <- data.frame(A = c('asd', 'adf', 'afg', 'agh', 'ahj'), stringsAsFactors = FALSE)
-df_2 <- data.frame(B = c('as', 'af', 'aj'), stringsAsFactors = FALSE)
+rmarkdown::render("jinxiaosong/nb2gitbook/bookdown.Rmd")
 ```
 
-这里 for 循环我觉得复杂了，可以向量化操作。
+这里需要将 nbconvert 和 rmarkdown 通过 make 结合
 
 ``` r
-left_join(df_1 %>% mutate(on = 1),
-          df_2 %>% mutate(on = 1), by = 'on') %>% 
-    select(-on) %>% 
-    group_by(A) %>% 
-    mutate(match = str_detect(A,B),
-           text = ifelse(match==1,B,"")) %>% 
-    summarise(
-        match = sum(match),
-        text = str_flatten(text,"")
-    )
+file.edit("jinxiaosong/nb2gitbook/build.R")
 ```
 
-    ## # A tibble: 5 x 3
-    ##   A     match text 
-    ##   <chr> <int> <chr>
-    ## 1 adf       0 ""   
-    ## 2 afg       1 af   
-    ## 3 agh       0 ""   
-    ## 4 ahj       0 ""   
-    ## 5 asd       1 as
+构建 RMarkdown 的脚本。
+
+``` r
+rstudioapi::viewer("jinxiaosong/nb2gitbook/bookdown.html")
+```
+
+查看构建效果，或者访问
+<https://jiaxiangbu.github.io/tutoring2/jinxiaosong/nb2gitbook/bookdown.html>
+
+查看下最后的构建结构
+
+``` r
+dir_tree("jinxiaosong/nb2gitbook", recurse = F)
+```
+
+    ## jinxiaosong/nb2gitbook
+    ## +-- bookdown.html
+    ## +-- bookdown.Rmd
+    ## +-- build.R
+    ## +-- libs
+    ## +-- Makefile
+    ## +-- nb_with_toc.ipynb
+    ## \-- nb_with_toc.md
+
+Makefile 文件
+
+``` bash
+all:
+
+    jupyter nbconvert --to markdown --output-dir . --NbConvertApp.output_files_dir=libs nb_with_toc.ipynb
+    RScript build.R
+```

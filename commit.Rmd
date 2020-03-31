@@ -4,18 +4,49 @@ bibliography: refs/add.bib
 ---
 
 
-```{r}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(fs)
 ```
 
-```{r}
-dir_tree("jinxiaosong")
-dir.create("jinxiaosong/nb2gitbook")
-file_move("jinxiaosong/to_ljx.ipynb", "jinxiaosong/nb2gitbook/nb_with_toc.ipynb")
+nb 相关参考 https://jiaxiangbu.github.io/learn_nbdev/learning_notes.html
+
+```bash
+$ cd jinxiaosong/nb2gitbook/
+$ jupyter nbconvert --to markdown --output-dir . --NbConvertApp.output_files_dir=libs nb_with_toc.ipynb
+[NbConvertApp] Converting notebook nb_with_toc.ipynb to markdown
+[NbConvertApp] Writing 17799 bytes to .\nb_with_toc.md
 ```
 
+```r
+rmarkdown::render("jinxiaosong/nb2gitbook/bookdown.Rmd")
+```
+
+这里需要将 nbconvert 和 rmarkdown 通过 make 结合
+
+```r
+file.edit("jinxiaosong/nb2gitbook/build.R")
+```
+
+构建 RMarkdown 的脚本。
+
+```r
+rstudioapi::viewer("jinxiaosong/nb2gitbook/bookdown.html")
+```
+
+查看构建效果，或者访问
+https://jiaxiangbu.github.io/tutoring2/jinxiaosong/nb2gitbook/bookdown.html
+
+查看下最后的构建结构
+
 ```{r}
-cc("rename file for https://github.com/JiaxiangBU/tutoring2/issues/49", quick = F)
+dir_tree("jinxiaosong/nb2gitbook", recurse = F)
+```
+
+Makefile 文件
+
+```{r echo=FALSE, results='asis'}
+read_lines("jinxiaosong/nb2gitbook/Makefile") %>% 
+    gluedown::md_fence(info='bash')
 ```
 
