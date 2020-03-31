@@ -4,28 +4,18 @@ bibliography: refs/add.bib
 ---
 
 
-参考
+```{r}
+library(tidyverse)
+library(fs)
+```
 
-1. `jinxiaosong/concatenate-csv.ipynb`
+```{r}
+dir_tree("jinxiaosong")
+dir.create("jinxiaosong/nb2gitbook")
+file_move("jinxiaosong/to_ljx.ipynb", "jinxiaosong/nb2gitbook/nb_with_toc.ipynb")
+```
 
-这是假设的三个表格
-
-1. `jinxiaosong/data/df1.csv` 
-1. `jinxiaosong/data/df2.csv`
-1. `jinxiaosong/data/df3.csv`
-
-**批量导入**，主要就是 for 循环加上 append 完成就好了。
-**批量导出**，主要就是 pd.DataFrame.groupby 加上 for 循环
-
-导出文件如
-
-1. `jinxiaosong/data/outputdf1.csv.csv`
-1. `jinxiaosong/data/outputdf2.csv.csv`
-1. `jinxiaosong/data/outputdf3.csv.csv`
-
-```python
-for idx, i in df.groupby('groups'):
-    file_name = 'output' + str(idx) + '.csv'
-    i.to_csv(os.path.join('data',file_name))
+```{r}
+cc("rename file for https://github.com/JiaxiangBU/tutoring2/issues/49", quick = F)
 ```
 
