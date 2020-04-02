@@ -21,7 +21,7 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 1. 相关问题提交到
     <a class="github-button" href="https://github.com/JiaxiangBU/tutoring2/issues" data-show-count="true" aria-label="Issue JiaxiangBU/tutoring on GitHub">Issue</a>
 
-```{r,child="nb_with_toc.md"}
+```{r,child="test_02.md"}
 ```
 
 

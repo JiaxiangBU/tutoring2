@@ -24,7 +24,7 @@
 <meta name="author" content="xxx" />
 
 
-<meta name="date" content="2020-04-01" />
+<meta name="date" content="2020-04-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -129,13 +129,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="1" data-path=""><a href="#前期准备"><i class="fa fa-check"></i><b>1</b> 前期准备</a></li>
-<li class="chapter" data-level="2" data-path=""><a href="#封装函数"><i class="fa fa-check"></i><b>2</b> 封装函数</a></li>
-<li class="chapter" data-level="3" data-path=""><a href="#读取数据"><i class="fa fa-check"></i><b>3</b> 读取数据</a><ul>
-<li class="chapter" data-level="3.1" data-path=""><a href="#数据处理"><i class="fa fa-check"></i><b>3.1</b> 数据处理</a><ul>
-<li class="chapter" data-level="3.1.1" data-path=""><a href="#绘图"><i class="fa fa-check"></i><b>3.1.1</b> 绘图</a></li>
+<li class="chapter" data-level="1" data-path=""><a href="#加载模块"><i class="fa fa-check"></i><b>1</b> 加载模块</a><ul>
+<li class="chapter" data-level="1.1" data-path=""><a href="#封装函数"><i class="fa fa-check"></i><b>1.1</b> 封装函数</a></li>
 </ul></li>
+<li class="chapter" data-level="2" data-path=""><a href="#构建数据"><i class="fa fa-check"></i><b>2</b> 构建数据</a><ul>
+<li class="chapter" data-level="2.1" data-path=""><a href="#数据处理"><i class="fa fa-check"></i><b>2.1</b> 数据处理</a></li>
 </ul></li>
+<li class="chapter" data-level="3" data-path=""><a href="#可视化"><i class="fa fa-check"></i><b>3</b> 可视化</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#附录"><i class="fa fa-check"></i>附录</a></li>
 <li class="chapter" data-level="" data-path=""><a href="#参考文献"><i class="fa fa-check"></i>参考文献</a></li>
 </ul>
@@ -158,7 +158,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">xxx</h1>
 <p class="author"><em>xxx</em></p>
-<p class="date"><em>2020-04-01</em></p>
+<p class="date"><em>2020-04-03</em></p>
 </div>
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -168,8 +168,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>相关问题提交到
 <a class="github-button" href="https://github.com/JiaxiangBU/tutoring2/issues" data-show-count="true" aria-label="Issue JiaxiangBU/tutoring on GitHub">Issue</a></li>
 </ol>
-<div id="前期准备" class="section level1">
-<h1><span class="header-section-number">1</span> 前期准备</h1>
+<div id="加载模块" class="section level1">
+<h1><span class="header-section-number">1</span> 加载模块</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" title="1"><span class="im">import</span> qgrid</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="im">import</span> random</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="im">import</span> warnings</a>
@@ -185,9 +185,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb1-13" title="13"><span class="op">%</span>matplotlib inline</a>
 <a class="sourceLine" id="cb1-14" title="14">warnings.filterwarnings(<span class="st">&#39;ignore&#39;</span>)</a>
 <a class="sourceLine" id="cb1-15" title="15">pd.set_option(<span class="st">&#39;display.max_columns&#39;</span>, <span class="dv">50</span>)</a></code></pre></div>
-</div>
-<div id="封装函数" class="section level1">
-<h1><span class="header-section-number">2</span> 封装函数</h1>
+<div id="封装函数" class="section level2">
+<h2><span class="header-section-number">1.1</span> 封装函数</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">def</span> liftchart_num(data, score_bins, loan_cnt, bad_rate, bad_rate_cum, cover, auc, ks):</a>
 <a class="sourceLine" id="cb2-2" title="2">    bar <span class="op">=</span> (</a>
 <a class="sourceLine" id="cb2-3" title="3">        Bar(init_opts<span class="op">=</span>opts.InitOpts(width<span class="op">=</span><span class="st">&quot;900px&quot;</span>, height<span class="op">=</span><span class="st">&quot;400px&quot;</span>))</a>
@@ -331,20 +330,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb2-141" title="141"><span class="co">#     return result_num_woe</span></a>
 <a class="sourceLine" id="cb2-142" title="142">    <span class="cf">return</span> page</a></code></pre></div>
 </div>
-<div id="读取数据" class="section level1">
-<h1><span class="header-section-number">3</span> 读取数据</h1>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" title="1">df_loc_raw <span class="op">=</span> pd.read_excel(<span class="st">&quot;../data/return/join.xlsx&quot;</span>)</a>
-<a class="sourceLine" id="cb3-2" title="2"></a>
-<a class="sourceLine" id="cb3-3" title="3">df_return_raw <span class="op">=</span> pd.read_excel(<span class="st">&quot;../data/return/df_return.xlsx&quot;</span>)</a></code></pre></div>
+</div>
+<div id="构建数据" class="section level1">
+<h1><span class="header-section-number">2</span> 构建数据</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" title="1">df_raw <span class="op">=</span> pd.DataFrame(</a>
+<a class="sourceLine" id="cb3-2" title="2">    {<span class="st">&#39;x&#39;</span>: [random.randint(<span class="dv">0</span>,<span class="dv">100</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>)],</a>
+<a class="sourceLine" id="cb3-3" title="3">     <span class="st">&#39;y&#39;</span>: [random.randint(<span class="dv">0</span>,<span class="dv">1</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>)]}</a>
+<a class="sourceLine" id="cb3-4" title="4">)</a></code></pre></div>
 <div id="数据处理" class="section level2">
-<h2><span class="header-section-number">3.1</span> 数据处理</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb4-1" title="1">df_return_raw.rename(columns<span class="op">=</span>{<span class="st">&#39;asdlfkjalskjf&#39;</span>:<span class="st">&#39;score&#39;</span>}, inplace<span class="op">=</span><span class="va">True</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb5-1" title="1">df_return_select <span class="op">=</span> df_return_raw[[<span class="st">&#39;score&#39;</span>]]</a></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb6-1" title="1">df_return_select[<span class="st">&#39;y&#39;</span>] <span class="op">=</span> [random.randint(<span class="dv">0</span>,<span class="dv">1</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(df_return_select))]</a></code></pre></div>
-<div id="绘图" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> 绘图</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb7-1" title="1">p_all <span class="op">=</span> liftchart(df_return_select, xvars<span class="op">=</span>[<span class="st">&#39;score&#39;</span>], yvar<span class="op">=</span><span class="st">&#39;y&#39;</span>, uv<span class="op">=</span><span class="dv">20</span>, g<span class="op">=</span><span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb7-2" title="2">p_all.render_notebook()</a></code></pre></div>
+<h2><span class="header-section-number">2.1</span> 数据处理</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb4-1" title="1">df_raw.rename(columns<span class="op">=</span>{<span class="st">&#39;x&#39;</span>:<span class="st">&#39;test_x&#39;</span>}, inplace<span class="op">=</span><span class="va">True</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="可视化" class="section level1">
+<h1><span class="header-section-number">3</span> 可视化</h1>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb5-1" title="1">p_all <span class="op">=</span> liftchart(df_raw, xvars<span class="op">=</span>[<span class="st">&#39;test_x&#39;</span>], yvar<span class="op">=</span><span class="st">&#39;y&#39;</span>, uv<span class="op">=</span><span class="dv">20</span>, g<span class="op">=</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2">p_all.render_notebook()</a></code></pre></div>
 <script>
     require.config({
         paths: {
@@ -352,12 +353,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         }
     });
 </script>
-<pre><code>    &lt;div id=&quot;8e83fda3b7a94eacb5d6531aa59f6d99&quot; style=&quot;width:900px; height:400px;&quot;&gt;&lt;/div&gt;</code></pre>
+<pre><code>    &lt;div id=&quot;9666c783c95b46a1b490de96884ad600&quot; style=&quot;width:900px; height:400px;&quot;&gt;&lt;/div&gt;</code></pre>
 <script>
         require(['echarts'], function(echarts) {
-                var chart_8e83fda3b7a94eacb5d6531aa59f6d99 = echarts.init(
-                    document.getElementById('8e83fda3b7a94eacb5d6531aa59f6d99'), 'white', {renderer: 'canvas'});
-                var option_8e83fda3b7a94eacb5d6531aa59f6d99 = {
+                var chart_9666c783c95b46a1b490de96884ad600 = echarts.init(
+                    document.getElementById('9666c783c95b46a1b490de96884ad600'), 'white', {renderer: 'canvas'});
+                var option_9666c783c95b46a1b490de96884ad600 = {
     "animation": true,
     "animationThreshold": 2000,
     "animationDuration": 1000,
@@ -398,16 +399,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             "type": "bar",
             "name": "\u6837\u672c\u91cf",
             "data": [
-                2950,
-                2955,
-                2859,
-                3035,
-                2999,
-                3039,
-                2946,
-                2991,
-                3072,
-                3049
+                97,
+                96,
+                101,
+                104,
+                97,
+                101,
+                104,
+                83,
+                115,
+                102
             ],
             "barCategoryGap": "20%",
             "label": {
@@ -427,44 +428,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             "step": false,
             "data": [
                 [
-                    "(661.0, 765.0]",
-                    "49.80"
+                    "(90.0, 100.0]",
+                    "50.52"
                 ],
                 [
-                    "(641.0, 661.0]",
-                    "49.81"
+                    "(79.0, 90.0]",
+                    "47.92"
                 ],
                 [
-                    "(629.0, 641.0]",
-                    "51.00"
+                    "(68.0, 79.0]",
+                    "52.48"
                 ],
                 [
-                    "(617.0, 629.0]",
-                    "50.44"
+                    "(59.0, 68.0]",
+                    "40.38"
                 ],
                 [
-                    "(605.0, 617.0]",
-                    "48.68"
+                    "(50.0, 59.0]",
+                    "52.58"
                 ],
                 [
-                    "(593.0, 605.0]",
-                    "50.38"
+                    "(41.0, 50.0]",
+                    "54.46"
                 ],
                 [
-                    "(581.0, 593.0]",
-                    "49.90"
+                    "(29.7, 41.0]",
+                    "52.88"
                 ],
                 [
-                    "(567.0, 581.0]",
-                    "49.68"
+                    "(19.0, 29.7]",
+                    "51.81"
                 ],
                 [
-                    "(548.0, 567.0]",
-                    "48.99"
+                    "(9.0, 19.0]",
+                    "53.91"
                 ],
                 [
-                    "(299.9, 548.0]",
-                    "51.00"
+                    "(-0.1, 9.0]",
+                    "57.84"
                 ]
             ],
             "hoverAnimation": true,
@@ -498,44 +499,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             "step": false,
             "data": [
                 [
-                    "(661.0, 765.0]",
-                    "49.80"
+                    "(90.0, 100.0]",
+                    "50.52"
                 ],
                 [
-                    "(641.0, 661.0]",
-                    "49.81"
+                    "(79.0, 90.0]",
+                    "49.22"
                 ],
                 [
-                    "(629.0, 641.0]",
-                    "50.19"
+                    "(68.0, 79.0]",
+                    "50.34"
                 ],
                 [
-                    "(617.0, 629.0]",
-                    "50.26"
+                    "(59.0, 68.0]",
+                    "47.74"
                 ],
                 [
-                    "(605.0, 617.0]",
-                    "49.94"
+                    "(50.0, 59.0]",
+                    "48.69"
                 ],
                 [
-                    "(593.0, 605.0]",
-                    "50.01"
+                    "(41.0, 50.0]",
+                    "49.66"
                 ],
                 [
-                    "(581.0, 593.0]",
-                    "50.00"
+                    "(29.7, 41.0]",
+                    "50.14"
                 ],
                 [
-                    "(567.0, 581.0]",
-                    "49.96"
+                    "(19.0, 29.7]",
+                    "50.32"
                 ],
                 [
-                    "(548.0, 567.0]",
-                    "49.85"
+                    "(9.0, 19.0]",
+                    "50.78"
                 ],
                 [
-                    "(299.9, 548.0]",
-                    "49.96"
+                    "(-0.1, 9.0]",
+                    "51.50"
                 ]
             ],
             "hoverAnimation": true,
@@ -606,16 +607,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
                 }
             },
             "data": [
-                "(661.0, 765.0]",
-                "(641.0, 661.0]",
-                "(629.0, 641.0]",
-                "(617.0, 629.0]",
-                "(605.0, 617.0]",
-                "(593.0, 605.0]",
-                "(581.0, 593.0]",
-                "(567.0, 581.0]",
-                "(548.0, 567.0]",
-                "(299.9, 548.0]"
+                "(90.0, 100.0]",
+                "(79.0, 90.0]",
+                "(68.0, 79.0]",
+                "(59.0, 68.0]",
+                "(50.0, 59.0]",
+                "(41.0, 50.0]",
+                "(29.7, 41.0]",
+                "(19.0, 29.7]",
+                "(9.0, 19.0]",
+                "(-0.1, 9.0]"
             ]
         }
     ],
@@ -669,8 +670,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     ],
     "title": [
         {
-            "text": "score_bin",
-            "subtext": "COVER=1.000   AUC=0.501   KS=0.008"
+            "text": "test_x_bin",
+            "subtext": "COVER=1.000   AUC=0.471   KS=0.069"
         }
     ],
     "toolbox": {
@@ -713,12 +714,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         "zoomLock": false
     }
 };
-                chart_8e83fda3b7a94eacb5d6531aa59f6d99.setOption(option_8e83fda3b7a94eacb5d6531aa59f6d99);
+                chart_9666c783c95b46a1b490de96884ad600.setOption(option_9666c783c95b46a1b490de96884ad600);
         });
     </script>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
-</div>
-</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"></code></pre></div>
 </div>
 <div id="附录" class="section level1 unnumbered">
 <h1>附录</h1>

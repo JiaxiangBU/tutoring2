@@ -9,3 +9,25 @@ library(tidyverse)
 library(fs)
 ```
 
+我测试了
+
+```bash
+$ jupyter nbconvert --to html_toc jinxiaosong/nb2gitbook/test_02.ipynb
+[NbConvertApp] Converting notebook jinxiaosong/nb2gitbook/test_02.ipynb to html_toc
+[NbConvertApp] Writing 331112 bytes to jinxiaosong/nb2gitbook\test_02.html
+```
+
+是失效的。
+
+导出了你新上传的`jinxiaosong/nb2gitbook/test_02.ipynb`产生的`jinxiaosong/nb2gitbook/test_02.md`进行 gitbook，也是失败的。
+原因是 md 让 rendered notebook 的图像失效了。
+
+但是`jinxiaosong/nb2gitbook/test_02.html` 图像在远程也是可以显示的。
+
+另外可以参考 https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/toc2/README.html
+
+因此我打算 ipynb to gitbook 找解决方案，不通过 markdown 了。
+但是我查看了，大部分都是要通过 markdown 进行的，见
+https://github.com/search?q=jupyter+nbconvert+gitbook&type=Code
+
+我找到一个和`jupyter nbconvert`的替代品，你可以尝试下 https://github.com/SamLau95/nbinteract/issues/26
