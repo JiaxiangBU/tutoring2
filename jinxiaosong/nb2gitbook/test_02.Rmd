@@ -1,0 +1,239 @@
+---
+title: xxx
+author: xxx
+date: "`r Sys.Date()`"
+output: 
+    bookdown::gitbook:
+        split_by: none
+        split_bib: TRUE
+        df_print: paged
+        self_contained: TRUE
+---
+
+```{r setup,echo = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+1. 使用 RMarkdown 的 `child` 参数，进行文档拼接。
+1. 这样拼接以后的笔记方便复习。
+1. 相关问题提交到
+    <a class="github-button" href="https://github.com/JiaxiangBU/tutoring2/issues" data-show-count="true" aria-label="Issue JiaxiangBU/tutoring on GitHub">Issue</a>
+# 加载模块
+
+```{python}
+import qgrid
+import random
+import warnings
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from sklearn import metrics
+from functools import reduce
+import matplotlib.pyplot as plt
+from pyecharts.charts import Bar, Line, Page
+from pyecharts import options as opts
+
+# %matplotlib inline
+# warnings.filterwarnings('ignore')
+# pd.set_option('display.max_columns', 50)
+```
+
+## 封装函数
+
+```{python}
+def liftchart_num(data, score_bins, loan_cnt, bad_rate, bad_rate_cum, cover, auc, ks):
+    bar = (
+        Bar(init_opts=opts.InitOpts(width="900px", height="400px"))
+        .add_xaxis(list(data[score_bins]))
+        .add_yaxis("样本量", list(data[loan_cnt]), color="#1f77b4")
+        .extend_axis(yaxis=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter="{value}%")))
+#         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        .set_global_opts(
+            toolbox_opts=opts.ToolboxOpts(),
+            legend_opts=opts.LegendOpts(pos_top="7%"),
+            datazoom_opts=opts.DataZoomOpts(range_start=0,range_end=100),
+            title_opts=opts.TitleOpts(title="%s" % score_bins, 
+                                      subtitle='COVER={0:.3f}   AUC={1:.3f}   KS={2:.3f}'.format(cover,auc,ks))
+        )
+    )
+    
+    line = (
+        Line()
+        .add_xaxis(data[score_bins])
+        .add_yaxis("每段首逾率", list(data[bad_rate]), yaxis_index=1, 
+                   linestyle_opts=opts.LineStyleOpts(color="#DE47C8", width=3),
+                   itemstyle_opts=opts.ItemStyleOpts(color="#DE47C8"))
+        .add_yaxis("累积首逾率", list(data[bad_rate_cum]), yaxis_index=1,
+                   linestyle_opts=opts.LineStyleOpts(color="#ff7f0e", width=3),
+                   itemstyle_opts=opts.ItemStyleOpts(color="#ff7f0e"))
+#         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+    ); bar.overlap(line); return bar
+
+
+def liftchart_cat(data, score_bins, loan_cnt, bad_rate, bad_rate_all, cover):
+    bar = (
+        Bar(init_opts=opts.InitOpts(width="1000px", height="400px"))
+        .add_xaxis([str(x) for x in data[score_bins]])
+        .add_yaxis("样本量", list(data[loan_cnt]), color="#1f77b4")
+        .extend_axis(yaxis=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter="{value}%")))
+#         .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        .set_global_opts(
+            title_opts=opts.TitleOpts(title="%s" % score_bins, subtitle='COVER={0:.3f}'.format(cover)),
+            legend_opts=opts.LegendOpts(pos_top="7%"),
+            toolbox_opts=opts.ToolboxOpts(),
+            datazoom_opts=opts.DataZoomOpts(range_start=0,range_end=100)
+        )
+    )
+    
+    line = (
+        Line()
+        .add_xaxis([str(x) for x in data[score_bins]])
+        .add_yaxis("每段首逾率", list(data[bad_rate]), yaxis_index=1, 
+                   linestyle_opts=opts.LineStyleOpts(color="#ff7f0e", width=3),
+                   itemstyle_opts=opts.ItemStyleOpts(color="#ff7f0e"))
+         .set_series_opts(
+#           label_opts=opts.LabelOpts(is_show=False)
+            markline_opts=opts.MarkLineOpts(data=[opts.MarkLineItem(y=bad_rate_all, name="整体首逾率")])
+        )
+    ); bar.overlap(line); return bar
+
+
+def liftchart(data, xvars, yvar, uv, g=10):
+    
+    data_tmp = data.copy()
+    page = Page()
+    for xvar in xvars:
+        
+        ######## 可视化离散型变量
+        if data_tmp[xvar].nunique() <= uv or data_tmp[xvar].dtype == 'object':
+            
+            ## 处理缺失值与-9999999
+#             data_tmp[xvar] = data_tmp[xvar].astype('str')
+            cover = 1 - sum(pd.isnull(data_tmp[xvar])) / len(data_tmp)
+            bad_rate_all = round(data_tmp[yvar].mean()*100, 2)
+#             data_tmp[xvar].replace('-9999999', '-999', inplace=True)
+    
+            result_cat = data_tmp \
+                .groupby(xvar, as_index=False)[yvar] \
+                .agg({'good' : lambda x: sum(x==0), 
+                      'bad'  : lambda x: sum(x==1), 
+                      'total': lambda x: len(x)}) \
+                .fillna(0)
+    
+            result_cat['bad_rate'] = (result_cat['bad'] / result_cat['total']).map(lambda x: '{:.2f}'.format(x*100))
+        
+            plot_cat = liftchart_cat(result_cat, xvar, 'total', 'bad_rate', bad_rate_all, cover); page.add(plot_cat)
+        
+        ######## 可视化连续性变量
+        else:
+            
+            data_tmp[xvar+'_bin'] = np.where(data_tmp[xvar] < 0, '999999999', pd.qcut(data_tmp[xvar], q=g, duplicates='drop', precision=1).astype('str'))
+            
+            result_num = data_tmp \
+                .groupby(xvar+'_bin', as_index=False)[yvar] \
+                .agg({'good' : lambda x: sum(x==0), 
+                      'bad'  : lambda x: sum(x==1), 
+                      'total': lambda x: len(x)}) \
+                .fillna(0)
+            
+            result_num['bins_fst'] = result_num[xvar+'_bin'].apply(lambda x: float(x.split(',')[0].replace('(', '')))
+            result_num = result_num.sort_values('bins_fst').reset_index(drop=True)
+            
+            data_tmp_g0 = data_tmp[data_tmp[xvar] > 0]
+            score_median = data_tmp_g0[xvar].median()
+            fst_rate_g = data_tmp_g0.loc[data_tmp_g0[xvar] > score_median, yvar].mean()
+            fst_rate_l = data_tmp_g0.loc[data_tmp_g0[xvar] < score_median, yvar].mean()
+            
+            if fst_rate_g < fst_rate_l:
+                
+                result_num = result_num \
+                    .assign(**{'is_neg_999': result_num[xvar+'_bin'] == '999999999', 
+                               'is_nan'    : result_num[xvar+'_bin'] == 'nan'}) \
+                    .sort_values(['is_neg_999', 'is_nan', 'bins_fst'], ascending=[1, 1, 0])
+
+            result_num = result_num \
+                .assign(bad_cum  = result_num['bad'].cumsum(),
+                        good_cum = result_num['good'].cumsum(),
+                        bad_rate = result_num['bad'] / result_num['total'])
+            
+            result_num['bad_rate_cum'] = result_num['bad_cum'] / result_num['total'].cumsum()
+            result_num[['bad_rate','bad_rate_cum']] = result_num[['bad_rate','bad_rate_cum']].applymap(lambda x: '{:.2f}'.format(x*100))
+            result_num.replace(to_replace=['999999999'], value=['-999'], inplace=True)
+#             result_num[xvar+'_bin'] = result_num[xvar+'_bin'].str.replace('\\.0', '')
+            
+            #### 计算AUC、KS和IV
+            result_num_woe = result_num[~result_num[xvar+'_bin'].isin(['-999','nan'])]
+            result_num_woe.reset_index(drop=True, inplace=True)
+            
+            result_num_woe = result_num_woe \
+                .assign(bad_rate_woe  = result_num_woe['bad'] / result_num_woe['bad_cum'][len(result_num_woe)-1],
+                        good_rate_woe = result_num_woe['good'] / result_num_woe['good_cum'][len(result_num_woe)-1])
+            
+            result_num_woe['woe_v'] = np.log(result_num_woe['bad_rate_woe'] / result_num_woe['good_rate_woe'])
+            result_num_woe['woe_w'] = result_num_woe['bad_rate_woe'] - result_num_woe['good_rate_woe']
+            
+            pred, real = data_tmp.loc[data_tmp[xvar] >= 0, xvar], data_tmp.loc[data_tmp[xvar] >= 0, yvar]
+            fpr, tpr, thresholds = metrics.roc_curve(real, pred, pos_label=1)
+            
+            cover = 1 - sum(pd.isnull(data_tmp[xvar])) / len(data_tmp)
+            auc = metrics.auc(fpr, tpr)
+            ks  = max(abs(tpr - fpr))
+            iv  = sum(result_num_woe['woe_w'] * result_num_woe['woe_v'])
+            
+            plot_num = liftchart_num(result_num, xvar+'_bin', 'total', 'bad_rate', 'bad_rate_cum', cover, auc, ks); page.add(plot_num)
+#     return result_num_woe
+    return page
+```
+
+# 构建数据
+
+```{python}
+df_raw = pd.DataFrame(
+    {'x': [random.randint(0,100) for _ in range(1000)],
+     'y': [random.randint(0,1) for _ in range(1000)]}
+)
+```
+
+## 数据处理
+
+```{python}
+df_raw.rename(columns={'x':'test_x'}, inplace=True)
+```
+
+# 可视化
+
+```{python}
+p_all = liftchart(df_raw, xvars=['test_x'], yvar='y', uv=20, g=10)
+p_all.render_notebook()
+```
+
+```{python}
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+```
+
+```{python}
+
+```
