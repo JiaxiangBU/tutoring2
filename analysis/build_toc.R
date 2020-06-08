@@ -111,5 +111,13 @@ toc_df <-
 
 tmp_path <- "tmp"
 if (!dir.exists(tmp_path)) dir.create(tmp_path)
+
+# toc_df <- read_rds("tmp/toc_df.rds")
+# toc_df %>% class
+# toc_df %>% names
+toc_df <-
+    toc_df %>%
+    filter(md_link %>% str_detect("xxx", negate = TRUE))
+
 toc_df %>% write_rds("tmp/toc_df.rds")
 
