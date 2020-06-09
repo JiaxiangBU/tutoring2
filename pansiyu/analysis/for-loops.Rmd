@@ -1,0 +1,30 @@
+---
+output: github_document
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(fs)
+```
+
+我看了下整体代码，你做这样的修改
+
+```{r}
+fun <- function(x,y) print(x,y)
+```
+
+
+```{r}
+for (i in 1:3) {
+    for (j in 1:3) {
+        fun(i,j)
+    }
+}
+```
+
+```{r}
+i <- 1:3
+j <- 1:3
+map2_chr(i,j,fun)
+```
+
