@@ -1,0 +1,24 @@
+---
+output: github_document
+---
+
+> 按照D，把数据分为四个数据框
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+set.seed(45L)
+df <- tibble(
+    A = runif(10, 0, 1),
+    B = runif(10, 0, 1),
+    D = c(0, 0, 0, 1, 1, 1, 1, 0, 0, 1)
+)
+```
+
+```{r}
+df %>% 
+    group_by(cumsum(c(0,abs(diff(D))))) %>% 
+    nest() %>% 
+    .$data
+```
+
