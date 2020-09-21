@@ -7,28 +7,13 @@ bibliography: refs/add.bib
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(fs)
-library(readxl)
 ```
 
-```{r}
-df <- read_excel("jinxiaosong/data/pivot_help.xlsx")  
+```{r eval=FALSE, include=FALSE}
+paste("jupyter nbconvert --to markdown --output-dir tmp","jinxiaosong/analysis/some_join.ipynb") %>% 
+    system()
 ```
 
-```{r}
-df %>%
-    group_by(cut,color) %>%
-    summarise(pctg = sum(n)) %>% 
-    ungroup() %>% 
-    group_by(cut) %>% 
-    mutate(pctg = pctg/sum(pctg)) %>% 
-    spread(color,pctg)
+```{r,child="tmp/some_join.md"}
 ```
 
-我看了下你的代码，我发现你的思路是按照 dplyr 的方式去实现的。
-就是说靠函数/pipeline，把每个 scalars 求出来，然后再进行汇总，这是 dplyr 的风格。
-也就是是，你在每一次 group_by 后，都需要统筹全局的去想想。
-
-pandas 更喜欢自定义函数，你分好块，然后只需要思考其中一块怎么 lambda 函数完成，然后向量化操作。
-
-思维上会不太一样。
-建议你看一下 https://github.com/JiaxiangBU/learn_credit_risk/pull/125
