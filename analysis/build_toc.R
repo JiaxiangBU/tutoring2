@@ -67,7 +67,7 @@ tmp_toc_df <-
         )
     ) %>%
     mutate(md_link = glue(
-        "1. [{title}]({publish_path}) ([{owner_name}]({owner_path}))"
+        "1. [{title}]({publish_path}) (\[@{owner_name}]({owner_path}))"
     ))
 
 
@@ -86,7 +86,7 @@ tmp_issue_df2 <-
     bind_rows(issue_df2) %>%
     transmute(
         md_link = glue(
-            "1. [{title}]({publish_path}) ([{owner_name}]({owner_path}))"
+            "1. [{title}]({publish_path}) ([\@{owner_name}]({owner_path}))"
         ),
         modification_time
     )
